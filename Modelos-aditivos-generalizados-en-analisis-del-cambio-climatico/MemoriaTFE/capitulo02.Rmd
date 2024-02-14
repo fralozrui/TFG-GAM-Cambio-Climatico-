@@ -29,8 +29,6 @@ output:
       #after_body: latex/latex_antes_enddoc.tex
 ---
 
-
-
 ```{r include=FALSE}
 knitr::opts_chunk$set(fig.path = 'figurasR/',
                       echo = FALSE, warning = FALSE, message = FALSE,
@@ -39,20 +37,25 @@ knitr::opts_chunk$set(fig.path = 'figurasR/',
 
 ```
 
-
 <!-- \setcounter{chapter}{2} -->
+
 <!-- \setcounter{chapter}{2} escribir 2 para capítulo 3  -->
+
 <!-- \pagenumbering{arabic} -->
 
+```{=tex}
 \ifdefined\ifprincipal
 \else
 \setlength{\parindent}{1em}
 \pagestyle{fancy}
 \setcounter{tocdepth}{4}
 \tableofcontents
+```
 <!-- \nocite{*} -->
+
 \fi
 
+```{=tex}
 \ifdefined\ifdoblecara
 \fancyhead{}{}
 \fancyhead[LE,RO]{\scriptsize\rightmark}
@@ -68,28 +71,151 @@ knitr::opts_chunk$set(fig.path = 'figurasR/',
 \fi
 \renewcommand{\headrulewidth}{0.4pt}
 \renewcommand{\footrulewidth}{0.4pt}
-
+```
+\theoremstyle{remark}
+\newtheorem{observación}{Observación}[section]
+\theoremstyle{definition}
+\newtheorem{definición}{Definición}[section]
+\theoremstyle{plain}
+\newtheorem{proposición}{Proposición}[section]
 
 # Modelos lineales generalizados
 
-## Introducción 
+## Introducción
 
-  Como bien introdujimos antes, los modelos estadísticos pretenden explicar la relación entre dos o mas variables, en particular, tratan de describir el comportamiento de una variable respuesta (o dependiente), que se suele denotar por $Y$, mediante la información que otorgan las variables predictoras (o independientes), que se suelen denotar como $X_{1},...,X_{p}$.
-  
-  La forma más general de expresar matemáticamente la intención de los modelos estadísticos es la siguiente: 
-  $$
+Como bien introdujimos antes, los modelos estadísticos pretenden explicar la relación entre dos o mas variables, en particular, tratan de describir el comportamiento de una variable respuesta (o dependiente), que se suele denotar por $Y$, mediante la información que otorgan las variables predictoras (o independientes), que se suelen denotar como $X_{1},...,X_{p}$.
+
+La forma más general de expresar matemáticamente la intención de los modelos estadísticos es la siguiente: $$
   Y = f(X_{1},..,X_{p}) + \epsilon
-  $$
-  donde $f$ es una función desconocida cuyo propósito es el de expresar de la "mejor"[^1.1] manera posible la relación entre las variables $X_{1},...,X_{p}$ e $Y$, y $\epsilon$ es un error aleatorio independiente de las variables predictoras que deberá cumplir ciertas condiciones según el tipo de modelo que estemos tratando. 
-  
-[^1.1]: Escribimos mejor entre comillas pues hay diversas formas de evaluar los modelos.
-  
-  Este trabajo tiene como finalidad el definir un conjunto de estrategias y técnicas que proporcionan un ajuste óptimo de la función $f$, es decir, que asemeje lo mejor posible la relación de las variables al fenómeno que se esté estudiando. Además, se incluye una posterior aplicación práctica de dichos resultados en el ámbito del cambio climático. 
-  
-  En lo que a este capítulo respecta, partiremos definiendo los modelos lineales de una forma breve y más general, ya que se ve de manera más extensa en varias asignaturas durante el grado. Tras ello daremos varios resultados básicos para el entendimiento y desarrollo de los Modelos Lineales Generalizados.
-  
-## Modelos lineales  
+  $$ donde $f$ es una función desconocida cuyo propósito es el de expresar de la "mejor"[^1] manera posible la relación entre las variables $X_{1},...,X_{p}$ e $Y$, y $\epsilon$ es un error aleatorio independiente de las variables predictoras que deberá cumplir ciertas condiciones según el tipo de modelo que estemos tratando.
 
-  El modelo lineal ocupa un lugar clave en el manual de herramientas de todo estadístico aplicado. Esto se debe a su simple estructura, a la fácil interpretación de sus resultados y al sencillo desarrolo de la teoría de mínimos cuadrados. Sin embargo, a la hora de dar su definición se deben tener en cuenta ciertas restricciones que deben cumplir las variables y los errores del modelo. Estas condiciones hacen que el modelo no sea capaz de adaptarse bien a todos los fenómenos que uno se propone describir pero, a cambio, otorga esa sencillez de visualización antes mencionada.
-  
-  
+[^1]: Escribimos mejor entre comillas pues hay diversas formas de evaluar los modelos.
+
+Este trabajo tiene como finalidad el definir un conjunto de estrategias y técnicas que proporcionan un ajuste óptimo de la función $f$, es decir, que asemeje lo mejor posible la relación de las variables al fenómeno que se esté estudiando. Además, se incluye una posterior aplicación práctica de dichos resultados en el ámbito del cambio climático.
+
+En lo que a este capítulo respecta, partiremos definiendo los modelos lineales de una forma breve y más general, ya que se ve de manera más extensa en varias asignaturas durante el grado. Tras ello daremos varios resultados básicos para el entendimiento y desarrollo de los Modelos Lineales Generalizados.
+
+## Modelos lineales
+
+El modelo lineal ocupa un lugar clave en el manual de herramientas de todo estadístico aplicado. Esto se debe a su simple estructura, a la fácil interpretación de sus resultados y al sencillo desarrolo de la teoría de mínimos cuadrados. Sin embargo, a la hora de dar su definición se deben tener en cuenta ciertas restricciones que deben cumplir las variables y los errores del modelo. Estas condiciones hacen que el modelo no sea capaz de adaptarse bien a todos los fenómenos que uno se propone describir pero, a cambio, otorga esa sencillez de visualización antes mencionada.
+
+
+\begin{definición}[Modelo Lineal]
+Sean $X_{1},\dots,X_{p}$ un conjunto de p vectores aleatorios de n componentes (con $p \leqslant n$) e $Y = (Y_{1},\dots,Y_{n})^T$ un vector aleatorio de p componentes tal que $E[Y]=\mu$. Entonces, se entiende por modelo lineal (multivariante) aquel que determina la relación entre los vectores aleatorios mediante una combinación lineal de parámetros de la siguiente forma:
+$$
+\mu = X\beta
+$$
+$$ 
+Y = \mu + \epsilon
+$$
+O vectorialmente como: 
+$$ 
+\begin{pmatrix} Y_{1} \\ \vdots \\ Y_{i} \\ \vdots \\ Y_{n} \end{pmatrix} = 
+\begin{pmatrix} x_{(1,1)} & \dotsb & x_{(1,j)} & \dotsb & x_{(1,p)} \\
+                 \dotsb & \ddots & \vdots & \ddots & \dotsb \\
+                 x_{(i,1)} & \dotsb & x_{(i,j)} & \dotsb & x_{(i,p)} \\
+                 \dotsb & \ddots & \vdots & \ddots & \dotsb \\
+                 x_{(n,1)} & \dotsb & x_{(n,j)} & \dotsb & x_{(n,p)}
+\end{pmatrix}
+\begin{pmatrix} \beta_{1} \\ \vdots \\ \beta_{i} \\ \vdots \\ \beta_{p} \end{pmatrix}
++
+\begin{pmatrix} \epsilon_{1} \\ \vdots \\ \epsilon_{i} \\ \vdots \\ \epsilon_{n} \end{pmatrix}
+$$
+\label{modelo-lineal}
+\end{definición}
+
+Donde: 
+* $\beta$ es un vector de parámetros a determinar y reflejan la magnitud del efecto lineal (constante) de los incrementos unitarios en las variables explicativas $X_{i}$ sobre la variable explicada $Y$.
+* $\epsilon$ es un vector aleatorio tal que los $\epsilon_{i}$ son variables aleatorias independientes e identicamente distribuidas por una distribución normal de esperanza nula y varianza $\sigma^2$ ($\epsilon_{i} \backsim N(0,\sigma^2)$). Representa el término de error del modelo y corresponde con $\epsilon = Y-E[Y]$.
+
+\begin{observación} Gracias a lo notado en el párrafo anterior podemos ver que: $Y \backsim N(\mu,\sigma^2I_{n})$ ya que:
+$$
+E[Y] = E[X \beta + \epsilon] = X\beta + E[\epsilon] = X\beta = \mu
+$$
+$$
+Cov(Y) = Cov(X\beta + \epsilon) = Cov(\epsilon) = \sigma^2I_{n}
+$$
+\end{observación}
+Veamos ahora cómo se pueden obtener los valores de los parámetros $\beta$.
+\begin{definición}[Estimador por mínimos cuadrados]
+Elegiremos los valores de $\beta$ que minimicen la expresión:
+$$
+S =  \sum_{i=1}^n \epsilon_{i} =  \sum_{i=1}^n (Y_{i}-\mu_{i}) = \sum_{i=1}^n (Y_{i}- (X\beta)_{i})
+$$
+Es decir: 
+$$
+\hat{\beta} = arg_{\beta \in \mathbb{R}^p}min{||Y-X\beta||^2}
+$$
+\label{minimos-cuadrados}
+\end{definición}
+Donde $||\cdot||$ denota la norma euclídea.
+Para encontrar tal mínimo se razona derivando respecto de cada $\beta_i$ y luego igualando a 0. De este modo los parámetros $\beta_i$ vienen dados por la solución del siguiente sistema:
+
+$$ \left\{
+\begin{array}{ l }
+\frac{\partial S}{\partial \beta_1}= 0 \\
+\dots \\
+\frac{\partial S}{\partial \beta_p}= 0
+\end{array}
+\right. 
+$$
+Desarrollando este sistema de escuaciones llegamos a que es equivalente a $X^TX\hat{\beta} = X^TY$, por lo que el estimador por mínimos cuadrados del vector de parámetros $\beta$ viene dado por:
+$$
+\hat{\beta} = (X^TX)^{-1}X^TY
+$$
+\begin{observación} Notemos que esta expresión tiene sentido pues el producto $X^TX$ resulta en una matriz cuadrada de orden p y rango máximo.
+\end{observación}
+
+\begin{proposición}[Distribución del estimador por mínimos cuadrados] 
+El estimador por mínimos cuadrados del vector de parámetros $\beta$, $\hat{\beta}$, sigue una distribución del tipo normal p-variante de esperanza $\beta$ y matriz de covarianzas $V_{\hat{\beta}} = \sigma^2 (X^TX)^{-1}$. Es decir: 
+$ \hat{\beta} \backsim N_{p}(\beta,\sigma^2 (X^TX)^{-1})$
+\end{proposición}
+
+\begin{proof}
+Partiremos viendo que el estimador $\hat{\beta}$ es insesgado:
+$$
+E[\hat{\beta}] = E[(X^TX)^{-1}X^TY] = (X^TX)^{-1}X^TE[Y]=(X^TX)^{-1}X^TX \beta = \beta
+$$
+Por otro lado, calculemos  la matriz de covarianzas de $\hat{\beta}$, para ello primero debemos notar que como los errores aleatorios $\epsilon_i$ son independientes e identicamentes distribuidos con esperanza nula y varianza $\sigma^2$, $\forall i \neq j$:
+$$
+E[\epsilon_i \epsilon_j] = E[\epsilon_i] + E[\epsilon_j] + Cov(\epsilon_i, \epsilon_j) = 0 
+$$
+y, por tanto:
+$$
+E[\epsilon \epsilon^T] = 
+E\begin{bmatrix}
+\epsilon_1^2 & \epsilon_1 \epsilon_2 & \dotsb & \epsilon_1 \epsilon_n \\
+\epsilon_1 \epsilon_2 & \epsilon_2^2 & \dotsb & \epsilon_2 \epsilon_n \\
+\vdots &\vdots & \ddots & \vdots \\
+\epsilon_1 \epsilon_n & \dotsb & \dotsb & \epsilon_n^2
+\end{bmatrix}
+= 
+\begin{pmatrix}
+E[\epsilon_1^2] & E[\epsilon_1 \epsilon_2] & \dotsb & E[\epsilon_1 \epsilon_n] \\
+E[\epsilon_1 \epsilon_2] & E[\epsilon_2^2] & \dotsb & E[\epsilon_2 \epsilon_n] \\
+\vdots &\vdots & \ddots & \vdots \\
+E[\epsilon_1 \epsilon_n] & \dotsb & \dotsb & E[\epsilon_n^2]\end{pmatrix}
+= 
+\begin{bmatrix}
+\sigma^2 & 0 & \dotsb & 0 \\
+0 & \sigma^2 & \dotsb & 0 \\
+\vdots &\vdots & \ddots & \vdots \\
+0 & \dotsb & \dotsb & \sigma^2
+\end{bmatrix}
+$$
+Luego, utilizando que $\hat{\beta} = \beta + (X^TX)^{-1}X \epsilon$, se tiene que: 
+$$
+Cov(\hat{\beta}) = E[(\hat{\beta} - E[\hat{\beta}])(\hat{\beta} - E[\hat{\beta}])^T] = 
+E[(\hat{\beta} - \beta)(\hat{\beta} - \beta)^T] = 
+E[((X^TX)^{-1}X^T \epsilon)((X^TX)^{-1}X^T \epsilon)^T] =\\
+E[(X^TX)^{-1}X^T \epsilon \epsilon^T X(X^TX)^{-T}] = 
+(X^TX)^{-1}X^T E[\epsilon \epsilon^T] X(X^TX)^{-T} =\\
+(X^TX)^{-1}X^T \sigma^2 I_n X(X^TX)^{-T} = 
+\sigma^2 (X^TX)^{-1}X^T X(X^TX)^{-T} =\sigma^2 (X^TX)^{-1}
+$$
+Acabamos la prueba recordando que $\hat{\beta}$ no es más que una combinación lineal de variables aleatorias normales, concretamente de las $Y_i$, para decir que en efecto sigue una distribución normal p-variante como en el enunciado.
+\end{proof}
+
+\begin{observación}[Estimador de $\sigma^2$]
+Ahora bien, generalmente el valor de $\sigma^2$ es desconocido así que también sería preciso dar una estimación del mismo para que así los resultados anteriores fueran de alguna utilidad
+\end{observación}
