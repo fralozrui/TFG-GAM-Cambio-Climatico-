@@ -143,16 +143,18 @@ $$
 Veamos ahora cómo se pueden obtener los valores de los parámetros $\beta$.
 \begin{definición}[Estimador por mínimos cuadrados]
 Elegiremos los valores de $\beta$ que minimicen la suma de cuadrados:
-$$
+\begin{equation}
 S =  \sum_{i=1}^n \epsilon_{i}^2 =  \sum_{i=1}^n (Y_{i}-\mu_{i})^2 = \sum_{i=1}^n (Y_{i}- (X\beta)_{i})^2
-$$
+\label{eq:MinCuad}
+\end{equation}
 Es decir: 
 $$
 \hat{\beta} = arg_{\beta \in \mathbb{R}^p}min{||Y-X\beta||^2}
 $$
+Donde $||\cdot||$ denota la norma euclídea.
 \label{minimos-cuadrados}
 \end{definición}
-Donde $||\cdot||$ denota la norma euclídea.
+
 Para encontrar tal mínimo se razona derivando respecto de cada $\beta_i$ y luego igualando a 0. De este modo los parámetros $\beta_i$ vienen dados por la solución del siguiente sistema:
 
 $$ \left\{
@@ -164,9 +166,11 @@ $$ \left\{
 \right. 
 $$
 Desarrollando este sistema de escuaciones llegamos a que es equivalente a $X^TX\hat{\beta} = X^TY$, por lo que el estimador por mínimos cuadrados del vector de parámetros $\beta$ viene dado por:
-$$
+\begin{equation}
 \hat{\beta} = (X^TX)^{-1}X^TY
-$$
+\label{eq:EstMinCuad}
+\end{equation}
+
 \begin{observación} Notemos que esta expresión tiene sentido pues el producto $X^TX$ resulta en una matriz cuadrada de orden p y rango máximo.
 \end{observación}
 
@@ -207,16 +211,21 @@ E[\epsilon_1 \epsilon_n] & \dotsb & \dotsb & E[\epsilon_n^2]\end{pmatrix}
 0 & \dotsb & \dotsb & \sigma^2
 \end{bmatrix}
 $$
+\newpage
 Luego, utilizando que $\hat{\beta} = \beta + (X^TX)^{-1}X \epsilon$, se tiene que: 
-$$
-Cov(\hat{\beta}) = E[(\hat{\beta} - E[\hat{\beta}])(\hat{\beta} - E[\hat{\beta}])^T] = 
-E[(\hat{\beta} - \beta)(\hat{\beta} - \beta)^T] = 
-E[((X^TX)^{-1}X^T \epsilon)((X^TX)^{-1}X^T \epsilon)^T] =\\
-E[(X^TX)^{-1}X^T \epsilon \epsilon^T X(X^TX)^{-T}] = 
-(X^TX)^{-1}X^T E[\epsilon \epsilon^T] X(X^TX)^{-T} =\\
-(X^TX)^{-1}X^T \sigma^2 I_n X(X^TX)^{-T} = 
-\sigma^2 (X^TX)^{-1}X^T X(X^TX)^{-T} =\sigma^2 (X^TX)^{-1}
-$$
+
+\begin{equation*}
+\begin{split}
+Cov(\hat{\beta}) & = E[(\hat{\beta} - E[\hat{\beta}])(\hat{\beta} - E[\hat{\beta}])^T] = 
+E[(\hat{\beta} - \beta)(\hat{\beta} - \beta)^T] = \\ 
+& = E[((X^TX)^{-1}X^T \epsilon)((X^TX)^{-1}X^T \epsilon)^T] = 
+  E[(X^TX)^{-1}X^T \epsilon \epsilon^T X(X^TX)^{-T}] = \\
+& = (X^TX)^{-1}X^T E[\epsilon \epsilon^T] X(X^TX)^{-T} = 
+  (X^TX)^{-1}X^T \sigma^2 I_n X(X^TX)^{-T} = \\
+& = \sigma^2 (X^TX)^{-1}X^T X(X^TX)^{-T} =\sigma^2 (X^TX)^{-1}
+\end{split}
+\end{equation*}
+
 Acabamos la prueba recordando que $\hat{\beta}$ no es más que una combinación lineal de variables aleatorias normales, concretamente de las $Y_i$, para decir que en efecto sigue una distribución normal p-variante como indica el enunciado.
 \end{proof}
 
@@ -244,29 +253,33 @@ No daremos la obtención de este estimador pero sí indicaremos que su distribuc
 Nos adentramos ya con esta sección en la primera extensión de los modelos lineales de las que se tratan durante el trabajo. Los Modelos Lineales Generalizados (MLG) fueron originalmente formulados por John Nelder y Robert Wedderburn (1972), quienes tenían como propósito unificar varios modelos estadísticos como la regresión lineal, la logística y la de Poisson en un mismo modelo. Este tipo de modelos relajan algunas de las condiciones de los modelos lineales, como que los errores ya no deben seguir ninguna distribución específica, y además añade nuevos elementos como la función de enlace, que interviene en la relación entre las medias y la forma lineal del modelo. También se deberá tener en cuenta que seguirá la hipótesis de que las variables de respuestas siguen distribuciones de tipo exponencial. Más tarde nos adentraremos en cada uno de estos aspectos, de momento demos la estructura básica de un MLG.
 
 \begin{definición}[Estructura básica de un MLG]
-$$
-g(\mu) = X\beta
-$$
+
 $$
 \mu = \begin{pmatrix} \mu_1 \\ \vdots \\ \mu_n \end{pmatrix} = 
 \begin{pmatrix} E[Y_1] \\ \vdots \\ E[Y_n] \end{pmatrix} = E[Y]
 $$
+$$
+g(\mu_i) = X_i\beta , \space \forall i =1,\dots,n
+$$
+
 Donde: 
 \begin{itemize}
-  \item g es la función de enlace, que debe ser diferenciable y monótona.
-  \item X es la matriz modelo que contiene a las variables predictoras, cada columna representa una variable predictora $X_i$.
-  \item $\beta$ es el vector de parámetros desconocidos como en el caso de los modelos lineales.
-  \item Y es el la variable de respuesta, se suele suponer que las $Y_i$ son independientes y que siguen una distribución de tipo exponencial.
+  \item X es la matriz modelo de dimensión $n \times p$ con $p \leqslant n$, que contiene a las variables predictoras, cada columna representa una variable predictora $X_i$.
+  \item $\beta = (\beta_1,\dots,\beta_p)^T$ es el vector de parámetros desconocidos como en el caso de los modelos lineales. A $\eta = X\beta$ se le conoce como predictor lineal.
+  \item $g: \mathbb{R} \rightarrow \mathbb{R}$ es la función de enlace, que debe ser diferenciable y monótona. Representa la relación entre la media de las variables de respuesta y el predictor lineal.
+  \item $Y=(Y_1,\dots,Y_n)^T$ es un vector aleatorio, se suele suponer que las $Y_i$ son variables aleatorias independientes y que siguen una distribución de tipo exponencial.
 \end{itemize}
+\label{Estructura básica de un MLG}
 \end{definición}
+
 
 \begin{observación}
 Desde esta formulación podemos ver fácilmente el por qué decimos que los MLG son una generalización de los modelos lineales, ya que basta tomar a la identidad como la función de enlace y suponer que la distribución considerada sea de tipo normal para encontrarnos ante la forma general de un modelo lineal como vimos en la sección anterior.
 \end{observación}
 
-### Familias de distribuciones exponenciales
+### Familia de distribuciones exponenciales
 
-Como hemos mencionado antes, la variable de respuesta de los modelos lineales generalizados deben seguir una distribución de tipo exponencial, en esta sección veremos qué significa eso y qué implicaciones tiene.
+Como hemos mencionado antes, la variable de respuesta de los modelos lineales generalizados deben seguir una distribución de tipo exponencial, en esta sección veremos qué significa eso y qué implicaciones tiene. Uno de los motivos más importantes por los que se supone que las variables de respuesta $Y_i$ siguen distribuciones de esta familia se debe a que en los modelos lineales los cambios constantes en las variables predictoras implicaban cambios constantes en la variable de respuesta, pero ahora se quiere permitir que dichos cambios constantes de entrada puedan implicar también variaciones geométricas. 
 
 \begin{definición}[Distribución de tipo exponencial]
 Una distribución se dice que es de tipo exponencial si su función de densidad es de la forma: 
@@ -301,10 +314,10 @@ Es posible dar una forma general para la esperanza y la varianza de las variable
 
 \begin{proposición}
 Sea Y una variable de tipo exponencial, entonces verifica:
-\begin{itemize}
-  \item $E[Y] = b'(\theta)$
-  \item $Var(Y) = b''(\theta)a(\phi)$
-\end{itemize}
+
+\begin{equation} E[Y] = b'(\theta) \label{Esperanza exponencial}\end{equation}
+\begin{equation} Var(Y) = b''(\theta)a(\phi) \label{Varianza exponencial}\end{equation}
+
 \end{proposición}
 
 \begin{proof}
@@ -334,5 +347,148 @@ De donde se obtiene que: $Var(Y) = b''(\theta)a(\phi)$.
 
 \begin{observación}
 Cuando $\phi$ es conocido el manejo de la función a no tiene dificultad, pero en muchos casos $\phi$ suele ser desconocido, así que para agilizar los resultados escribiremos $a(\phi) = \frac{\phi}{\omega}$, donde ${\omega}$ es una constante conocida. De hecho, todos los casos prácticos de interés se podrán expresar así y la mayoría con ${\omega}=1$. De este modo nos queda: $Var(Y) = b''(\theta)\frac{\phi}{\omega}$.
+Por otro lado, en secciones posteriores necesitaremos trabajar con Var(Y) en función de $\mu = E[Y]$, para ello utilizaremos la relación $\ref{Esperanza exponencial}$ y definiremos una nueva función: \begin{equation} V(\mu) = \frac{b''(\theta)}{\omega} \label{V} \end{equation} pues de este modo se tiene que: $Var(Y) = V(\mu)\phi$
 \end{observación}
 
+Podemos recoger las carácterísticas de las principales distribuciones de tipo exponencial en la siguiente tabla:
+
+|  	| Binomial $Bi(n,p)$ 	| Normal $N(\mu,\sigma^2)$ 	|  Poisson $\newline$ $Po(\lambda)$ 	| Gamma $Ga(p,\lambda)$ 	|
+|---	|---	|---	|---	|---	|
+| $\theta(\mu)$ 	| $log(\frac{\mu}{n-\mu})$ 	| $\mu$ 	| $log(\mu)$ 	| $-\frac{1}{\mu}$ 	|
+| $\phi$ 	| 1 	| $\sigma^2$ 	| 1 	| $\frac{1}{p}$ 	|
+| $a(\phi)$ 	| 1 	| $\sigma^2$ 	| 1 	| $\frac{1}{p}$ 	|
+| $b(\theta)$ 	| $nlog(1+e^{\theta})$ 	| $\frac{\theta^2}{2}$ 	| $e^{\theta}$ 	| $-log(-\theta)$ 	|
+| $c(y,\phi)$ 	| $log(\binom{n}{y})$ 	| $-\frac{1}{2}(\frac{y^2}{\phi}+log(2\pi \phi))$ 	| $-log(y!)$ 	| $plog(py)-log(y\Gamma(p))$ 	|
+
+
+### Ajuste de los modelos lineales generalizados
+
+La estimación de parámetros e inferencia con modelos aditivos generalizados se basa en la estimación de máxima verosimilitud, ya que, gracias a la hipótesis de que las $Y_i$ pertenecezcan a la familia de distribuciones exponenciales, siempre se dispondrá de funciones de densidad. Partiremos considerando un MLG como el de la definición $\ref{Estructura básica de un MLG}$ y nuestro principal objetivo en esta sección será dar el estimador de máxima verosimilitud del vector de parámetros $\beta$.Veremos que será necesario recurrir a un algoritmo basado en mínimos cuadrados para hallar tal máximo, el método de mínimos cuadrados reponderados iterativamente.
+
+Empezamos considerando y una observación de Y y notando que, como los $Y_i$ son independientes entre sí, la función de verosimilitud para $\beta$ viene dada por: 
+$$
+L(\beta) = \prod_{i=1}^n f_{\theta_i}(y_i)
+$$
+Y la función de verosimilitud logarítmica:
+$$
+ l(\beta) = \sum_{i=1}^n log(f_{\theta_i}(y_i)) = \sum_{i=1}^n \frac{y_i\theta_i - b_i(\theta_i)}{a_i(\phi)}+c_i(\phi,y_i)
+$$
+
+La dependencia de $\beta$ viene de que $\theta$ depende de $\mu$ y este a su vez depende del predictor lineal. Ahora bien, si sustituimos en esta expresión que $a_i(\phi)= \frac{\phi}{\omega_i}$, como mencionamos en la sección anterior, nos queda:
+$$
+l(\beta) = \sum_{i=1}^n \omega_i\frac{y_i\theta_i - b_i(\theta_i)}{\phi}+c_i(\phi,y_i)
+$$
+Como queremos hallar el $\beta$ que la hace máxima derivamos respecto $\beta_i$ e igualamos a 0: 
+
+$$
+\frac{\partial l}{\partial \beta_j} = \frac{1}{\phi} \sum_{i=1}^n \omega_i(y_i\frac{\partial\theta_i}{\partial \beta_j} - b'_i(\theta_i)\frac{\partial\theta_i}{\partial \beta_j})
+$$
+Donde $\frac{\partial\theta_i}{\partial \beta_j}$ por la regla de la cadena es: 
+$$
+\frac{\partial\theta_i}{\partial \beta_j} = \frac{d\theta_i}{d \mu_i} \frac{\partial\mu_i}{\partial \beta_j} = \frac{d\theta_i}{d \mu_i} \frac{\partial\eta_i}{\partial \beta_j} \frac{\partial\mu_i}{\partial \eta_i} = \frac{X_{ij}}{g'(\mu_i) b''(\theta_i)}
+$$
+Hemos utilizado que $\frac{\partial\mu_i}{\partial \eta_i} = g'(\mu_i)$, que $\frac{\partial\eta_i}{\partial \beta_j} = X_{ij}$ y que derivando el resultado $\ref{Esperanza exponencial}$ se tiene: $\frac{d\theta_i}{d \mu_i} = \frac{1}{b''(\theta)}$. Sustituyendo también el resultado de $\ref{V}$: 
+\begin{equation}
+\frac{\partial l}{\partial \beta_j} = \frac{1}{\phi} \sum_{i=1}^n \frac{y_i - b'_i(\theta_i)}{g'(\mu_i)b''_i(\theta_i)/\omega_i} = 
+\frac{1}{\phi} \sum_{i=1}^n \frac{y_i - \mu_i}{g'(\mu_i)V(\mu_i)}X_{ij}
+\label{derivada log-likelihood}
+\end{equation}
+
+\begin{observación}
+Ahora bien, el razonamiento general que seguiríamos sería el igualar estas derivadas a 0 y resolver el sistema resultante, sin embargo, se trata de un sistema con ecuaciones no lineales, por lo que para resolverlo utilizaremos métodos numéricos, en concreto utilizaremos el método de Newton que precisa del gradiente y del Hessiano de $l$. Por lo que debemos volver a derivar $l$.
+\end{observación}
+$$
+\frac{\partial^2 l}{\partial \beta_j \beta_k} =  
+-\frac{1}{\phi} \sum_{i=1}^n \frac{X_{ij}X_{ik}\alpha(\mu_i)}{g'(\mu_i)^2V(\mu_i)}
+$$
+Donde $\alpha(\mu_i) = 1 + (y_i - \mu_i)(\frac{V'(\mu_i)}{V(\mu_i)} + \frac {g''(\mu_i)}{g'(\mu_i)})$. Luego, si definimos la matriz $W = diag(\omega_i)$ para $\omega_i = \frac {\alpha(\mu_i)}{g'(\mu_i)^2V(\mu_i)}$, el Hessiano de $l$ es: $-\frac{1}{\phi}XWX$. De manera similar, si definimos $G = diag(\frac{g'(\mu)} {\alpha(\mu_i)})$, el gradiente de $l$ puede escribirse como: $X^TWG\frac{(y-\mu)}{\phi}$.
+
+De este modo, una actualización del método de Newton es de la forma:
+$$
+\beta^{k+1} = \beta^k + (XWX)^{-1}X^TWG(y-\mu)= (XWX)^{-1}X^TWz
+$$
+Donde $z_i = g'(\mu_i) \frac{y_i-\mu_i}{\alpha(\mu_i)} + \eta_i$
+
+\begin{observación} 
+De lo anterior se podemos notar que las actualizaciones de los $\beta^k$ no son más que las estimaciones de $\beta$ por mínimos cuadrados ponderados, es decir, resultan de de minimizar:
+\begin{equation}
+\sum_{i=1}^n \omega_i(z_i - X_i\beta)^2
+\label{minimos cuadrados ponderados}
+\end{equation}
+Podemos entonces obtener el estimador numérico de los parámetros $\beta$ de los MLG mediante el siguiente algoritmo.
+\end{observación}
+
+\begin{definición}[Algoritmo de mínimos cuadrados reponderados iterativamente]
+
+1) Inicialización: tomar $\hat{\mu_i} = y_i + \delta_i$ y $\hat{\eta_i} = g(\hat{\mu_i})$, donde $\delta_i$ suele ser 0 o una constante que asegure que  $\hat{\eta_i}$ sea finito. \newline
+2) Calcular: $z_i = g'(\mu_i) \frac{y_i-\hat{\mu_i}}{\alpha(\mu_i)} + \hat{\eta_i}$ y $\omega_i = \frac {\alpha(\hat{\mu}_i)}{g'(\hat{\mu}_i)^2V(\hat{\mu}_i)}$ \newline
+3) Encontrar $\hat{\beta}$ el parámetro que minimiza la función objetivo de mínimos cuadrados ponderados $\ref{minimos cuadrados ponderados}$ y actualizar $\hat{\eta} = X \hat{\beta}$ y 
+$\hat{\mu_i} = g^{-1}(\hat{\eta}_i)$
+\end{definición}
+
+\begin{observación}
+Para saber con qué iteracion quedarnos debemos comprobar paso a paso si la variación entre el valor antiguo y el nuevo de $\hat{\beta}$ o las derivadas de la función de verosimilitud logáritmica están lo suficientemente cerca de 0.
+\end{observación}
+
+### Funciones de enlace canónicas
+
+\begin{definición}[Funciones de enlace canónicas]
+Se dice que una función de enlace $g_c$ es canónica para una distribución de la familia exponencial si verifica: $g_c(\mu_i)=\theta_i$, es decir, relaciona directamente el parámetro canónico con el predictor lineal.
+\end{definición}
+
+\begin{proposición}[Propiedades de las funciones de enlace canónicas]
+\begin{itemize}
+  \item Su uso en el modelo $\ref{Estructura básica de un MLG}$ resulta en: $\theta_i = X_i\beta$
+  \item Hacen que $\alpha(\mu_i)=1$.
+  \item El Hessiano de la función de verosimilitud logarítmica coincida con su valor esperado.
+  \item El sistema a resolver para obtener los estimadores de máxima verosimilitud de $\beta$, es decir, el formado por las derivadas parciales $\frac{\partial l}{\partial \beta_j}$ igualadas a 0 se reduce a: $X^ty - X^T\hat{\mu} = 0 \Rightarrow X^ty = X^T\hat{\mu}$ pues $\frac{\partial \theta_i}{\partial \beta_j} = X_{ij}$
+\end{itemize}
+\end{proposición}
+
+### Residuos
+
+Al igual que para los modelos lineales, el estudio de los residuos $\epsilon_i$ de los MLG es un buen método para el control de los modelos, pero en este caso la estandarización de los residuos es necesaria y más complicada. Esto se debe a que si las suposiciones hechas sobre el modelo son correctas, entonces los residuos estandarizados deben tener aproximadamente la misma varizana y se deben comportar, tanto como sea posible, como los residuos de los modelos lineales. Para ello veremos dos tipos de estandarizaciones distintas.
+
+\begin{definición} [Residuos de Pearson]
+Se dividen los residuos entre una cantidad proporcional a la desviación estándar dada por el modelo ajustado: 
+$$
+\hat{\epsilon}^p_i = \frac{y_i - \hat{\mu_i}}{\sqrt{V(\hat{\mu_i})}}
+$$
+Deben tener media nula y varianza $\phi$ si el modelos es correcto.
+\end{definición}
+
+\begin{observación}
+Estos residuos no deberían mostrar ninguna tendencia en la media o la varianza al representarlos frente a los valores ajustados del modelo. 
+\end{observación}
+
+En la práctica los residuos de Pearson suelen ser asimétricos en torno al 0, lo que no concuerda mucho con que se parezcan a los residuos de los modelos lineales. Por tanto, se considera también la siguiente estandarización de los residuos, que surge al comparar la desviación del MLG con la suma de los residuos al cuadrado de los modelos lineales. Veámos primero a qué nos referimos con desviación:
+
+\begin{definición}[Desviación]
+En el contexto de la definición $\ref{Estructura básica de un MLG}$, decimos que la desviación del modelo se define como:
+\begin{equation}
+D = 2(l(\hat{\beta}_{max})-l(\hat{\beta})\phi = 
+\sum_{i=1}^n 2\omega_i(y_i(\tilde{\theta}_i - \hat{\theta}_i) - b(\tilde{\theta}_i + b(\hat{\theta}_i))
+\label{eq:desviación}
+\end{equation}
+Donde:
+\begin{itemize}
+  \item $l(\hat{\beta}_{max})$ representa el valor máximo de la función de verosimilitud logarítmica del modelo saturado (el que tiene un parámetro por dato). Este es el valor máximo que pueden tener todas las funciones de verosimilitud logarítmicas para los datos dados.
+  \item $\tilde{\theta}_i$ es la estimación del parámetro canónico para el modelo saturado.
+  \item $\hat{\theta}_i$ es la estimación del parámetro canónico del modelo que estamos estudiando.
+\end{itemize}
+\end{definición}
+
+\begin{definición}[Residuos de desviación]
+Si denotamos por $d_i$ a la i-ésima componente de la desviación de un MLG, nos queda que $D = \sum_{i=1}^n d_i$ y se definen los residuos de desviación como:
+$$
+\hat{\epsilon}^d_i = signo(y_i - \hat{\mu_i})\sqrt{d_i}
+$$
+\end{definición}
+
+\begin{observación}
+Obviamente se tiene que: $ D = \sum_{i=1}^n (\hat{\epsilon}^d_i)^2$. Además, notemos que: $D^* = \frac{D}{\phi} \backsim \chi_n^2$ y, aunque esto no se pueda trasladar directamente componente a componente, podemos intuir que: 
+$$
+\frac{d_i}{\phi} \backsim \chi_1^2 \Rightarrow \hat{\epsilon}^d_i \backsim N(0,\phi)
+$$
+Es decir, intuitivamente, se comportarán como los residuos de los modelos lineales.
+\end{observación}

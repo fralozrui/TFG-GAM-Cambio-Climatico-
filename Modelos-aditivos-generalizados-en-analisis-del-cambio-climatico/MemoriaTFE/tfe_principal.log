@@ -1,9 +1,9 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2024.2.23)  24 FEB 2024 18:45
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2024.2.23)  24 FEB 2024 12:29
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**capitulo02.tex
-(./capitulo02.tex
+**tfe_principal.tex
+(./tfe_principal.tex
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-02-20>
 (c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/book.cls
@@ -272,8 +272,8 @@ Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 28
 )
 \Hy@SectionHShift=\skip53
 )
-Package hyperref Info: Option `unicode' set `true' on input line 34.
-Package hyperref Info: Option `breaklinks' set `true' on input line 34.
+Package hyperref Info: Option `unicode' set `true' on input line 32.
+Package hyperref Info: Option `breaklinks' set `true' on input line 32.
 (c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/natbib/natbib.sty
 Package: natbib 2010/09/13 8.31b (PWD, AO)
 \bibhang=\skip54
@@ -970,30 +970,30 @@ Package: makecell 2009/08/03 V0.1e Managing of Tab Column Heads and Cells
 \rotheadsize=\dimen321
 \c@nlinenum=\count373
 \TeXr@lab=\toks61
-) (./capitulo02.aux
+) (./tfe_principal.aux
 LaTeX Info: Redefining \. on input line 9.
 LaTeX Info: Redefining \% on input line 9.
 )
-\openout1 = `capitulo02.aux'.
+\openout1 = `tfe_principal.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 497.
-LaTeX Font Info:    ... okay on input line 497.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 497.
-LaTeX Font Info:    ... okay on input line 497.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 497.
-LaTeX Font Info:    ... okay on input line 497.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 497.
-LaTeX Font Info:    ... okay on input line 497.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 497.
-LaTeX Font Info:    ... okay on input line 497.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 497.
-LaTeX Font Info:    ... okay on input line 497.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 497.
-LaTeX Font Info:    ... okay on input line 497.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 497.
-LaTeX Font Info:    ... okay on input line 497.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 497.
-LaTeX Font Info:    ... okay on input line 497.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 495.
+LaTeX Font Info:    ... okay on input line 495.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 495.
+LaTeX Font Info:    ... okay on input line 495.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 495.
+LaTeX Font Info:    ... okay on input line 495.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 495.
+LaTeX Font Info:    ... okay on input line 495.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 495.
+LaTeX Font Info:    ... okay on input line 495.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 495.
+LaTeX Font Info:    ... okay on input line 495.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 495.
+LaTeX Font Info:    ... okay on input line 495.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 495.
+LaTeX Font Info:    ... okay on input line 495.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 495.
+LaTeX Font Info:    ... okay on input line 495.
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
 *geometry* verbose mode - [ preamble ] result:
@@ -1028,10 +1028,10 @@ LaTeX Font Info:    ... okay on input line 497.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-Package hyperref Info: Link coloring OFF on input line 497.
-(./capitulo02.out) (./capitulo02.out)
+Package hyperref Info: Link coloring OFF on input line 495.
+(./tfe_principal.out) (./tfe_principal.out)
 \@outlinefile=\write4
-\openout4 = `capitulo02.out'.
+\openout4 = `tfe_principal.out'.
 
 (c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
@@ -1039,117 +1039,176 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 48
 (c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 ))
-LaTeX Info: Redefining \. on input line 497.
-LaTeX Info: Redefining \% on input line 497.
+LaTeX Info: Redefining \. on input line 495.
+LaTeX Info: Redefining \% on input line 495.
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: subfig package v1.3 is loaded.
 Package caption Info: rotating package is loaded.
 Package caption Info: End \AtBeginDocument code.
-(./capitulo02.toc
-LaTeX Info: Redefining \. on input line 1.
-LaTeX Info: Redefining \% on input line 1.
-LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 3.
+<logo.png, id=95, 301.125pt x 262.9825pt>
+File: logo.png Graphic file (type png)
+<use logo.png>
+Package pdftex.def Info: logo.png  used on input line 511.
+(pdftex.def)             Requested size: 227.63055pt x 227.63321pt.
+LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 551.
 (c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/ot1lmr.fd
 File: ot1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-LaTeX Font Info:    Trying to load font information for OML+lmm on input line 3.
+LaTeX Font Info:    Trying to load font information for OML+lmm on input line 551.
 (c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/omllmm.fd
 File: omllmm.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 3.
+LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 551.
 (c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/omslmsy.fd
 File: omslmsy.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 3.
+LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 551.
 (c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/omxlmex.fd
 File: omxlmex.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <12> on input line 3.
+(Font)              <12> on input line 551.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <8> on input line 3.
+(Font)              <8> on input line 551.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <6> on input line 3.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 3.
+(Font)              <6> on input line 551.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 551.
 (c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 3.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 551.
 (c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-))
-\tf@toc=\write5
-\openout5 = `capitulo02.toc'.
+) [1
 
+
+
+{c:/Users/34633/AppData/Roaming/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc} <./logo.png>] [2
+
+] (./tfe_principal.toc
+LaTeX Info: Redefining \. on input line 1.
+LaTeX Info: Redefining \% on input line 1.
+)
+\tf@toc=\write5
+\openout5 = `tfe_principal.toc'.
+
+[1
+
+] [2
+
+] [3] [4
+
+] [5] [6
+
+] (./tfe_principal.lof
+LaTeX Info: Redefining \. on input line 1.
+LaTeX Info: Redefining \% on input line 1.
+)
+\tf@lof=\write6
+\openout6 = `tfe_principal.lof'.
+
+[7
+
+
+] [8
+
+] (./tfe_principal.lot
+LaTeX Info: Redefining \. on input line 1.
+LaTeX Info: Redefining \% on input line 1.
+)
+\tf@lot=\write7
+\openout7 = `tfe_principal.lot'.
+
+[9
+
+] [10
+
+]
+Cap\'{\i }tulo 1.
+
+pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.713 
+       [1
+
+]
 \c@observación=\count374
 \c@definición=\count375
 \c@proposición=\count376
 \c@ejemplo=\count377
-[1
+LaTeX Info: Redefining \. on input line 752.
+LaTeX Info: Redefining \% on input line 752.
 
-
-
-{c:/Users/34633/AppData/Roaming/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}] [2
-
-]
-Cap\'{\i }tulo 1.
+pdfTeX warning (ext4): destination with the same identifier (name{page.2}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.752 ...s}\label{modelos-lineales-generalizados}}
+                                                   [2]
+Cap\'{\i }tulo 2.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 555.
+(Font)              <10> on input line 769.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 555.
+(Font)              <7> on input line 769.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 555.
-[3{c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}]
-LaTeX Info: Redefining \. on input line 643.
-LaTeX Info: Redefining \% on input line 643.
-LaTeX Info: Redefining \. on input line 643.
-LaTeX Info: Redefining \% on input line 643.
+(Font)              <5> on input line 769.
+[3
+
+{c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}]
+LaTeX Info: Redefining \. on input line 856.
+LaTeX Info: Redefining \% on input line 856.
+LaTeX Info: Redefining \. on input line 856.
+LaTeX Info: Redefining \% on input line 856.
 [4{c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc}{c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}]
-Overfull \hbox (17.40993pt too wide) detected at line 703
+Overfull \hbox (17.40993pt too wide) detected at line 915
 \OML/lmm/m/it/12 E\OT1/lmr/m/n/12 [\OML/lmm/m/it/12 ^^O^^O[]\OT1/lmr/m/n/12 ] = \OML/lmm/m/it/12 E [] \OT1/lmr/m/n/12 = [] = []
  []
 
-LaTeX Info: Redefining \. on input line 704.
-LaTeX Info: Redefining \% on input line 704.
-LaTeX Info: Redefining \. on input line 704.
-LaTeX Info: Redefining \% on input line 704.
+LaTeX Info: Redefining \. on input line 916.
+LaTeX Info: Redefining \% on input line 916.
+LaTeX Info: Redefining \. on input line 916.
+LaTeX Info: Redefining \% on input line 916.
 [5]
-LaTeX Info: Redefining \. on input line 768.
-LaTeX Info: Redefining \% on input line 768.
-LaTeX Info: Redefining \. on input line 768.
-LaTeX Info: Redefining \% on input line 768.
+LaTeX Info: Redefining \. on input line 980.
+LaTeX Info: Redefining \% on input line 980.
+LaTeX Info: Redefining \. on input line 980.
+LaTeX Info: Redefining \% on input line 980.
 [6]
-LaTeX Info: Redefining \. on input line 818.
-LaTeX Info: Redefining \% on input line 818.
-LaTeX Info: Redefining \. on input line 818.
-LaTeX Info: Redefining \% on input line 818.
+LaTeX Info: Redefining \. on input line 1030.
+LaTeX Info: Redefining \% on input line 1030.
+LaTeX Info: Redefining \. on input line 1030.
+LaTeX Info: Redefining \% on input line 1030.
 [7]
-LaTeX Info: Redefining \. on input line 867.
-LaTeX Info: Redefining \% on input line 867.
-LaTeX Info: Redefining \. on input line 867.
-LaTeX Info: Redefining \% on input line 867.
+LaTeX Info: Redefining \. on input line 1079.
+LaTeX Info: Redefining \% on input line 1079.
+LaTeX Info: Redefining \. on input line 1079.
+LaTeX Info: Redefining \% on input line 1079.
 [8]
-LaTeX Info: Redefining \. on input line 936.
-LaTeX Info: Redefining \% on input line 936.
-LaTeX Info: Redefining \. on input line 936.
-LaTeX Info: Redefining \% on input line 936.
-[9]
-LaTeX Info: Redefining \. on input line 990.
-LaTeX Info: Redefining \% on input line 990.
-LaTeX Info: Redefining \. on input line 990.
-LaTeX Info: Redefining \% on input line 990.
-[10]
-LaTeX Info: Redefining \. on input line 1039.
-LaTeX Info: Redefining \% on input line 1039.
-LaTeX Info: Redefining \. on input line 1039.
-LaTeX Info: Redefining \% on input line 1039.
-[11]
-No file capitulo02.bbl.
-LaTeX Info: Redefining \. on input line 1076.
-LaTeX Info: Redefining \% on input line 1076.
-LaTeX Info: Redefining \. on input line 1076.
-LaTeX Info: Redefining \% on input line 1076.
-[12] (./capitulo02.aux
+LaTeX Info: Redefining \. on input line 1160.
+LaTeX Info: Redefining \% on input line 1160.
+LaTeX Info: Redefining \. on input line 1160.
+LaTeX Info: Redefining \% on input line 1160.
+[9] [10
+
+]
+Cap\'{\i }tulo 3.
+[11] [12
+
+]
+Cap\'{\i }tulo 4.
+[13] [14
+
+]
+Ap\'{e}ndice A.
+[15] [16
+
+]
+Ap\'{e}ndice B.
+[17] [18
+
+] (./tfe_principal.bbl) [19
+
+] (./tfe_principal.aux
 LaTeX Info: Redefining \. on input line 9.
 LaTeX Info: Redefining \% on input line 9.
 )
@@ -1157,22 +1216,22 @@ LaTeX Info: Redefining \% on input line 9.
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-02-20>
  ***********
-Package rerunfilecheck Info: File `capitulo02.out' has not changed.
-(rerunfilecheck)             Checksum: 6613B57B2FF1A7308E06EE1351B399BA;1658.
+Package rerunfilecheck Info: File `tfe_principal.out' has not changed.
+(rerunfilecheck)             Checksum: 04EC26E1A997AE06621E5B1F939B23EB;3365.
  ) 
 Here is how much of TeX's memory you used:
- 30673 strings out of 476079
- 585516 string characters out of 5791215
+ 30792 strings out of 476079
+ 587264 string characters out of 5791215
  1947190 words of memory out of 5000000
- 52106 multiletter control sequences out of 15000+600000
- 623049 words of font info for 82 fonts, out of 8000000 for 9000
+ 52185 multiletter control sequences out of 15000+600000
+ 635705 words of font info for 86 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 84i,16n,93p,547b,608s stack positions out of 10000i,1000n,20000p,200000b,200000s
-<c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmex10.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi12.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi6.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi8.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr6.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr8.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri12.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmro8.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy6.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy8.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on capitulo02.pdf (12 pages, 305932 bytes).
+ 84i,16n,93p,550b,598s stack positions out of 10000i,1000n,20000p,200000b,200000s
+<c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbxi10.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmcsc10.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmex10.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi12.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi6.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi8.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr17.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr6.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr8.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri12.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmro8.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy6.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy8.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on tfe_principal.pdf (31 pages, 389871 bytes).
 PDF statistics:
- 270 PDF objects out of 1000 (max. 8388607)
- 217 compressed objects within 3 object streams
- 65 named destinations out of 1000 (max. 500000)
- 85 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 437 PDF objects out of 1000 (max. 8388607)
+ 357 compressed objects within 4 object streams
+ 94 named destinations out of 1000 (max. 500000)
+ 194 words of extra memory for PDF output out of 10000 (max. 10000000)
 
