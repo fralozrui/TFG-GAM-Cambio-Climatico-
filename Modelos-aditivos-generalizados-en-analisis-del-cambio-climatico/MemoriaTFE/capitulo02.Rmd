@@ -1,5 +1,5 @@
 ---
-author: "Nombre Completo Autor"
+author: "Francisco José Lozano Ruiz"
 date: "27/10/2017"
 documentclass: book
 forprint: true  # true: imprime a dos caras, false: libro digital
@@ -259,7 +259,7 @@ $$
 \begin{pmatrix} E[Y_1] \\ \vdots \\ E[Y_n] \end{pmatrix} = E[Y]
 $$
 $$
-g(\mu_i) = X_i\beta , \space \forall i =1,\dots,n
+g(\mu_i) = X_i\beta , \hspace{0.5cm} \forall i =1,\dots,n
 $$
 
 Donde: 
@@ -289,7 +289,7 @@ $$
 Donde: 
 \begin{itemize}
   \item a, b y c son funciones arbitrarias.
-  \item  $\phi$ es conocido como parámetro de escala.
+  \item  $\phi$ es conocido como parámetro de escalado.
   \item $\theta$ es conocido como parámetro canónico de la distribución. Más adelante veremos que depende completamente de los parámetros del modelo $\beta$.
 \end{itemize}
 \end{definición}
