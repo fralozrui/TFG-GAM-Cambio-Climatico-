@@ -76,7 +76,7 @@ knitr::opts_chunk$set(fig.path = 'figurasR/',
 \newtheorem{observación}{Observación}[section]
 \theoremstyle{definition}
 \newtheorem{definición}{Definición}[section]
-\theoremstyle{plain}
+\theoremstyle{definition}
 \newtheorem{proposición}{Proposición}[section]
 \theoremstyle{remark}
 \newtheorem{ejemplo}{Ejemplo}[section]
@@ -87,11 +87,15 @@ knitr::opts_chunk$set(fig.path = 'figurasR/',
 
 Como bien introdujimos antes, los modelos estadísticos pretenden explicar la relación entre dos o mas variables, en particular, tratan de describir el comportamiento de una variable respuesta (o dependiente), que se suele denotar por $Y$, mediante la información que otorgan las variables predictoras (o independientes), que se suelen denotar como $X_{1},...,X_{p}$.
 
-La forma más general de expresar matemáticamente la intención de los modelos estadísticos es la siguiente: $$
-  Y = f(X_{1},..,X_{p}) + \epsilon
-  $$ Donde $f$ es una función desconocida cuyo propósito es el de representar de la "mejor"[^1] manera posible la relación entre las variables $X_{1},...,X_{p}$ e $Y$, y $\epsilon$ es un error aleatorio independiente de las variables predictoras que deberá cumplir ciertas condiciones según el tipo de modelo que estemos tratando.
+La forma más general de expresar matemáticamente la intención de los modelos estadísticos es la siguiente: 
+\begin{equation}
+Y = f(X_{1},..,X_{p}) + \epsilon
+\label{eq:modelo general}
+\end{equation}
 
-[^1]: Escribimos mejor entre comillas pues hay diversas formas de evaluar los modelos.
+Donde $f$ es una función desconocida cuyo propósito es el de representar de la mejor[^1] manera posible la relación entre las variables $X_{1},...,X_{p}$ e $Y$; y $\epsilon$ es un error aleatorio independiente de las variables predictoras que deberá cumplir ciertas condiciones según el tipo de modelo que estemos tratando.
+
+[^1]: El cómo de bueno es un modelo es un concepto que se puede definir de tantas formas como maneras hay de evaluarlos. Veremos varias de ellas a lo largo del trabajo.
 
 Este trabajo tiene como finalidad el definir un conjunto de estrategias y técnicas que proporcionan un ajuste óptimo de la función $f$, es decir, que asemeje lo mejor posible la relación de las variables al fenómeno que se esté estudiando. Además, se incluye una posterior aplicación práctica de dichos resultados en el ámbito del cambio climático.
 
@@ -129,10 +133,10 @@ $$
 
 Donde: 
 \begin{itemize}
-  \item $\beta$ es un vector de $\beta_i$ parámetros a determinar que reflejan la magnitud del efecto lineal (constante) de los incrementos unitarios en las variables explicativas $X_{i}$ sobre la variable explicada $Y$.
+  \item $\beta$ es un vector de parámetros $\beta_i$ a determinar que reflejan la magnitud del efecto lineal (constante) de los incrementos unitarios en las variables explicativas $X_{i}$ sobre la variable explicada $Y$.
   \item $\epsilon$ es un vector aleatorio tal que los $\epsilon_{i}$ son variables aleatorias independientes e identicamente distribuidas por una distribución normal de esperanza nula y varianza $\sigma^2$ ($\epsilon_{i} \backsim N(0,\sigma^2)$). Representa el término de error del modelo y corresponde con $\epsilon = Y-E[Y]$.
 \end{itemize}
-\begin{observación} Gracias a lo notado en el párrafo anterior podemos ver que: $Y \backsim N(\mu,\sigma^2I_{n})$ ya que:
+\begin{observación} Gracias a lo notado en el párrafo anterior podemos ver que: \newline $Y \backsim N(\mu,\sigma^2I_{n})$ ya que:
 $$
 E[Y] = E[X \beta + \epsilon] = X\beta + E[\epsilon] = X\beta = \mu
 $$
@@ -171,10 +175,10 @@ Desarrollando este sistema de escuaciones llegamos a que es equivalente a $X^TX\
 \label{eq:EstMinCuad}
 \end{equation}
 
-\begin{observación} Notemos que esta expresión tiene sentido pues el producto $X^TX$ resulta en una matriz cuadrada de orden p y rango máximo.
+\begin{observación} Notemos que esta expresión tiene sentido pues el producto $X^TX$ resulta en una matriz cuadrada de orden p y rango máximo, por lo que el sistema antes dado tiene solución única.
 \end{observación}
 
-\begin{proposición}[Distribución del estimador por mínimos cuadrados] 
+\begin{proposición}[Distribución del estimador $\hat{\beta}$] 
 El estimador por mínimos cuadrados del vector de parámetros $\beta$, $\hat{\beta}$, sigue una distribución del tipo normal p-variante de esperanza $\beta$ y matriz de covarianzas $V_{\hat{\beta}} = \sigma^2 (X^TX)^{-1}$. Es decir: 
 $ \hat{\beta} \backsim N_{p}(\beta,\sigma^2 (X^TX)^{-1})$
 \end{proposición}
@@ -211,8 +215,7 @@ E[\epsilon_1 \epsilon_n] & \dotsb & \dotsb & E[\epsilon_n^2]\end{pmatrix}
 0 & \dotsb & \dotsb & \sigma^2
 \end{bmatrix}
 $$
-\newpage
-Luego, utilizando que $\hat{\beta} = \beta + (X^TX)^{-1}X \epsilon$, se tiene que: 
+Luego, utilizando que por $\ref{eq:EstMinCuad}$ se tiene que $\hat{\beta} = \beta + (X^TX)^{-1}X \epsilon$, obtenemos que la matriz de covarianzas es: 
 
 \begin{equation*}
 \begin{split}
@@ -250,7 +253,7 @@ No daremos la obtención de este estimador pero sí indicaremos que su distribuc
 
 ## Modelos lineales generalizados
 
-Nos adentramos ya con esta sección en la primera extensión de los modelos lineales de las que se tratan durante el trabajo. Los Modelos Lineales Generalizados (MLG) fueron originalmente formulados por John Nelder y Robert Wedderburn (1972), quienes tenían como propósito unificar varios modelos estadísticos como la regresión lineal, la logística y la de Poisson en un mismo modelo. Este tipo de modelos relajan algunas de las condiciones de los modelos lineales, como que los errores ya no deben seguir ninguna distribución específica, y además añade nuevos elementos como la función de enlace, que interviene en la relación entre las medias y la forma lineal del modelo. También se deberá tener en cuenta que seguirá la hipótesis de que las variables de respuestas siguen distribuciones de tipo exponencial. Más tarde nos adentraremos en cada uno de estos aspectos, de momento demos la estructura básica de un MLG.
+Nos adentramos ya con esta sección en la primera extensión de los modelos lineales de las que se tratan durante el trabajo. Los Modelos Lineales Generalizados (MLG) fueron originalmente formulados por John Nelder y Robert Wedderburn (1972), quienes tenían como propósito unificar varios modelos estadísticos como la regresión lineal, la logística y la de Poisson en un mismo modelo. Este tipo de modelo relaja algunas de las hipótesis que asumían los modelos lineales, como que los errores ya no deben seguir ninguna distribución específica y además añade nuevos elementos como la función de enlace, la cual interviene en la relación entre las medias y la forma lineal del modelo. También se deberá tener en cuenta una nueva hipótesis distribucional, las variables de respuestas seguirán distribuciones de tipo exponencial. Más tarde introduciremos cada uno de estos aspectos, de momento demos la estructura básica de un MLG.
 
 \begin{definición}[Estructura básica de un MLG]
 

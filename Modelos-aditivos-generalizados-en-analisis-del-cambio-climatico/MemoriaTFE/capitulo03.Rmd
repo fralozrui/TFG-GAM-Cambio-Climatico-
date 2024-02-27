@@ -73,7 +73,7 @@ knitr::opts_chunk$set(fig.path = 'figurasR/',
 \newtheorem{observación}{Observación}[section]
 \theoremstyle{definition}
 \newtheorem{definición}{Definición}[section]
-\theoremstyle{plain}
+\theoremstyle{definición}
 \newtheorem{proposición}{Proposición}[section]
 \theoremstyle{remark}
 \newtheorem{ejemplo}{Ejemplo}[section]
@@ -82,11 +82,13 @@ knitr::opts_chunk$set(fig.path = 'figurasR/',
 
 ## Introducción
 
-Como bien podemos intuir por su nombte, los modelos aditivos generalizados no son más que la fusión entre los modelos lineales generalizados y los modelos aditivos, los cuales se introducen con una sección en este capítulo. Podemos ver estos dos tipos de modelos como extensiones del modelo lineal. Por un lado, como vimos en el capítulo anterior, el MLG hace uso de una función de enlace entre el predictor lineal y el valor esperado de la variable dependiente para poder expresar relaciones más complejas y relaja la hipótesis distribucional permitiendo que tal variable siga distribuciones de la familia exponencial. Por otro lado, los modelos aditivos, además de también relajar esta hipótesis de distribución, introducen las funciones de suavizado en el modelo, estas proporcionan más flexibilidad a la hora de relacionar las variables explicativas con la de respuesta.
+Como bien podemos intuir por su nombre, los modelos aditivos generalizados no son más que la fusión entre los modelos lineales generalizados y los modelos aditivos, los cuales se introducen con una sección en este capítulo. Podemos ver estos dos tipos de modelos como extensiones del modelo lineal. Por un lado, como vimos en el capítulo anterior, el MLG hace uso de una función de enlace entre el predictor lineal y el valor esperado de la variable dependiente para poder expresar relaciones más complejas y relaja la hipótesis distribucional permitiendo que tal variable siga distribuciones de la familia exponencial. Por otro lado, los modelos aditivos, además de también relajar esta hipótesis de distribución, introducen las funciones de suavizado en el modelo, estas proporcionan más flexibilidad a la hora de relacionar las variables explicativas con la de respuesta.
 
-Luego, como ya hemos mencionado y como se plantean Hastie y Tibshirani (1986,1990), el MAG reune estas dos propuestas de forma que este tipo de modelo generaliza el modelo aditivo de la misma forma que el MLG generalizaba el modelo lineal. Sin embargo, la flexibilidad que proporciona este modelo da lugar a dos nuevos problemas teóricos: cómo estimar las funciones de suavizado y cómo de "suaves" deben ser. 
+Luego, como ya hemos mencionado, y como se plantea en Hastie y Tibshirani (1986,1990), el MAG reune estas dos propuestas de forma que este tipo de modelo generaliza el modelo aditivo de la misma forma que el MLG generalizaba el modelo lineal. Sin embargo, la flexibilidad que proporciona este modelo da lugar a dos nuevos problemas teóricos: cómo estimar las funciones de suavizado y cómo de "suaves" deben ser. 
 
-Comenzaremos este capítulo viendo como construir los modelos aditivos generalizados, es decir, qué bases de funciones podemos elegir para obtener las funciones de suavizado y qué parámetro de suavizado se debe seleccionar o cómo se puede estimar. Luego se introduce el modelo aditivo, en el que se utilizarán los resultados vistos a lo largo del capítulo. Tras todo ello se propone la forma final del modelo aditivo generalizado.
+En este capítulo nos adentramos en los modelos no paramétricos, es decir, con aquellos que en vez de expresar la relación del valor esperado de la variable de respuesta con las variables predictoras mediante un predictor lineal se hace mediante funciones $f$, como se vió en $\ref{eq:modelo general}$, pero ahora sin hacer ninguna suposición sobre ella. Esto conllevará en muchas ocasiones un mejor ajuste del modelo y traerá a la mesa una nueva cuestión conocida como sobreajuste que, aunque ya aparecía para los modelos paramétricos, ahora jugará un papel fundamental a la hora de querer predecir datos fuera de los observados. Este concepto refleja el hecho de que el modelo ajusta tan bien los datos proporcionados para la estimación de sus parámetros que es incapaz de mostrar la verdadera relación entre las variables que se estudian y, por tanto, da lugar a predicciones de nuevos datos que no serán las idóneas.
+
+Comenzaremos viendo cómo construir los modelos aditivos generalizados, es decir, qué bases de funciones podemos elegir para obtener las funciones de suavizado y qué parámetro de suavizado se debe seleccionar o cómo se puede estimar. Luego se introduce el modelo aditivo, en el que se utilizarán los resultados vistos a lo largo del capítulo. Tras todo ello se propone la forma final del modelo aditivo generalizado.
 
 
 \begin{definición}[Estructura básica del modelo aditivo generalizado]
@@ -144,7 +146,7 @@ Como indica Wood, 2017, p.162, por el teorema de Taylor, la base polinomial nos 
 El principal problema se debe a que la interpolación de los datos puede resultar en una función muy oscilante o que no ajuste bien la indormación, dependiendo del valor de k. Esto se puede solucionar de cierta manera con el siguiente tipo de base de funciones.
 \end{observación}
 
-**Base lineal por parte** \newline
+**Base lineal por partes** \newline
 Consideremos ahora una partición de nodos $\{x^*_j : j = 1,\dots,k \}$ del rango de la variable predictora $x$ tal que $x^*_j > x^*_{j+1}$ y la base de funciones $\mathcal{B} = \{b_j(x)\}_{j=1}^k$ donde:
 
 
@@ -200,7 +202,7 @@ par(mfrow = c(1, 3))
 plot(x, y1, type = "l", col = "blue", main = "Función básica b1(x)")
 abline(v = 0, lty = 2, col = "green")
 points(0, 0, col = "red", pch = 16)
-text(0, 0, "x1", pos = 3)
+text(0, 0, "x0", pos = 3)
 plot(x, y2, type = "l", col = "blue", main = "Función básica b2(x)")
 abline(v = 2, lty = 2, col = "green")
 points(2, 0, col = "red", pch = 16)
