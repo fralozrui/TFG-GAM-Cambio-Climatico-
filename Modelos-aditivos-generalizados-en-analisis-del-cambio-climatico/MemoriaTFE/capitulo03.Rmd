@@ -84,11 +84,11 @@ knitr::opts_chunk$set(fig.path = 'figurasR/',
 
 Como bien podemos intuir por su nombre, los modelos aditivos generalizados no son más que la fusión entre los modelos lineales generalizados y los modelos aditivos, los cuales se introducen con una sección en este capítulo. Podemos ver estos dos tipos de modelos como extensiones del modelo lineal. Por un lado, como vimos en el capítulo anterior, el MLG hace uso de una función de enlace entre el predictor lineal y el valor esperado de la variable dependiente para poder expresar relaciones más complejas y relaja la hipótesis distribucional permitiendo que tal variable siga distribuciones de la familia exponencial. Por otro lado, los modelos aditivos, además de también relajar esta hipótesis de distribución, introducen las funciones de suavizado en el modelo, estas proporcionan más flexibilidad a la hora de relacionar las variables explicativas con la de respuesta.
 
-Luego, como ya hemos mencionado, y como se plantea en Hastie y Tibshirani (1986,1990), el MAG reune estas dos propuestas de forma que este tipo de modelo generaliza el modelo aditivo de la misma forma que el MLG generalizaba el modelo lineal. Sin embargo, la flexibilidad que proporciona este modelo da lugar a dos nuevos problemas teóricos: cómo estimar las funciones de suavizado y cómo de "suaves" deben ser. 
+Luego, como ya hemos mencionado, y como se plantea en @Hastie, el MAG reune estas dos propuestas de modo que generaliza el modelo aditivo de la misma forma que el MLG generalizaba el modelo lineal. Sin embargo, la flexibilidad que proporciona este modelo da lugar a dos nuevos problemas teóricos: cómo estimar las funciones de suavizado y cómo de "suaves" deben ser. 
 
-En este capítulo nos adentramos en los modelos no paramétricos, es decir, con aquellos que en vez de expresar la relación del valor esperado de la variable de respuesta con las variables predictoras mediante un predictor lineal se hace mediante funciones $f$, como se vió en $\ref{eq:modelo general}$, pero ahora sin hacer ninguna suposición sobre ella. Esto conllevará en muchas ocasiones un mejor ajuste del modelo y traerá a la mesa una nueva cuestión conocida como sobreajuste que, aunque ya aparecía para los modelos paramétricos, ahora jugará un papel fundamental a la hora de querer predecir datos fuera de los observados. Este concepto refleja el hecho de que el modelo ajusta tan bien los datos proporcionados para la estimación de sus parámetros que es incapaz de mostrar la verdadera relación entre las variables que se estudian y, por tanto, da lugar a predicciones de nuevos datos que no serán las idóneas.
+En este capítulo nos adentramos en los modelos no paramétricos, es decir, en aquellos que en vez de expresar la relación del valor esperado de la variable de respuesta con las variables predictoras mediante un predictor lineal, lo hacen mediante funciones $f$, como se vió en $\ref{eq:modelo general}$, pero ahora sin hacer ninguna suposición sobre ella. Esto conllevará en muchas ocasiones un mejor ajuste del modelo y traerá a la mesa una nueva cuestión conocida como sobreajuste que, aunque ya aparecía para los modelos paramétricos, ahora jugará un papel fundamental a la hora de querer predecir datos fuera de los observados. Este concepto refleja el hecho de que el modelo ajusta tan bien los datos proporcionados para la estimación de sus parámetros que es incapaz de mostrar la verdadera relación entre las variables que se estudian y, por tanto, da lugar a predicciones de nuevos datos que no serán las idóneas.
 
-Comenzaremos viendo cómo construir los modelos aditivos generalizados, es decir, qué bases de funciones podemos elegir para obtener las funciones de suavizado y qué parámetro de suavizado se debe seleccionar o cómo se puede estimar. Luego se introduce el modelo aditivo, en el que se utilizarán los resultados vistos a lo largo del capítulo. Tras todo ello se propone la forma final del modelo aditivo generalizado.
+Tal y como se hace en @Wood, comenzaremos viendo cómo construir los modelos aditivos generalizados, es decir, qué bases de funciones podemos elegir para obtener las funciones de suavizado y qué parámetro de suavizado se debe seleccionar o cómo se puede estimar. Luego se introduce el modelo aditivo, en el que se utilizarán los resultados vistos a lo largo del capítulo. Tras todo ello se propone la forma final del modelo aditivo generalizado.
 
 
 \begin{definición}[Estructura básica del modelo aditivo generalizado]
@@ -141,7 +141,7 @@ y_i = \beta_1 + \beta_2 x_i + \beta_3 x_i^2 + \dots + \beta_{k+1} x_i^k + \epsil
 $$
 
 \begin{observación}[Problema de la base polinómica]
-Como indica Wood, 2017, p.162, por el teorema de Taylor, la base polinomial nos será útil cuando nuestro interés sea el de estudiar las propiedades de la función de suavizado en el entorno de un punto concreto, pero nos encontramos con problemas cuando queremos hacerlo en todo el dominio de $f$.
+Notemos que por el teorema de Taylor, la base polinomial nos será útil cuando nuestro interés sea el de estudiar las propiedades de la función de suavizado en el entorno de un punto concreto, pero nos encontramos con problemas cuando queremos hacerlo en todo el dominio de $f$.
 
 El principal problema se debe a que la interpolación de los datos puede resultar en una función muy oscilante o que no ajuste bien la indormación, dependiendo del valor de k. Esto se puede solucionar de cierta manera con el siguiente tipo de base de funciones.
 \end{observación}
@@ -176,11 +176,12 @@ b_k(x) = \left\{
 \end{array}
 \right. 
 $$
+Es decir, la base de funciones $b_j(x)$ que son 0 en todo su dominio excepto entre los nodos a izquierda y derecha de $x_j^*$, donde crece y decrece de forma lineal hasta llegar a 1 en tal nodo. Este tipo de funciones se conocen como *tent functions*.
 
 \begin{ejemplo}
-Supongamos que el rango de $x$ es de 0 a 5 y consideremos 6 nodos: $\{0,1,2,3,4,5\}$, entonces podemos representar las funciones $b_0(x)$, $b_2(x)$ y $b_5(x)$ como:
+Supongamos que el rango de $x$ va de 0 a 5 y consideremos 6 nodos: $\{0,1,2,3,4,5\}$, entonces podemos representar las funciones $b_0(x)$, $b_2(x)$ y $b_5(x)$ como:
 ```{r}
-b1 <- function(x) {
+b0 <- function(x) {
   ifelse(x < 1, 1-x, 0)
 }
 
@@ -193,13 +194,13 @@ b5 <- function(x){
 }
 
 x <- seq(0, 5, length.out = 100)
-y1 <- b1(x)
+y0 <- b0(x)
 y2 <- b2(x)
 y5 <- b5(x)
 
 par(mfrow = c(1, 3))
 
-plot(x, y1, type = "l", col = "blue", main = "Función básica b1(x)")
+plot(x, y0, type = "l", col = "blue", main = "Función básica b0(x)")
 abline(v = 0, lty = 2, col = "green")
 points(0, 0, col = "red", pch = 16)
 text(0, 0, "x0", pos = 3)
@@ -214,3 +215,81 @@ text(5, 0, "x5", pos = 3)
 
 ```
 \end{ejemplo}
+
+De momento sólo planteamos estas formas de estimar las funciones de suavizado para tener una idea inicial y sencilla de cómo hacerlo pero más adelante dedicamos una sección a mejorar estas estimaciones mediante *splines*.
+
+### Control del suavizado
+
+Nos interesará ahora controlar el grado de suavizado del GAM. Para ello tendremos en cuenta que el modelo aproxime de forma correcta los datos a la vez que la curvatura se mantiene controlada. Consideramos un nuevo parámetro $\lambda$, denominado parámetro de suavizado, el cuál tiene como principal función el compensar entre la fidelidad a los datos del modelos y el grado de suavizado del mismo.
+
+Notemos primero que podemos representar la penalización a la curvatura de $f$ como: 
+$$
+\int(f'')^2
+$$
+Y en el caso de utilizar la base de funciones lineales por partes se puede aproximar[^1] por:
+$$
+\sum_{j=2}^{k-1}(f(x_{j-1}^*)-2f(x_j^*)+f(x_{j+1}^*))^2
+$$
+
+Es fácil observar que cuando $f$ es una línea recta la penalización es 0 y cuando presenta muchas fluctuaciones en su curvatura este término es mayor.
+
+[^1]: Se supone que se los nodos están espaciados de manera uniforme, pues en el caso de no que no lo estuvieran habría que añadir pesos a la suma.
+
+Luego, en vez de ajustar el modelo por mínimos cuadrados, ahora se hará añadiendo la anterior penalización, es decir, minimizando: 
+$$
+||y - X\beta||^2 + \lambda \sum_{j=2}^{k-1}(f(x_{j-1}^*)-2f(x_j^*)+f(x_{j+1}^*))^2
+$$
+
+\begin{observación}
+Mientras mayor sea $\lambda$ más importancia le estaremos dando a que la función $f$ sea suave y menos a que a aproxime bien los datos. De hecho, cuando $\lambda \rightarrow \infty $ la función de suavizado $f$ que minimiza la anterior expresión será una línea recta y cuando $\lambda=0$ resultará en una estimación no penalizada. 
+\end{observación}
+
+### Elección del parámetro de suavizado
+
+Cómo hemos visto en la observación anterior: si el parámetro de suavizado es muy grande, el modelo será demasiado simple como para ajustarse bien a los datos y si es muy pequeño, la función de suavizado tendrá una curvatura muy alta. En cualquiera de los casos se tendrá que la estimación de $f$ no se parecerá a la función real que ajusta los datos. Por ello, debemos dar un criterio para la elección de $\lambda$.
+
+Un primer criterio planteado en @Wood es el de elegir $\lambda$ de forma que minimice la siguiente expresión para $x_1,\dots,x_n$ unas observaciones dadas.
+$$
+M = \frac{1}{n} \sum_{i=1}^n(\hat{f_i}-f_i)^2
+$$
+Donde $\hat{f_i} = \hat{f}(x_i)$ es la evaluación de los puntos dados en la estimación de la función y $f_i = f(x_i)$ son sus evaluaciones en la función real.
+
+Sin embargo, como la función $f$ es desconocida, no es posible utilizar este criterio directamente. Daremos entonces una primera versión **método de validación cruzada**.
+
+\begin{definición}[Validación cruzada ordinaria]
+Sea $\hat{f_i}^{[-i]}$ la estimación de la función de suavizado que ajustada por todos los datos $\{(x_j,y_j)\}_{j=1}^n$ menos el i-ésimo, se define la validación cruzada ordinaria como:
+\begin{equation}
+\nu_0 = \frac{1}{n} \sum_{i=1}^n(\hat{f_i}^{[-i]}-y_i)^2
+\label{cross-val-ord}
+\end{equation}
+
+\end{definición}
+
+Se puede entender como que se ajusta el modelo sin utilizar la observación $(x_i,y_i)$, se predice la variable de respuesta con este modelo en el punto $x_i$ y luego se calcula la diferencia al cuadrado entre la estimación y el valor observado $\forall i=1,\dots ,n$.
+
+\begin{observación}
+Podemos ver que tomar $\lambda$ de modo que minimice $\nu_0$ es una buena manera de abordar que minimice M. Para ello veamos que $E[\nu_0] \approx E[M] + \sigma^2$. Sustituyendo en $\ref{cross-val-ord}$ que $y_i = f_i + \epsilon_i$ nos queda que:
+$$
+\nu_0 = \frac{1}{n} \sum_{i=1}^n(\hat{f_i}^{[-i]}-f_i + \epsilon_i)^2 = 
+        \frac{1}{n} \sum_{i=1}^n[(\hat{f_i}^{[-i]}-f_i)2 - 2(\hat{f_i}^{[-i]}-f_i)\epsilon_i + \epsilon_i^2]
+$$
+Entonces, tomando valor esperado y teniendo en cuenta que $E[\epsilon_i]=0$ y que $\epsilon_i$ y $f_i$ son independientes:
+$$
+E[\nu_0] = \frac{1}{n} E[\sum_{i=1}^n(\hat{f_i}^{[-i]}-f_i)^2] + \sigma^2 = E[M] + \sigma^2
+$$
+Por lo tanto, cuando $n \rightarrow \infty$ se tienen las igualdades $E[\nu_0] = E[M] + \sigma^2$ y $\hat{f}^{[-i]} = \hat{f}$.
+\end{observación}
+
+Si los modelos sólo fueran juzgados por su capacidad de ajustar los datos que les aportamos, entonces siempre se elegirían los modelos más complejos, pero el elegir el modelo que maximice la capacidad de predecir nuevos datos no tiene este problema.
+
+Sin embargo, como se indica en @Wood, p.171, este método es costoso computacionalmente, ya que se deben realizar n ajustes de los datos, por ello se propone un nuevo método el cuál hace uso de la matriz de influencia $A$.
+
+\begin{definición}[Validación cruzada generalizada]
+Dadas unas observaciones $\{(x_i,y_i)\}_{i=1}^n$ se elige $\lambda$ tal que minimice:
+$$
+\nu_g = n \frac{\sum_{i=1}^n(y_i-\hat{f_i})^2}{(n-tr(A))^2}
+$$
+\end{definición}
+
+## Modelos aditivos
+

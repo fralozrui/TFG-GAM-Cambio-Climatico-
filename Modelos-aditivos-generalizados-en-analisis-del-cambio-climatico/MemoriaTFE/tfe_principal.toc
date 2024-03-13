@@ -1,0 +1,26 @@
+\babel@toc {spanish}{}\relax 
+\contentsline {section}{Prólogo}{\es@scroman {iii}}{section*.2}%
+\contentsline {section}{Resumen}{\es@scroman {v}}{section*.3}%
+\contentsline {section}{Abstract}{\es@scroman {vi}}{section*.4}%
+\contentsline {section}{Índice de Figuras}{\es@scroman {vii}}{chapter*.5}%
+\contentsline {section}{Índice de Tablas}{\es@scroman {ix}}{chapter*.6}%
+\contentsline {chapter}{\numberline {1}Introducción}{1}{chapter.1}%
+\contentsline {chapter}{\numberline {2}Modelos lineales generalizados}{3}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Introducción}{3}{section.2.1}%
+\contentsline {section}{\numberline {2.2}Modelos lineales}{4}{section.2.2}%
+\contentsline {section}{\numberline {2.3}Modelos lineales generalizados}{6}{section.2.3}%
+\contentsline {subsection}{\numberline {2.3.1}Familia de distribuciones exponenciales}{7}{subsection.2.3.1}%
+\contentsline {subsection}{\numberline {2.3.2}Ajuste de los modelos lineales generalizados}{9}{subsection.2.3.2}%
+\contentsline {subsection}{\numberline {2.3.3}Funciones de enlace canónicas}{10}{subsection.2.3.3}%
+\contentsline {subsection}{\numberline {2.3.4}Residuos}{11}{subsection.2.3.4}%
+\contentsline {chapter}{\numberline {3}Modelos aditivos generalizados}{13}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Introducción}{13}{section.3.1}%
+\contentsline {section}{\numberline {3.2}Suavizado univariante}{14}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}Bases de funciones}{14}{subsection.3.2.1}%
+\contentsline {chapter}{\numberline {4}Título del Capítulo}{17}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Primera sección}{17}{section.4.1}%
+\contentsline {chapter}{\numberline {A}Apéndice: Título del Apéndice}{19}{appendix.Alph1}%
+\contentsline {section}{\numberline {A.1}Primera sección}{19}{section.Alph1.1}%
+\contentsline {chapter}{\numberline {B}Apéndice: Título del Apéndice}{21}{appendix.Alph2}%
+\contentsline {section}{\numberline {B.1}Primera sección}{21}{section.Alph2.1}%
+\contentsline {chapter}{Bibliografía}{23}{appendix*.7}%

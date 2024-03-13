@@ -85,26 +85,26 @@ knitr::opts_chunk$set(fig.path = 'figurasR/',
 
 ## Introducción
 
-Como bien introdujimos antes, los modelos estadísticos pretenden explicar la relación entre dos o mas variables, en particular, tratan de describir el comportamiento de una variable respuesta (o dependiente), que se suele denotar por $Y$, mediante la información que otorgan las variables predictoras (o independientes), que se suelen denotar como $X_{1},...,X_{p}$.
+Los modelos estadísticos pretenden explicar la relación entre dos o mas variables, en particular, tratan de describir el comportamiento de una variable respuesta (o dependiente), que se suele denotar por $Y$, mediante la información que otorgan las variables predictoras (o independientes), que se suelen denotar como $X_{1},...,X_{p}$.
 
-La forma más general de expresar matemáticamente la intención de los modelos estadísticos es la siguiente: 
+Como se indica en @Stat-Learning, la forma más general de expresar matemáticamente los modelos estadísticos es la siguiente: 
 \begin{equation}
 Y = f(X_{1},..,X_{p}) + \epsilon
 \label{eq:modelo general}
 \end{equation}
 
-Donde $f$ es una función desconocida cuyo propósito es el de representar de la mejor[^1] manera posible la relación entre las variables $X_{1},...,X_{p}$ e $Y$; y $\epsilon$ es un error aleatorio independiente de las variables predictoras que deberá cumplir ciertas condiciones según el tipo de modelo que estemos tratando.
+Donde $f$ es una función desconocida cuyo propósito es el de representar de la mejor[^1] manera posible la relación entre las variables $X_{1},...,X_{p}$ e $Y$; y $\epsilon$ es un error aleatorio independiente de las variables predictoras que deberá cumplir ciertas condiciones según el tipo de modelo que estemos tratando. 
 
 [^1]: El cómo de bueno es un modelo es un concepto que se puede definir de tantas formas como maneras hay de evaluarlos. Veremos varias de ellas a lo largo del trabajo.
 
 Este trabajo tiene como finalidad el definir un conjunto de estrategias y técnicas que proporcionan un ajuste óptimo de la función $f$, es decir, que asemeje lo mejor posible la relación de las variables al fenómeno que se esté estudiando. Además, se incluye una posterior aplicación práctica de dichos resultados en el ámbito del cambio climático.
 
-En lo que a este capítulo respecta, partiremos definiendo los modelos lineales de una forma breve y más general, ya que se ve de manera más extensa en varias asignaturas durante el grado. Tras ello daremos varios resultados básicos para el entendimiento y desarrollo de los Modelos Lineales Generalizados.
+En lo que a este capítulo respecta, partiremos definiendo los modelos lineales de una forma breve y más general, ya que se ve de manera más extensa en varias asignaturas durante el grado. Tras ello, daremos varios resultados básicos para el entendimiento y desarrollo de los Modelos Lineales Generalizados.
 
 \newpage
 ## Modelos lineales
 
-El modelo lineal ocupa un lugar clave en el manual de herramientas de todo estadístico aplicado. Esto se debe a su simple estructura, a la fácil interpretación de sus resultados y al sencillo desarrolo de la teoría de mínimos cuadrados. Sin embargo, a la hora de dar su definición se deben tener en cuenta ciertas restricciones que deben cumplir las variables y los errores del modelo. Estas condiciones hacen que el modelo no sea capaz de adaptarse bien a todos los fenómenos que uno se propone describir pero, a cambio, otorga esa sencillez de visualización antes mencionada.
+El modelo lineal ocupa un lugar clave en el manual de herramientas de todo estadístico aplicado. Esto se debe a su simple estructura, a la fácil interpretación de sus resultados y al sencillo desarrolo de la teoría de mínimos cuadrados. Sin embargo, a la hora de dar su definición se deben tener en cuenta ciertas restricciones que deben cumplir las variables y los errores del modelo. Estas condiciones hacen que el modelo no sea capaz de adaptarse bien a todos los fenómenos que uno propone describir con él pero, a cambio, otorga esa sencillez de visualización antes mencionada. Daremos a continuación una serie de definiciones y resultados basados en @Wood. 
 
 
 \begin{definición}[Modelo Lineal]
@@ -253,7 +253,7 @@ No daremos la obtención de este estimador pero sí indicaremos que su distribuc
 
 ## Modelos lineales generalizados
 
-Nos adentramos ya con esta sección en la primera extensión de los modelos lineales de las que se tratan durante el trabajo. Los Modelos Lineales Generalizados (MLG) fueron originalmente formulados por John Nelder y Robert Wedderburn (1972), quienes tenían como propósito unificar varios modelos estadísticos como la regresión lineal, la logística y la de Poisson en un mismo modelo. Este tipo de modelo relaja algunas de las hipótesis que asumían los modelos lineales, como que los errores ya no deben seguir ninguna distribución específica y además añade nuevos elementos como la función de enlace, la cual interviene en la relación entre las medias y la forma lineal del modelo. También se deberá tener en cuenta una nueva hipótesis distribucional, las variables de respuestas seguirán distribuciones de tipo exponencial. Más tarde introduciremos cada uno de estos aspectos, de momento demos la estructura básica de un MLG.
+Nos adentramos ya con esta sección en la primera extensión de los modelos lineales de las que se tratan durante el trabajo. Los Modelos Lineales Generalizados (MLG) fueron originalmente formulados por John Nelder y Robert Wedderburn (1972), quienes tenían como propósito unificar varios modelos estadísticos como la regresión lineal, la logística y la de Poisson en un mismo modelo. Este tipo de modelo relaja algunas de las hipótesis que asumían los modelos lineales, como que los errores ya no deben seguir ninguna distribución específica, y además añade nuevos elementos como la función de enlace, la cual interviene en la relación entre los valores esperados y la forma lineal del modelo. También se deberá tener en cuenta una nueva hipótesis distribucional, las variables de respuestas seguirán distribuciones de tipo exponencial. Más tarde introduciremos cada uno de estos aspectos, de momento demos la estructura básica de un MLG como en @Wood.
 
 \begin{definición}[Estructura básica de un MLG]
 
@@ -282,7 +282,7 @@ Desde esta formulación podemos ver fácilmente el por qué decimos que los MLG 
 
 ### Familia de distribuciones exponenciales
 
-Como hemos mencionado antes, la variable de respuesta de los modelos lineales generalizados deben seguir una distribución de tipo exponencial, en esta sección veremos qué significa eso y qué implicaciones tiene. Uno de los motivos más importantes por los que se supone que las variables de respuesta $Y_i$ siguen distribuciones de esta familia se debe a que en los modelos lineales los cambios constantes en las variables predictoras implicaban cambios constantes en la variable de respuesta, pero ahora se quiere permitir que dichos cambios constantes de entrada puedan implicar también variaciones geométricas. 
+Como hemos mencionado antes, la variable de respuesta de los modelos lineales generalizados deben seguir una distribución de tipo exponencial, en esta sección veremos qué significa eso y qué implicaciones tiene. Uno de los motivos más importantes por los que se supone que las variables de respuesta $Y_i$ siguen distribuciones de esta familia se debe a que en los modelos lineales los cambios constantes en las variables predictoras implicaban cambios constantes en la variable de respuesta, pero ahora se quiere permitir que dichos cambios constantes de entrada puedan implicar también variaciones geométricas. @MLG-wikipedia.
 
 \begin{definición}[Distribución de tipo exponencial]
 Una distribución se dice que es de tipo exponencial si su función de densidad es de la forma: 
@@ -349,8 +349,8 @@ De donde se obtiene que: $Var(Y) = b''(\theta)a(\phi)$.
 \end{proof}
 
 \begin{observación}
-Cuando $\phi$ es conocido el manejo de la función a no tiene dificultad, pero en muchos casos $\phi$ suele ser desconocido, así que para agilizar los resultados escribiremos $a(\phi) = \frac{\phi}{\omega}$, donde ${\omega}$ es una constante conocida. De hecho, todos los casos prácticos de interés se podrán expresar así y la mayoría con ${\omega}=1$. De este modo nos queda: $Var(Y) = b''(\theta)\frac{\phi}{\omega}$.
-Por otro lado, en secciones posteriores necesitaremos trabajar con Var(Y) en función de $\mu = E[Y]$, para ello utilizaremos la relación $\ref{Esperanza exponencial}$ y definiremos una nueva función: \begin{equation} V(\mu) = \frac{b''(\theta)}{\omega} \label{V} \end{equation} pues de este modo se tiene que: $Var(Y) = V(\mu)\phi$
+Cuando $\phi$ es conocido el manejo de la función $a$ no tiene dificultad, pero en muchos casos $\phi$ suele ser desconocido, así que para agilizar los resultados escribiremos $a(\phi) = \frac{\phi}{\omega}$, donde ${\omega}$ es una constante conocida. De hecho, como se indica en @Wood, todos los casos prácticos de interés se podrán expresar así y la mayoría con ${\omega}=1$. De este modo nos queda: $Var(Y) = b''(\theta)\frac{\phi}{\omega}$.
+Por otro lado, en secciones posteriores necesitaremos trabajar con Var(Y) en función de $\mu = E[Y]$, para ello utilizaremos la relación $\ref{Esperanza exponencial}$ y definiremos una nueva función: \begin{equation} V(\mu) = \frac{b''(\theta)}{\omega} \label{V} \end{equation} pues de este modo se tiene que: $Var(Y) = V(\mu)\phi$. @Wood.
 \end{observación}
 
 Podemos recoger las carácterísticas de las principales distribuciones de tipo exponencial en la siguiente tabla:
@@ -366,9 +366,9 @@ Podemos recoger las carácterísticas de las principales distribuciones de tipo 
 
 ### Ajuste de los modelos lineales generalizados
 
-La estimación de parámetros e inferencia con modelos aditivos generalizados se basa en la estimación de máxima verosimilitud, ya que, gracias a la hipótesis de que las $Y_i$ pertenecezcan a la familia de distribuciones exponenciales, siempre se dispondrá de funciones de densidad. Partiremos considerando un MLG como el de la definición $\ref{Estructura básica de un MLG}$ y nuestro principal objetivo en esta sección será dar el estimador de máxima verosimilitud del vector de parámetros $\beta$.Veremos que será necesario recurrir a un algoritmo basado en mínimos cuadrados para hallar tal máximo, el método de mínimos cuadrados reponderados iterativamente.
+La estimación de parámetros e inferencia con modelos aditivos generalizados se basa en la estimación de máxima verosimilitud, ya que, gracias a la hipótesis de que las $Y_i$ pertenecezcan a la familia de distribuciones exponenciales, siempre se dispondrá de funciones de densidad. Partiremos considerando un MLG como el de la definición $\ref{Estructura básica de un MLG}$ y nuestro principal objetivo en esta sección será dar el estimador de máxima verosimilitud del vector de parámetros $\beta$ como se hace en @Wood. Veremos que será necesario recurrir a un algoritmo basado en mínimos cuadrados para hallar tal máximo, el método de mínimos cuadrados reponderados iterativamente.
 
-Empezamos considerando y una observación de Y y notando que, como los $Y_i$ son independientes entre sí, la función de verosimilitud para $\beta$ viene dada por: 
+Empezamos considerando $y$ una observación de $Y$ y notando que, como los $Y_i$ son independientes entre sí, en tal caso la función de verosimilitud para $\beta$ viene dada por: 
 $$
 L(\beta) = \prod_{i=1}^n f_{\theta_i}(y_i)
 $$
@@ -413,7 +413,7 @@ $$
 Donde $z_i = g'(\mu_i) \frac{y_i-\mu_i}{\alpha(\mu_i)} + \eta_i$
 
 \begin{observación} 
-De lo anterior se podemos notar que las actualizaciones de los $\beta^k$ no son más que las estimaciones de $\beta$ por mínimos cuadrados ponderados, es decir, resultan de de minimizar:
+De lo anterior podemos notar que las actualizaciones de los $\beta^k$ no son más que las estimaciones de $\beta$ por mínimos cuadrados ponderados, es decir, resultan de minimizar:
 \begin{equation}
 \sum_{i=1}^n \omega_i(z_i - X_i\beta)^2
 \label{minimos cuadrados ponderados}

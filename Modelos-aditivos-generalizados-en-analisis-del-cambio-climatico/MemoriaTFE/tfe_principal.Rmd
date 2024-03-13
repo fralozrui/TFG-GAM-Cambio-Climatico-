@@ -11,7 +11,7 @@ metodobib: true
 #natbib: plainnat, abbrvnat, unsrtnat
 biblio-style: "plainnat"
 #Método 2 (pandoc): descomente una línea de las 2 siguientes en caso de usarlo
-csl: methods-in-ecology-and-evolution.csl      # no numera mejor en las citas
+csl: acm-sig-proceedings-long-author-list.csl      # no numera mejor en las citas
 #csl: acm-sig-proceedings-long-author-list.csl  # numera peor en las citas
 link-citations: yes
 output: 
@@ -38,8 +38,7 @@ output:
 
 ---
 nocite: | 
-  @Luque2017,@Luque2019,@RStudio,@R-base,
-  @R-knitr,@R-rmarkdown,@R-dplyr,@R-ggplot2,@Techopedia
+  @Luque2017,@Wood,@Hastie,@M-Clark,@MLG-wikipedia,
 ...
 
 
