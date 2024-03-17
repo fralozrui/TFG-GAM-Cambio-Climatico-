@@ -295,6 +295,7 @@ Donde:
   \item  $\phi$ es conocido como parámetro de escalado.
   \item $\theta$ es conocido como parámetro canónico de la distribución. Más adelante veremos que depende completamente de los parámetros del modelo $\beta$.
 \end{itemize}
+\label{Dist-exponencial}
 \end{definición}
 
 \begin{ejemplo}
@@ -348,9 +349,10 @@ $$
 De donde se obtiene que: $Var(Y) = b''(\theta)a(\phi)$.
 \end{proof}
 
+La siguiente observación se basa en las indicaciones de @Wood.
 \begin{observación}
-Cuando $\phi$ es conocido el manejo de la función $a$ no tiene dificultad, pero en muchos casos $\phi$ suele ser desconocido, así que para agilizar los resultados escribiremos $a(\phi) = \frac{\phi}{\omega}$, donde ${\omega}$ es una constante conocida. De hecho, como se indica en @Wood, todos los casos prácticos de interés se podrán expresar así y la mayoría con ${\omega}=1$. De este modo nos queda: $Var(Y) = b''(\theta)\frac{\phi}{\omega}$.
-Por otro lado, en secciones posteriores necesitaremos trabajar con Var(Y) en función de $\mu = E[Y]$, para ello utilizaremos la relación $\ref{Esperanza exponencial}$ y definiremos una nueva función: \begin{equation} V(\mu) = \frac{b''(\theta)}{\omega} \label{V} \end{equation} pues de este modo se tiene que: $Var(Y) = V(\mu)\phi$. @Wood.
+Cuando $\phi$ es conocido el manejo de la función $a$ no tiene dificultad, pero en muchos casos $\phi$ suele ser desconocido, así que para agilizar los resultados escribiremos $a(\phi) = \frac{\phi}{\omega}$, donde ${\omega}$ es una constante conocida. De hecho, todos los casos prácticos de interés se podrán expresar así y la mayoría con ${\omega}=1$. De este modo nos queda: $Var(Y) = b''(\theta)\frac{\phi}{\omega}$.
+Por otro lado, en secciones posteriores necesitaremos trabajar con Var(Y) en función de $\mu = E[Y]$, para ello utilizaremos la relación $\ref{Esperanza exponencial}$ y definiremos una nueva función: \begin{equation} V(\mu) = \frac{b''(\theta)}{\omega} \label{V} \end{equation} pues de este modo se tiene que: $Var(Y) = V(\mu)\phi$.
 \end{observación}
 
 Podemos recoger las carácterísticas de las principales distribuciones de tipo exponencial en la siguiente tabla:

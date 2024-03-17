@@ -97,7 +97,7 @@ $$
 \begin{pmatrix} E[Y_1] \\ \vdots \\ E[Y_n] \end{pmatrix} = E[Y]
 $$
 \begin{equation}
-g(\mu_i) = A_i\theta + f_1(x_{1i} + f_2(x_{2i}) + f_3(x_{3i},x_{4i}) + \dots  \hspace{0.5cm}, 
+g(\mu_i) = A_i\theta + f_1(x_{1i}) + f_2(x_{2i}) + f_3(x_{3i},x_{4i}) + \dots  \hspace{0.5cm}, 
 \forall i =1,\dots,n
 \label{eq:MAG}
 \end{equation}
@@ -106,7 +106,7 @@ Donde:
   \item $Y_i$ es la variable de respuesta y sigue una distribución de la familia exponencial de media $\mu_i$ y parámetro de escalado $\phi$. A partir de ahora esto lo denotaremos por: $Y_i \backsim EF(\mu_i,\phi)$.
   \item $A_i$ es la fila i-ésima de la matriz del modelo para aquellas componentes del modelo que son estrictamente paramétricas.
   \item $\theta$ es el correspondiente vector de parámetro, que antes denotábamos por $\beta$, para las variables predictoras mencionadas en el anterior punto.
-  \item Las $f_i$ son las funciones de suavizado para las covariables $x_k$.
+  \item Las $f_i$ son las funciones de suavizado para las covariables $x_k$. Suelen ser desconocidas y el principal objetivo es el de estimarlas, pero también pueden darse casos, la mayoría de modelos biológicos, en los que son conocidas y nos interesa estimar otros parámetros del modelo.
 \end{itemize}
 \end{definición}
 
@@ -143,7 +143,7 @@ $$
 \begin{observación}[Problema de la base polinómica]
 Notemos que por el teorema de Taylor, la base polinomial nos será útil cuando nuestro interés sea el de estudiar las propiedades de la función de suavizado en el entorno de un punto concreto, pero nos encontramos con problemas cuando queremos hacerlo en todo el dominio de $f$.
 
-El principal problema se debe a que la interpolación de los datos puede resultar en una función muy oscilante o que no ajuste bien la indormación, dependiendo del valor de k. Esto se puede solucionar de cierta manera con el siguiente tipo de base de funciones.
+El principal problema se debe a que la interpolación de los datos puede resultar en una función muy oscilante o que no ajuste bien la información, dependiendo del valor de k, y que al modificar un coeficiente del modelo, el cambio impacta a los valores ajustados en todo el rango de la variable explicativa. Esto se puede solucionar de cierta manera con el siguiente tipo de base de funciones.
 \end{observación}
 
 **Base lineal por partes** \newline
@@ -236,9 +236,10 @@ Es fácil observar que cuando $f$ es una línea recta la penalización es 0 y cu
 [^1]: Se supone que se los nodos están espaciados de manera uniforme, pues en el caso de no que no lo estuvieran habría que añadir pesos a la suma.
 
 Luego, en vez de ajustar el modelo por mínimos cuadrados, ahora se hará añadiendo la anterior penalización, es decir, minimizando: 
-$$
+\begin{equation}
 ||y - X\beta||^2 + \lambda \sum_{j=2}^{k-1}(f(x_{j-1}^*)-2f(x_j^*)+f(x_{j+1}^*))^2
-$$
+\label{pen-least-squares}
+\end{equation}
 
 \begin{observación}
 Mientras mayor sea $\lambda$ más importancia le estaremos dando a que la función $f$ sea suave y menos a que a aproxime bien los datos. De hecho, cuando $\lambda \rightarrow \infty $ la función de suavizado $f$ que minimiza la anterior expresión será una línea recta y cuando $\lambda=0$ resultará en una estimación no penalizada. 
@@ -293,3 +294,177 @@ $$
 
 ## Modelos aditivos
 
+Como ya hemos mencionado previamente, el modelo aditivo es una extensión del modelo de regresión lineal. Su principal característica, la cual da lugar a su nombre, es que los efectos de las variables predictoras sobre la variable de respuesta son aditivos, es decir, una vez ajustado el modelo aditivo se pueden examinar tales efectors por separado. Veremos primero la forma general del modelo aditivo tal y como la introduce @Hastie y luego desarrollaremos la teoría alrededor de él para el caso de dos variables predictoras.
+
+\begin{definición}[Modelo aditivo]
+Supongamos el contexto de las anteriores de las definiciones de modelos, el modelo aditivo se expresa como:
+$$
+Y = \alpha + \sum_{j=1}^p f_j(X_j) + \epsilon
+$$
+Donde $\alpha$ es el término independiente, $\epsilon$ son errores aleatorios independientes de los $X_j$ tales que $E[\epsilon] = 0$ y $Var(\epsilon)= \sigma^2$, y las $f_j$ son funciones que conviene suponer univariadas y suaves pero no es necesario.
+\end{definición}
+
+\begin{observación}
+Además se debe tener que $E[f_j(X_j)]=0 \hspace{0.5cm} \forall j =1,\dots,n$, pues de otro modo las funciones $f_j$ añadirían términos independientes constantes adicionales.
+\end{observación}
+
+Suele ser útil el pensar el modelo aditivo como un método que primero estima los parámetros adecuados en los que medir las variables y luego realiza el análisis lineal estándar sobre las variables transformadas. La principal motivación a priori tras este tipo de modelos es que, al representar por separado el efecto de cada variable predictora, mantienen la interpretabilidad del modelo lineal.
+
+En lo que sigue, para poder ajustar más fácilmente el modelo como en @Wood, supondremos que se tienen sólo dos variables predictoras $X = (X_1,\dots,X_p)$ y $V = (V_1,\dots,V_p)$ y consideraremos el modelo aditivo:
+\begin{equation}
+y_i = \alpha + f_1(x_i) + f_2(v_i) + \epsilon_i
+\label{modelo aditivo}
+\end{equation}
+
+\begin{observación}
+Los principales problemas del modelo aditivo son:
+\begin{itemize}
+  \item La suposición de los efectos aditivos sobre $\ref{eq:modelo general}$ es bastante restrictiva.
+  \item Existen problemas de identificabilidad pues las $f_j$ son estimables con una precisión de una constante aditiva.
+\end{itemize}
+Sin embargo, si suponemos resueltos estos problemas, el modelo aditivo puede ser representado por splines de regresión penalizados, los cuales serán estimados mediante mínimos cuadrados penalizados, y el grado de suavizado, que se obtendrá por validación cruzada.
+\end{observación}
+
+**Modelo aditivo por regresión penalizada por partes**
+
+En lo que sigue, consideraremos la base del espacio de funciones lineales por partes vista en la sección anterior, es decir, expresamos las funciones $f_1$ y $f_2$ como:
+$$
+f_1(x) = \sum_{j=1}^{k_1} b_j(x)\delta_j \\
+f_2(v) = \sum_{j=1}^{k_2} \beta_j(v)\gamma_j
+$$
+Donde $\delta_j$ y $\gamma_j$ son parámetros conocidos y las $b_j$ y $\beta_j$ son las funciones básicas de tipo carpa para los nodos $x^*_j$ y $v^*_j$ respectivamente, los cuales están espaciados uniformemente en el rango de $x$ y $v$. 
+
+Definimos ahora los vectores n-dimesionales $\vec{f_1} = (f_1(x_1),\dots,f_1(x_n))^T$ y $\vec{f_2} = (f_2(v_1),\dots,f_2(v_n))^T$ como:
+$$
+\vec{f_1} = X_1\delta = 
+\begin{pmatrix}
+b_1(x_1) & \dots & b_{k1}(x_1) \\ \vdots & \dots & \vdots \\ b_1(x_n) & \dots & b_{k1}(x_n)
+\end{pmatrix}
+\begin{pmatrix} 
+\delta_1 \\ \vdots \\ \delta_{k1}
+\end{pmatrix} = 
+\begin{pmatrix}
+\sum_{j=1}^{k1} b_j(x_1)\delta_j \\ \vdots \\ \sum_{j=1}^{k1} b_j(x_n)\delta_j
+\end{pmatrix} = 
+\begin{pmatrix}
+f_1(x_1) \\ \vdots \\ f_1(x_n)
+\end{pmatrix}
+$$
+$$
+\vec{f_2} = X_2\gamma = 
+\begin{pmatrix}
+\beta_1(v_1) & \dots & \beta_{k2}(v_1) \\ \vdots & \dots & \vdots \\ \beta_1(v_n) & \dots & \beta_{k2}(v_n)
+\end{pmatrix}
+\begin{pmatrix} 
+\gamma_1 \\ \vdots \\ \gamma_{k1}
+\end{pmatrix} = 
+\begin{pmatrix}
+\sum_{j=1}^{k2} \beta_j(v_1)\gamma_j \\ \vdots \\ \sum_{j=1}^{k2} \beta_j(v_n)\gamma_j
+\end{pmatrix} = 
+\begin{pmatrix}
+f_2(v_1) \\ \vdots \\ f_2(v_n)
+\end{pmatrix}
+$$
+
+\begin{proposición}
+En el caso de considerar la base lineal por partes, los coeficientes $\beta_j$ que definen a una función $f$ coinciden con los valores de la función en los nodos, es decir, $\beta_j = f(x^*_j)$.
+\end{proposición}
+
+Gracias a esto, se tiene que el problema de ajuste de la regresión penalizada se reduce a minimizar la siguiente expresión respecto de $beta$: 
+$$
+||y-X\beta||^2 + \lambda\beta^TS\beta
+$$
+Donde $S = D^TD$ con $D = \begin{pmatrix} 1 & -2 & 1 & 0 & \dots & \dots \\ 0 & 1 & -2 & 1 & 0 & \dots \\ 0 & 0 & 1 & -2 & 1 &  \dots \\  \dots & \dots & \dots & \dots & \dots & \ddots\end{pmatrix}$.
+
+Por lo tanto, la penalización asociada a las funciones $f_1$ y $f_2$ vienen dadas por:
+$$
+\left\{
+\begin{array}{ l }
+\delta^TD_1^TD_1\delta = \delta S_1\delta \\
+\gamma^TD_2^TD_2\gamma = \gamma S_2 \gamma
+\end{array}
+\right.
+$$
+
+Además, para tratar el problema de identificabilidad utilizaremos la siguiente restricción lineal:
+$$
+\left\{
+\begin{array}{ l }
+\sum_{i=1}^nf_1(x_i) = 0 \Leftrightarrow \bar{1}^T \vec{f_1} = 0 \Leftrightarrow \bar{1}^TX\delta = 0 \hspace{0.3cm} \forall \delta \Leftrightarrow \bar{1}^TX = 0 \\ 
+\sum_{i=1}^nf_2(v_i) = 0 \Leftrightarrow \bar{1}^T \vec{f_2} = 0 \Leftrightarrow \bar{1}^TV\gamma = 0 \hspace{0.3cm} \forall \gamma \Leftrightarrow \bar{1}^TV = 0
+\end{array}
+\right.
+$$
+Donde $\bar{1}$ es un vector n-dimensional con todas las componentes iguales a 1. Ahora bien, para que se pueda cumplir esta condición debemos retirar de cada columna de las marices X y V la media de tales columnas, es decir, definiremos las nuevas matrices centradas por columnas y las respectivas transformaciones de $f_1$ y $f_2$: 
+$$
+\left\{
+\begin{array}{ l }
+\tilde{X} = X - \bar{1} \bar{1}^T \frac{X}{n} \hspace{0.3cm},\hspace{0.3cm}\tilde{f_1} = \tilde{X}\delta \\ 
+\tilde{V} = V - \bar{1} \bar{1}^T \frac{V}{n} \hspace{0.3cm},\hspace{0.3cm}\tilde{f_2} = \tilde{V}\gamma
+\end{array}
+\right.
+$$
+\begin{observación}
+Esta nueva restricción y la transformación de las funciones no afecta a las restricciones impuestas con anterioridad, de hecho solo implica un cambio constante en las funciones: 
+$$
+\tilde{f_1} = \tilde{X} \delta = X\delta - \bar{1} \bar{1} X \frac{\delta}{n} = X\delta  - \bar{1}c = f_1 - c
+$$
+Para la constante $c=\bar{1}X\frac{\delta}{n}$.Se hace de forma análoga para $f_2$.
+\end{observación}
+Finalmente, notemos que el proceso de centrado por columnas reduce el rango a $k_1-1$, así que sólo se podrán estimar $k_1-1$ de los $k_1$ elementos de $\delta$ de forma única. Para solucionar este problema se retira una columna de $\tilde{X}$ y de $D_1$ y la correspondiente componente de $\delta$ se hace 0.
+
+Gracias a este razonamiento, el modelo aditivo puede ser expresado como $Y = Z\beta + \epsilon$, 
+donde $Z = (\bar{1},X,V)$ y $\beta = (\alpha,\delta,\gamma)^T$. De este modo, la penalización que añadimos al criterio de mínimos cuadrados es:
+$$
+\beta^T S_1 \beta = (\alpha,\delta^T,\gamma^T)
+\begin{pmatrix}
+0 & 0 & 0 \\ 0 & S_1 & 0 \\ 0 & 0 & 0
+\end{pmatrix}
+\begin{pmatrix} \alpha \\ \delta \\ \gamma \end{pmatrix} = 
+\delta^T S_1 \delta
+$$
+
+**Ajuste del modelo aditivo por mínimos cuadrados penalizados**
+Gracias a la expresión de la penalización que acabamos de obtener para el modelo aditivo $\ref{modelo aditivo}$ se tiene que la estimación de los coeficientes $\hat{\beta}$ del modelo se obtienen minimizando la función objetivo de mínimos cuadrados penalizados:
+$$
+||y- X\beta||^2 + \lambda_1 \beta^T S_1 \beta + \lambda_2 \beta^T S_2 \beta
+$$
+Donde $\lambda_1$ es el parámetro de suavizado que controla a $f_1$ y $\lambda_2$ el que controla a $f_2$. Entonces, los estimadores de $\beta$ son:
+$$
+\hat{\beta} = (X^TX + \lambda_1 S_1 \lambda_2 S_2)^{-1} X^TY
+$$
+
+## Modelos aditivos generalizados
+
+Cómo ya hemos mencionado varias veces a lo largo del trabajo y como se indica en @Wood, en los MAG se quiere predecir algunas funcionasmonótonas que expresan la relación entre los predictores y el valor esperado de la variable de respuesta. Del mismo modo que para los MLG la variable de respuesta debe seguir una distribución de tipo exponencial, $\ref{Dist-exponencial}$.
+
+Mientras que el modelo aditivo se estimaba mediante mínimos cuadrados penalizados, el MAG se estirmará utilizando máxima verosimilitud penalizada, aunque en la práctica se utiliza un algoritmo de iteración de mínimos cuadrados penalizados (PIRLS). Partimos dando la definión general del modelo como lo hace @Wood:
+
+\begin{definición}[Estructura general del modelo aditivo generalizado]
+Sean:
+\begin{itemize}
+  \item $Y$ un vector aleatorio n-dimensional, cuyas componentes siguen una distribución de tipo exponencial $y_i \backsim EF(\mu_i,\phi)  \hspace{0.2cm} \forall i=1,\dots,n$.
+  \item $X$ una matriz de orden $n \times p$, $p \leq n$, de columnas $x_j \hspace{0.2cm} \forall j=1,\dots,p$ con constantes conocidas.
+  \item $f_j: \mathbb{R} \rightarrow \mathbb{R} \hspace{0.2cm} \forall j = 1, \dots,p$ funciones desconocidas.
+  \item $A$ la matriz asociada al modelo paramétrico de orden $n \times p$.
+  \item $\gamma$ un vector de parámetros de dimensión n.
+  \item $g: \mathbb{R} \rightarrow \mathbb{R}$ una función monótona y diferenciable.
+\end{itemize}
+Definimos el Modelo Aditivo Generalizado como:
+\begin{equation}
+g(\mu_i) = A_i \gamma + \sum_{j=1}^p f_j(x_{ij})
+\label{MAG}
+\end{equation}
+\end{definición}
+
+@Wood también propone una definición alternativa utilizando distintas formas de $L_{ij}$:
+$$
+g(\mu_i) = A_i \gamma + \sum_{j=1}^p L_{ij}f_j(x_{j})
+$$
+La más básica de ella es: $L_{ij}f_j(x_j) = f_j(x_{ij})$ que da la forma habitual del MAG, pero existen otras variaciones de ellas y cada una tiene una utilidad específica.
+
+Luego, para cada $f_j$ se deben elegir una base de suavizado y una penalización, las cuales dan lugar a las matrices modelo $X^{[j]}$ y a la matriz de penalización $S^{[j]}$, de modo que $X_{ik}^{[j]} = b_{jk}(x_{ji})$ para $b_{jk}$ la k-ésima función básica para $f_j$.
+
+### Ajuste del modelo
+
+Seguiremos las directrices dadas en @Wood para dar la estimación de los parámetros $\beta$ cuando suponemos dado los parámetros de suavizado $\lambda$. Partimos notando que el vector de parámetros $\beta$ contiene a $\gamma$ y a 
