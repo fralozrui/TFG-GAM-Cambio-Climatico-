@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2024.3.11)  11 MAR 2024 11:02
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2024.3.11)  17 MAR 2024 21:17
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1045,7 +1045,7 @@ Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: subfig package v1.3 is loaded.
 Package caption Info: rotating package is loaded.
 Package caption Info: End \AtBeginDocument code.
-<logo.png, id=111, 301.125pt x 262.9825pt>
+<logo.png, id=131, 301.125pt x 262.9825pt>
 File: logo.png Graphic file (type png)
 <use logo.png>
 Package pdftex.def Info: logo.png  used on input line 511.
@@ -1147,101 +1147,152 @@ l.757 ...s}\label{modelos-lineales-generalizados}}
                                                    [2]
 Cap\'{\i }tulo 2.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 777.
+(Font)              <10> on input line 778.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 777.
+(Font)              <7> on input line 778.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 777.
+(Font)              <5> on input line 778.
 [3
 
 {c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}]
-LaTeX Info: Redefining \. on input line 865.
-LaTeX Info: Redefining \% on input line 865.
-LaTeX Info: Redefining \. on input line 865.
-LaTeX Info: Redefining \% on input line 865.
+LaTeX Info: Redefining \. on input line 864.
+LaTeX Info: Redefining \% on input line 864.
+LaTeX Info: Redefining \. on input line 864.
+LaTeX Info: Redefining \% on input line 864.
 [4{c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc}{c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}]
-Overfull \hbox (17.40993pt too wide) detected at line 925
+Overfull \hbox (17.40993pt too wide) detected at line 927
 \OML/lmm/m/it/12 E\OT1/lmr/m/n/12 [\OML/lmm/m/it/12 ^^O^^O[]\OT1/lmr/m/n/12 ] = \OML/lmm/m/it/12 E [] \OT1/lmr/m/n/12 = [] = []
  []
 
-LaTeX Info: Redefining \. on input line 938.
-LaTeX Info: Redefining \% on input line 938.
-LaTeX Info: Redefining \. on input line 938.
-LaTeX Info: Redefining \% on input line 938.
+LaTeX Info: Redefining \. on input line 940.
+LaTeX Info: Redefining \% on input line 940.
+LaTeX Info: Redefining \. on input line 940.
+LaTeX Info: Redefining \% on input line 940.
 [5]
-LaTeX Info: Redefining \. on input line 993.
-LaTeX Info: Redefining \% on input line 993.
-LaTeX Info: Redefining \. on input line 993.
-LaTeX Info: Redefining \% on input line 993.
+LaTeX Info: Redefining \. on input line 995.
+LaTeX Info: Redefining \% on input line 995.
+LaTeX Info: Redefining \. on input line 995.
+LaTeX Info: Redefining \% on input line 995.
 [6]
-LaTeX Info: Redefining \. on input line 1045.
-LaTeX Info: Redefining \% on input line 1045.
-LaTeX Info: Redefining \. on input line 1045.
-LaTeX Info: Redefining \% on input line 1045.
+LaTeX Info: Redefining \. on input line 1047.
+LaTeX Info: Redefining \% on input line 1047.
+LaTeX Info: Redefining \. on input line 1047.
+LaTeX Info: Redefining \% on input line 1047.
 [7]
-LaTeX Info: Redefining \. on input line 1124.
-LaTeX Info: Redefining \% on input line 1124.
-LaTeX Info: Redefining \. on input line 1124.
-LaTeX Info: Redefining \% on input line 1124.
+LaTeX Info: Redefining \. on input line 1093.
+LaTeX Info: Redefining \% on input line 1093.
+LaTeX Info: Redefining \. on input line 1093.
+LaTeX Info: Redefining \% on input line 1093.
 [8]
-LaTeX Info: Redefining \. on input line 1171.
-LaTeX Info: Redefining \% on input line 1171.
-LaTeX Info: Redefining \. on input line 1171.
-LaTeX Info: Redefining \% on input line 1171.
+LaTeX Info: Redefining \. on input line 1160.
+LaTeX Info: Redefining \% on input line 1160.
+LaTeX Info: Redefining \. on input line 1160.
+LaTeX Info: Redefining \% on input line 1160.
 [9]
-LaTeX Info: Redefining \. on input line 1225.
-LaTeX Info: Redefining \% on input line 1225.
-LaTeX Info: Redefining \. on input line 1225.
-LaTeX Info: Redefining \% on input line 1225.
+LaTeX Info: Redefining \. on input line 1217.
+LaTeX Info: Redefining \% on input line 1217.
+LaTeX Info: Redefining \. on input line 1217.
+LaTeX Info: Redefining \% on input line 1217.
 [10]
-LaTeX Info: Redefining \. on input line 1278.
-LaTeX Info: Redefining \% on input line 1278.
-LaTeX Info: Redefining \. on input line 1278.
-LaTeX Info: Redefining \% on input line 1278.
+LaTeX Info: Redefining \. on input line 1266.
+LaTeX Info: Redefining \% on input line 1266.
+LaTeX Info: Redefining \. on input line 1266.
+LaTeX Info: Redefining \% on input line 1266.
 [11]
-LaTeX Info: Redefining \. on input line 1320.
-LaTeX Info: Redefining \% on input line 1320.
-LaTeX Info: Redefining \. on input line 1320.
-LaTeX Info: Redefining \% on input line 1320.
+LaTeX Info: Redefining \. on input line 1326.
+LaTeX Info: Redefining \% on input line 1326.
+LaTeX Info: Redefining \. on input line 1326.
+LaTeX Info: Redefining \% on input line 1326.
 [12]
 Cap\'{\i }tulo 3.
 [13
 
 ]
-LaTeX Info: Redefining \. on input line 1421.
-LaTeX Info: Redefining \% on input line 1421.
-LaTeX Info: Redefining \. on input line 1421.
-LaTeX Info: Redefining \% on input line 1421.
+LaTeX Info: Redefining \. on input line 1424.
+LaTeX Info: Redefining \% on input line 1424.
+LaTeX Info: Redefining \. on input line 1424.
+LaTeX Info: Redefining \% on input line 1424.
 [14]
-<figurasR/unnamed-chunk-13-1.pdf, id=336, 469.755pt x 325.215pt>
+<figurasR/unnamed-chunk-13-1.pdf, id=378, 469.755pt x 325.215pt>
 File: figurasR/unnamed-chunk-13-1.pdf Graphic file (type pdf)
 <use figurasR/unnamed-chunk-13-1.pdf>
-Package pdftex.def Info: figurasR/unnamed-chunk-13-1.pdf  used on input line 1463.
+Package pdftex.def Info: figurasR/unnamed-chunk-13-1.pdf  used on input line 1473.
 (pdftex.def)             Requested size: 430.31812pt x 297.91121pt.
-LaTeX Info: Redefining \. on input line 1463.
-LaTeX Info: Redefining \% on input line 1463.
-LaTeX Info: Redefining \. on input line 1463.
-LaTeX Info: Redefining \% on input line 1463.
+LaTeX Info: Redefining \. on input line 1473.
+LaTeX Info: Redefining \% on input line 1473.
+LaTeX Info: Redefining \. on input line 1473.
+LaTeX Info: Redefining \% on input line 1473.
 [15]
-LaTeX Info: Redefining \. on input line 1494.
-LaTeX Info: Redefining \% on input line 1494.
-LaTeX Info: Redefining \. on input line 1494.
-LaTeX Info: Redefining \% on input line 1494.
+LaTeX Info: Redefining \. on input line 1510.
+LaTeX Info: Redefining \% on input line 1510.
+LaTeX Info: Redefining \. on input line 1510.
+LaTeX Info: Redefining \% on input line 1510.
 [16 <./figurasR/unnamed-chunk-13-1.pdf>]
-Cap\'{\i }tulo 4.
-[17
+LaTeX Info: Redefining \. on input line 1571.
+LaTeX Info: Redefining \% on input line 1571.
+LaTeX Info: Redefining \. on input line 1571.
+LaTeX Info: Redefining \% on input line 1571.
+[17]
+Underfull \hbox (badness 3179) in paragraph at lines 1578--1579
+[][]\T1/lmr/bx/n/12 Definición 3.2.2 \T1/lmr/m/n/12 (Va-li-da-ción cru-za-da ge-ne-ra-li-za-da)\T1/lmr/bx/n/12 . []\T1/lmr/m/n/12 Da-das unas ob-ser-va-cio-nes
+ []
 
-] [18
+LaTeX Info: Redefining \. on input line 1630.
+LaTeX Info: Redefining \% on input line 1630.
+LaTeX Info: Redefining \. on input line 1630.
+LaTeX Info: Redefining \% on input line 1630.
+[18]
+LaTeX Info: Redefining \. on input line 1709.
+LaTeX Info: Redefining \% on input line 1709.
+LaTeX Info: Redefining \. on input line 1709.
+LaTeX Info: Redefining \% on input line 1709.
+[19]
+LaTeX Info: Redefining \. on input line 1772.
+LaTeX Info: Redefining \% on input line 1772.
+LaTeX Info: Redefining \. on input line 1772.
+LaTeX Info: Redefining \% on input line 1772.
+[20]
+LaTeX Info: Redefining \. on input line 1839.
+LaTeX Info: Redefining \% on input line 1839.
+LaTeX Info: Redefining \. on input line 1839.
+LaTeX Info: Redefining \% on input line 1839.
+[21] [22
+
+]
+Cap\'{\i }tulo 4.
+[23] [24
 
 ]
 Ap\'{e}ndice A.
-[19] [20
+[25] [26
 
 ]
 Ap\'{e}ndice B.
-[21] [22
+[27] [28
 
-] (./tfe_principal.bbl) [23
+]
+
+Package natbib Warning: Citation `Luque2019' undefined on input line 1934.
+
+
+Package natbib Warning: Citation `RStudio' undefined on input line 1934.
+
+
+Package natbib Warning: Citation `R-base' undefined on input line 1934.
+
+
+Package natbib Warning: Citation `Techopedia' undefined on input line 1934.
+
+(./tfe_principal.bbl
+Underfull \hbox (badness 10000) in paragraph at lines 45--49
+[]$\T1/lmr/m/n/12 https : / / es . wikipedia . org / w / index . php ? title = Modelo _ lineal _ generalizado & oldid =
+ []
+
+)
+
+Package natbib Warning: There were undefined citations.
+
+[29
 
 ] (./tfe_principal.aux
 LaTeX Info: Redefining \. on input line 9.
@@ -1252,21 +1303,21 @@ LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-02-20>
  ***********
 Package rerunfilecheck Info: File `tfe_principal.out' has not changed.
-(rerunfilecheck)             Checksum: 01BC7FDEB8544A379903E4AC6596A27B;4038.
+(rerunfilecheck)             Checksum: C918F2DDB9A0545CC8869CF53F8FF07D;4968.
  ) 
 Here is how much of TeX's memory you used:
- 30859 strings out of 476058
- 588671 string characters out of 5790415
- 1950190 words of memory out of 5000000
- 52236 multiletter control sequences out of 15000+600000
+ 30905 strings out of 476058
+ 589519 string characters out of 5790415
+ 1952190 words of memory out of 5000000
+ 52251 multiletter control sequences out of 15000+600000
  635705 words of font info for 86 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  84i,16n,93p,550b,758s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbxi10.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmcsc10.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmex10.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi12.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi6.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi8.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr17.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr6.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr8.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri12.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmro8.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy6.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy8.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on tfe_principal.pdf (35 pages, 432133 bytes).
+Output written on tfe_principal.pdf (41 pages, 459883 bytes).
 PDF statistics:
- 528 PDF objects out of 1000 (max. 8388607)
- 441 compressed objects within 5 object streams
- 131 named destinations out of 1000 (max. 500000)
- 231 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 644 PDF objects out of 1000 (max. 8388607)
+ 550 compressed objects within 6 object streams
+ 162 named destinations out of 1000 (max. 500000)
+ 271 words of extra memory for PDF output out of 10000 (max. 10000000)
 

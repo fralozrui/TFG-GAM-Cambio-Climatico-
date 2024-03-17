@@ -38,7 +38,7 @@ output:
 
 ---
 nocite: | 
-  @Luque2017,@Wood,@Hastie,@M-Clark,@MLG-wikipedia,
+  @Luque2017, @Wood, @Hastie, @M-Clark, @MLG-wikipedia, @fundamentos, @Stat-Learning
 ...
 
 
