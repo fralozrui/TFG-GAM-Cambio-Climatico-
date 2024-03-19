@@ -426,13 +426,175 @@ $$
 
 **Ajuste del modelo aditivo por mínimos cuadrados penalizados**
 Gracias a la expresión de la penalización que acabamos de obtener para el modelo aditivo $\ref{modelo aditivo}$ se tiene que la estimación de los coeficientes $\hat{\beta}$ del modelo se obtienen minimizando la función objetivo de mínimos cuadrados penalizados:
-$$
+\begin{equation}
 ||y- X\beta||^2 + \lambda_1 \beta^T S_1 \beta + \lambda_2 \beta^T S_2 \beta
-$$
+\label{min-cuad-pen}
+\end{equation}
+
 Donde $\lambda_1$ es el parámetro de suavizado que controla a $f_1$ y $\lambda_2$ el que controla a $f_2$. Entonces, los estimadores de $\beta$ son:
 $$
 \hat{\beta} = (X^TX + \lambda_1 S_1 \lambda_2 S_2)^{-1} X^TY
 $$
+
+## Smoothers
+
+En esta sección razonaremos de forma similar a la sección [3.2.1][Bases de funciones], es decir, queremos definir una base de funciones $\mathcal{B} = \{b_i(x)\}_{i=1}^k$ de forma que las funciones de suavizado se puedan expresar como una combinación lineal de estas funciones básicas. La base lineal por partes, vista en la sección antes mencionada, ofrece una forma razonable de representar las funciones de suavizado para los modelos aditivos, pero nos proponemos ahora dar mejores bases de funciones que tengan el mismo objetivo. Para ello, utilizaremos bases de splines ya que, para un tamaño de base fijado, reducen significativamente el error de aproximación de las funciones de suavizado.
+
+### Splines cúbicos
+
+Será de interés el dedicarle una sección al marco teórico tras los splines, pues están muy relacionados con la mayoría de suavizadores. Como en @Wood, no abordaremos el tema de forma general, sino que se pueden recoger las ideas principales mediante las propiedades de los splines cúbicos. Veremos esto primero en el contexto de la interpolación y luego en el del suavizado.
+
+\begin{definición}[Spline cúbico]
+Dada una colección de puntos $\mathcal{C} = \{(x_i,y_i) / i = 1,\dots, n\}$ tales que $x_i \leq x_{i+1}$, decimos que $s:[x_1,x_n] \rightarrow \mathbb{R}$ es un spline cúbico si verifica: 
+\begin{itemize}
+  \item $s|_{[x_j,x_{j+1}]} = s_j$, donde $s_j$ es un polinomio de grado 3 en $[x_j,x_{j+1}]$.
+  \item $s(x_j) = y_j \hspace{0.3cm} \forall j = 1,\dots,n$.
+  \item $s$ es continua hasta la segunda deriva en los nodos $x_j$, es decir, se cumple que: 
+  $$
+  s_{j+1}(x_{j+1})=s_{j}(x_{j+1}) ,\hspace{0.3cm}   
+  s'_{j+1}(x_{j+1})=s'_{j}(x_{j+1}) ,\hspace{0.3cm}
+  s''_{j+1}(x_{j+1})=s''_{j}(x_{j+1}) \hspace{0.2cm} \forall j = 1,\dots,n
+  $$
+\end{itemize}
+\end{definición}
+
+Se dice que un spline cúbico es natural cuando: $s''(x_1) = 0 = s''(x_n)$
+
+**Splines cúbicos naturales como interpoladores** \newline
+
+Partimos considerando una colección de puntos $\mathcal{C} = \{(x_i,y_i) / i = 1,\dots, n\}$ tales que $x_i \leq x_{i+1}$ y el spline cúbico natural $s(x)$ que interpola los puntos de $\mathcal{C}$. Entonces, en @Wood se propone la siguiente proposición como uno de los resultados más importantes en la teoría de splines: 
+
+\begin{proposición}
+De entre todas las funciones $f$ continuas en $[x_1,x_n]$, con primera derivada absolutamente continua y que interpolan los puntos de $\mathcal{C}$, $s(x)$ es la más suave de todas ellas en el sentido que minimiza: 
+$$
+J(f) = \int_{x_1}^{x_n} f''(x)^2 dx
+$$
+\label{prop-interp}
+\end{proposición}
+
+\begin{proof}
+Sea $f(x)$ una función que verifique las condiciones del enunciado y sea distinta de $s(x)$, definimos $h(x) = f(x) - s(x)$ y busquemos una expresión de $J(f)$ en función de $J(s)$:
+$$
+J(f) = \int_{x_1}^{x_n} f''(x)^2 dx = \int_{x_1}^{x_n} (s''(x) + h''(x))^2 dx = 
+\int_{x_1}^{x_n} s''(x)^2dx + 2\int_{x_1}^{x_n} s''(x)h''(x)dx + \int_{x_1}^{x_n}h''(x)^2dx
+$$
+Ahora bien, aplicando integración por partes en el término del medio de la última igualdad queda:
+\begin{equation*}
+\begin{split}
+\int_{x_1}^{x_n} s''(x)h''(x)dx = s''(x_n)h'(x_n) - s''(x_1)h'(x_1) - \int_{x_1}^{x_n} s'''(x)h'(x)dx = \\
+- \int_{x_1}^{x_n} s'''(x)h'(x)dx = - \sum_{i=1}^{n-1} s'''(x_i^+)\int_{x_i}^{x_{i+1}} h''(x)dx = 
+- \sum_{i=1}^{n-1} s'''(x_i^+)(h(x_{i+1}) - h(x_i)) = 0
+\end{split}
+\end{equation*}
+
+Hemos utilizado que $s''(x_1) = 0 = s''(x_n)$ y que como $s$ es un spline cúbico, $s'''$ es constante en cada intervalo $(x_i,x_{i+1})$, $x_i^+$ denota cualquier elemento de tal intervalo. Luego, nos queda que: 
+$$
+\int_{x_1}^{x_n} f''(x)^2 dx = \int_{x_1}^{x_n} s''(x)^2 +  \int_{x_1}^{x_n} h''(x)^2 dx \geq \int_{x_1}^{x_n} s''(x)^2
+$$
+De hecho, la igualdad sólo se tiene cuando $h''(x)=0 \hspace{0.2cm} \forall x \in (x_1,x_n)$. Sin embargo, como $h(x_1) = 0 = h(x_n)$ pues $f$ y $s$ tienen los mismos valores en los nodos, podemos observar que se da la igualdad si y sólo si $h(x)=0 \hspace{0.2cm} \forall x \in [x_1,x_n]$. Es decir, cualquier otra función de interpolación distinta de $s$ tendrá mayor valor de la integral del cuadrado de su segunda derivada.
+\end{proof}
+
+Esta proposición nos indica una razón de por qué el spline cúbico es el interpolador más suave para cualquier conjunto de datos. Sin embargo, esta no es la única propiedad interesante para tener en cuenta a los splines cúbicos a la hora de querer estimar las funciones de suavizado, como indica @Wood, en de Boor(1978, Capítulo 5), se enumeran una serie de resultados que indican que sea cual sea la verdadera función que representa los datos, un spline debe ser capaz de aproximarla de manera eficaz y además, si quisieramos construir un modelo a partir de funciones de suavizado de las covariables, el aproximar estas funciones por las aproximaciones más suaves puede ser una idea llamativa. 
+
+**Splines cúbicos de suavizado**  \newline
+
+En los estudios estadísticos los datos con los que trabajamos suelen ser medidos con ruido, así que por lo general será más útil el suavizar los datos que el interpolarlos. Con tal propósito, nos será más conveniente el tratar a $s(x_i)$ como $n$ parámetros de un spline cúbico, los cuáles pueden ser estimados minimizando: 
+$$
+\sum_{i=1}^n (y_i-s(x_i))^2 + \lambda \int s''(x)^2dx
+$$
+Donde $\lambda$ es el parámetro ajustable de suavizado. La función $s$ resultante se conoce como Spline cúbico de suavizado y, de hecho, verifica:
+
+\begin{proposición}
+El spline cúbico de suavizado $s(x)$ minimiza: 
+\begin{equation}
+\sum_{i=1}^n (y_i-f(x_i))^2 + \lambda \int f''(x)^2dx
+\label{min-spline-suavizado}
+\end{equation}
+para toda función $f$ continua en $[x_1,x_n]$, con derivada absolutamente continua. 
+\label{spline-suav}
+\end{proposición}
+
+La prueba de este resultado se basa en la propiedad de los interpoladores $\ref{prop-interp}$.
+
+\begin{proposición}
+Se obtiene el mismo resultado de $\ref{spline-suav}$ si en vez de utilizar la suma de los cuadrados de los residuos en $\ref{min-spline-suavizado}$ utilizamos la log-verosimilitud.
+\end{proposición}
+
+Debido a estos resultados, los splines cúbicos parecen los suavizadores ideales pero tienen un problema computacional importante, ya que se deberán estimar tantos parámetros como datos queramos suavizar.
+
+\begin{observación}[Splines de regresión penalizada]
+Una buena forma de balancear las propiedades que ofrecen los splines con la eficiencia computacional será el utilizar mínimos cuadrados penalizados $\ref{min-cuad-pen}$. En su forma más simple, esto conlleva formar una base de splines junto con sus respectivas penalizaciones para un conjunto de datos de cardinal menor al conjunto original y luego utilizarlos para modelar el conjunto completo.
+
+Con este método nos surge la duda de cuántos elementos debe tener la base de splines. Generalmente esto no es posible saberlo sin conocer la función real que queremos estimar, pero es posible observar cómo debe escalar la dimensión de la base cuando se aumenta el número de datos. Se ve de manera detallada en @Wood (Capítulo 5.2, p.199).
+\end{observación}
+
+
+
+### Smoothers unidimensionales
+
+Nos disponemos ahora a estudiar algunas bases penalizadas de suavizadores de las que se desarrollan en @Wood en el caso de tener una sola variable predictora.
+
+**Splines cúbicos de regresión** \newline
+
+Acabamos de ver varias propiedades interesantes de los splines cúbicos como suavizadores, veamos ahora como construirlo a partir de unos datos dados. Existen muchas bases equivalentes para representar splines cúbicos, nosotoros lo abordaremos como en @Wood, parametrizando el spline en términos de su valor en los nodos. 
+
+Partimos considerando un spline cúbico $f(x)$ y k nodos $\{x_1,\dots,x_k\}$ con $x_i \leq x_{i+1}$.Denotaremos entonces $\beta_j = f(x_j)$ y $\delta_j = f''(x_j)$, pues de esta forma el spline $f$ puede escribirse como:
+$$
+f(x) = a_j^-(x) \beta_j + a_j^+(x) \beta_{j+1} + c_j^-(x) \delta_j + c_j^+(x)\delta_{j+1} \hspace{0.3cm} ,\forall x \in [x_j,x_{j+1}]
+$$
+Sea $h_j = x_{j+1}-x_j$, las funciones básicas $a_j^-$, $a_j^+$, $c_j^-$ y $c_j^+$ vienen dadas por: 
+\begin{equation*}
+\begin{split}
+a_j^-(x) = \frac{x_{j+1} - x}{h_j} \hspace{0.6cm}
+c_j^-(x) =  \frac{1}{6} [\frac{(x_{j+1} - x)^3}{h_j} - h_j(x_{j+1}-x)] \\
+a_j^+(x) =  \frac{x - x_j}{h_j} \hspace{1.7cm}
+c_j^+(x) = \frac{1}{6} [\frac{(x - x_j)^3}{h_j} - h_j(x-x_j)]
+\end{split}
+\end{equation*}
+
+Ahora bien, para representar formalmente las condiciones que debe cumplir el spline: continuidad hasta la segunda derivada en los nodos $x_j$ y que en los nodos extremos, $x_1$ y $x_k$, la segunda derivada sea nula, se utiliza: 
+$$
+B\delta^- = D \beta
+$$
+donde $\delta^- = (\delta_2,\dots,\delta_{k-1})^T$, $\delta_1 = 0 = \delta_k$ y B y D son definidas como: 
+$$
+\left\{
+\begin{array}{ l }
+B_{i,i} = \frac{h_i+h_{i+1}}{3}  \\
+B_{i,i+1} = \frac{h_{i+1}}{6} \\
+B_{i+1,i} = \frac{h_{i+1}}{6}
+\end{array}
+\right. \hspace{0.2cm} \forall i = 1,\dots,k-3
+\hspace{0.5cm}
+\left\{
+\begin{array}{ l }
+D_{i,i} = \frac{1}{h_i}  \\
+D_{i,i+1} = -\frac{1}{h_{i}} -\frac{1}{h_{i+1}} \\
+D_{i,i+2} = \frac{1}{h_{i+1}}
+\end{array}
+\right. \hspace{0.2cm} \forall i = 1,\dots,k-2
+$$
+
+Luego, definiendo $F^- = B^{-1}D$ y $F = \begin{pmatrix}  \bar{0} \\ F^- \\ \bar{0} \end{pmatrix}$, donde $\bar{0}$ es una fila de ceros, tenemos que $\delta = F \beta$ y de esta forma el spline se puede reescribir como: 
+$$
+f(x) = a_j^-(x) \beta_j + a_j^+(x) \beta_{j+1} + c_j^-(x) F_j\beta + c_j^+(x) F_j\beta \hspace{0.3cm} ,\forall x \in [x_j,x_{j+1}]
+$$
+Y renombrando las funciones básicas de cierta forma nos queda finalmente que: 
+$$
+f(x) = \sum_{i=1}^k b_i(x) \beta_i
+$$
+\begin{observación}
+Gracias a esta nueva forma de expresar el spline mediante las funciones básicas podemos expresar la penalización de curvatura de la siguiente forma: 
+$$
+\int_{x_1}^{x_k}f''(x)^2dx = \beta^T D^T B^{-1}D \beta = \beta^T S \beta
+$$
+Donde $S = D^TB^{-1}D$ se conoce como la matriz de penalizado asociada a tal base.
+\end{observación}
+
+Además de proporcionar parámetros directamente interpretables, la base de splines cúbicos no requiere de ningún re-escalado de las covariables, sólo de la elección de los nodos $x_j$.
+
+**P-splines**
+
 
 ## Modelos aditivos generalizados
 

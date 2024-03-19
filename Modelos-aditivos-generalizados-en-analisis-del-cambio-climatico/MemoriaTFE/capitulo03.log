@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2024.3.11)  16 MAR 2024 19:58
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2024.3.11)  19 MAR 2024 18:21
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1100,12 +1100,12 @@ Cap\'{\i }tulo 1.
 LaTeX Warning: Reference `eq:modelo general' on page 3 undefined on input line 567.
 
 [3{c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}]
-LaTeX Info: Redefining \. on input line 639.
-LaTeX Info: Redefining \% on input line 639.
-LaTeX Info: Redefining \. on input line 639.
-LaTeX Info: Redefining \% on input line 639.
+LaTeX Info: Redefining \. on input line 635.
+LaTeX Info: Redefining \% on input line 635.
+LaTeX Info: Redefining \. on input line 635.
+LaTeX Info: Redefining \% on input line 635.
 [4{c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc}{c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}]
-<figurasR/unnamed-chunk-2-1.pdf, id=92, 469.755pt x 325.215pt>
+<figurasR/unnamed-chunk-2-1.pdf, id=117, 469.755pt x 325.215pt>
 File: figurasR/unnamed-chunk-2-1.pdf Graphic file (type pdf)
 <use figurasR/unnamed-chunk-2-1.pdf>
 Package pdftex.def Info: figurasR/unnamed-chunk-2-1.pdf  used on input line 684.
@@ -1142,14 +1142,69 @@ LaTeX Info: Redefining \. on input line 841.
 LaTeX Info: Redefining \% on input line 841.
 LaTeX Info: Redefining \. on input line 841.
 LaTeX Info: Redefining \% on input line 841.
-[8] (./capitulo03.bbl
-LaTeX Info: Redefining \. on input line 1.
-LaTeX Info: Redefining \% on input line 1.
-LaTeX Info: Redefining \. on input line 1.
-LaTeX Info: Redefining \% on input line 1.
-[9] [10
+[8]
+LaTeX Info: Redefining \. on input line 920.
+LaTeX Info: Redefining \% on input line 920.
+LaTeX Info: Redefining \. on input line 920.
+LaTeX Info: Redefining \% on input line 920.
+[9]
+LaTeX Info: Redefining \. on input line 984.
+LaTeX Info: Redefining \% on input line 984.
+LaTeX Info: Redefining \. on input line 984.
+LaTeX Info: Redefining \% on input line 984.
+[10]
+Overfull \hbox (3.67665pt too wide) detected at line 1005
+\OML/lmm/m/it/12 s[]\OT1/lmr/m/n/12 (\OML/lmm/m/it/12 x[]\OT1/lmr/m/n/12 ) = \OML/lmm/m/it/12 s[]\OT1/lmr/m/n/12 (\OML/lmm/m/it/12 x[]\OT1/lmr/m/n/12 )\OML/lmm/m/it/12 ;  s[]\OT1/lmr/m/n/12 (\OML/lmm/m/it/12 x[]\OT1/lmr/m/n/12 ) = \OML/lmm/m/it/12 s[]\OT1/lmr/m/n/12 (\OML/lmm/m/it/12 x[]\OT1/lmr/m/n/12 )\OML/lmm/m/it/12 ;  s[]\OT1/lmr/m/n/12 (\OML/lmm/m/it/12 x[]\OT1/lmr/m/n/12 ) = \OML/lmm/m/it/12 s[]\OT1/lmr/m/n/12 (\OML/lmm/m/it/12 x[]\OT1/lmr/m/n/12 ) \OMS/lmsy/m/n/12 8\OML/lmm/m/it/12 j \OT1/lmr/m/n/12 = 1\OML/lmm/m/it/12 ; [] ; n
+ []
 
-]) [11] (./capitulo03.aux
+
+Underfull \hbox (badness 10000) in paragraph at lines 1012--1013
+
+ []
+
+
+Overfull \hbox (46.07927pt too wide) detected at line 1034
+\OML/lmm/m/it/12 J\OT1/lmr/m/n/12 (\OML/lmm/m/it/12 f\OT1/lmr/m/n/12 ) = [][] \OML/lmm/m/it/12 f[]\OT1/lmr/m/n/12 (\OML/lmm/m/it/12 x\OT1/lmr/m/n/12 )[]\OML/lmm/m/it/12 dx \OT1/lmr/m/n/12 = [][](\OML/lmm/m/it/12 s[]\OT1/lmr/m/n/12 (\OML/lmm/m/it/12 x\OT1/lmr/m/n/12 ) + \OML/lmm/m/it/12 h[]\OT1/lmr/m/n/12 (\OML/lmm/m/it/12 x\OT1/lmr/m/n/12 ))[]\OML/lmm/m/it/12 dx \OT1/lmr/m/n/12 = [][] \OML/lmm/m/it/12 s[]\OT1/lmr/m/n/12 (\OML/lmm/m/it/12 x\OT1/lmr/m/n/12 )[]\OML/lmm/m/it/12 dx \OT1/lmr/m/n/12 + 2 [][] \OML/lmm/m/it/12 s[]\OT1/lmr/m/n/12 (\OML/lmm/m/it/12 x\OT1/lmr/m/n/12 )\OML/lmm/m/it/12 h[]\OT1/lmr/m/n/12 (\OML/lmm/m/it/12 x\OT1/lmr/m/n/12 )\OML/lmm/m/it/12 dx \OT1/lmr/m/n/12 + [][] \OML/lmm/m/it/12 h[]\OT1/lmr/m/n/12 (\OML/lmm/m/it/12 x\OT1/lmr/m/n/12 )[]\OML/lmm/m/it/12 dx
+ []
+
+LaTeX Info: Redefining \. on input line 1042.
+LaTeX Info: Redefining \% on input line 1042.
+LaTeX Info: Redefining \. on input line 1042.
+LaTeX Info: Redefining \% on input line 1042.
+[11]
+Underfull \hbox (badness 10000) in paragraph at lines 1062--1063
+
+ []
+
+LaTeX Info: Redefining \. on input line 1094.
+LaTeX Info: Redefining \% on input line 1094.
+LaTeX Info: Redefining \. on input line 1094.
+LaTeX Info: Redefining \% on input line 1094.
+[12]
+Underfull \hbox (badness 10000) in paragraph at lines 1109--1110
+
+ []
+
+LaTeX Info: Redefining \. on input line 1159.
+LaTeX Info: Redefining \% on input line 1159.
+LaTeX Info: Redefining \. on input line 1159.
+LaTeX Info: Redefining \% on input line 1159.
+[13]
+
+LaTeX Warning: Reference `Dist-exponencial' on page 14 undefined on input line 1189.
+
+LaTeX Info: Redefining \. on input line 1205.
+LaTeX Info: Redefining \% on input line 1205.
+LaTeX Info: Redefining \. on input line 1205.
+LaTeX Info: Redefining \% on input line 1205.
+[14] (./capitulo03.bbl
+LaTeX Info: Redefining \. on input line 1.
+LaTeX Info: Redefining \% on input line 1.
+LaTeX Info: Redefining \. on input line 1.
+LaTeX Info: Redefining \% on input line 1.
+[15] [16
+
+]) [17] (./capitulo03.aux
 LaTeX Info: Redefining \. on input line 9.
 LaTeX Info: Redefining \% on input line 9.
 )
@@ -1161,21 +1216,21 @@ L3 programming layer <2024-02-20>
 LaTeX Warning: There were undefined references.
 
 Package rerunfilecheck Info: File `capitulo03.out' has not changed.
-(rerunfilecheck)             Checksum: 079EFC1D7C0935B478631B25E45EECBA;1305.
+(rerunfilecheck)             Checksum: A8DD8E8D74821A9629C90A40501A516F;2106.
  ) 
 Here is how much of TeX's memory you used:
- 30666 strings out of 476058
- 585254 string characters out of 5790415
- 1949190 words of memory out of 5000000
- 52132 multiletter control sequences out of 15000+600000
+ 30713 strings out of 476058
+ 586085 string characters out of 5790415
+ 1952190 words of memory out of 5000000
+ 52152 multiletter control sequences out of 15000+600000
  632023 words of font info for 85 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 84i,13n,93p,547b,662s stack positions out of 10000i,1000n,20000p,200000b,200000s
-<c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmex10.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi12.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi6.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi8.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr6.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr8.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri12.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmro8.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy6.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy8.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb>
-Output written on capitulo03.pdf (11 pages, 285847 bytes).
+ 84i,16n,93p,547b,662s stack positions out of 10000i,1000n,20000p,200000b,200000s
+<c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmex10.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi12.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi6.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi8.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr6.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr8.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri12.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmro8.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy6.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy8.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on capitulo03.pdf (17 pages, 320996 bytes).
 PDF statistics:
- 254 PDF objects out of 1000 (max. 8388607)
- 202 compressed objects within 3 object streams
- 48 named destinations out of 1000 (max. 500000)
- 82 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 355 PDF objects out of 1000 (max. 8388607)
+ 295 compressed objects within 3 object streams
+ 75 named destinations out of 1000 (max. 500000)
+ 122 words of extra memory for PDF output out of 10000 (max. 10000000)
 
