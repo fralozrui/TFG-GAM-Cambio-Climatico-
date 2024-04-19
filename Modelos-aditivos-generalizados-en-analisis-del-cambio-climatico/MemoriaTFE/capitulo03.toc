@@ -1,0 +1,14 @@
+\babel@toc {spanish}{}\relax 
+\contentsline {chapter}{\numberline {1}Modelos aditivos generalizados}{3}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Introducción}{3}{section.1.1}%
+\contentsline {section}{\numberline {1.2}Suavizado univariante}{4}{section.1.2}%
+\contentsline {subsection}{\numberline {1.2.1}Bases de funciones}{4}{subsection.1.2.1}%
+\contentsline {subsection}{\numberline {1.2.2}Control del suavizado}{6}{subsection.1.2.2}%
+\contentsline {subsection}{\numberline {1.2.3}Elección del parámetro de suavizado}{7}{subsection.1.2.3}%
+\contentsline {section}{\numberline {1.3}Modelos aditivos}{8}{section.1.3}%
+\contentsline {section}{\numberline {1.4}Smoothers}{10}{section.1.4}%
+\contentsline {subsection}{\numberline {1.4.1}Splines cúbicos}{11}{subsection.1.4.1}%
+\contentsline {subsection}{\numberline {1.4.2}Smoothers unidimensionales}{13}{subsection.1.4.2}%
+\contentsline {section}{\numberline {1.5}Modelos aditivos generalizados}{16}{section.1.5}%
+\contentsline {subsection}{\numberline {1.5.1}Ajuste del modelo}{17}{subsection.1.5.1}%
+\contentsline {chapter}{Bibliografía}{19}{chapter*.3}%

@@ -423,12 +423,13 @@ De lo anterior podemos notar que las actualizaciones de los $\beta^k$ no son má
 Podemos entonces obtener el estimador numérico de los parámetros $\beta$ de los MLG mediante el siguiente algoritmo.
 \end{observación}
 
-\begin{definición}[Algoritmo de mínimos cuadrados reponderados iterativamente]
-
-1) Inicialización: tomar $\hat{\mu_i} = y_i + \delta_i$ y $\hat{\eta_i} = g(\hat{\mu_i})$, donde $\delta_i$ suele ser 0 o una constante que asegure que  $\hat{\eta_i}$ sea finito. \newline
-2) Calcular: $z_i = g'(\mu_i) \frac{y_i-\hat{\mu_i}}{\alpha(\mu_i)} + \hat{\eta_i}$ y $\omega_i = \frac {\alpha(\hat{\mu}_i)}{g'(\hat{\mu}_i)^2V(\hat{\mu}_i)}$ \newline
-3) Encontrar $\hat{\beta}$ el parámetro que minimiza la función objetivo de mínimos cuadrados ponderados $\ref{minimos cuadrados ponderados}$ y actualizar $\hat{\eta} = X \hat{\beta}$ y 
+\begin{definición}[Algoritmo de mínimos cuadrados reponderados iterativamente] $\hspace{0,8cm}$
+  1. Inicialización: tomar $\hat{\mu_i} = y_i + \delta_i$ y $\hat{\eta_i} = g(\hat{\mu_i})$, donde $\delta_i$ suele ser 0 ó una constante que asegure que  $\hat{\eta_i}$ sea finito. \newline
+  2. Calcular: $z_i = g'(\mu_i) \frac{y_i-\hat{\mu_i}}{\alpha(\mu_i)} + \hat{\eta_i}$ y $\omega_i = \frac {\alpha(\hat{\mu}_i)}{g'(\hat{\mu}_i)^2V(\hat{\mu}_i)}$ \newline
+  3. Encontrar $\hat{\beta}$ el parámetro que minimiza la función objetivo de mínimos cuadrados ponderados $\ref{minimos cuadrados ponderados}$ y actualizar $\hat{\eta} = X \hat{\beta}$ y 
 $\hat{\mu_i} = g^{-1}(\hat{\eta}_i)$
+
+\label{IRLS}
 \end{definición}
 
 \begin{observación}

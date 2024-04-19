@@ -243,6 +243,7 @@ Luego, en vez de ajustar el modelo por mínimos cuadrados, ahora se hará añadi
 
 \begin{observación}
 Mientras mayor sea $\lambda$ más importancia le estaremos dando a que la función $f$ sea suave y menos a que a aproxime bien los datos. De hecho, cuando $\lambda \rightarrow \infty $ la función de suavizado $f$ que minimiza la anterior expresión será una línea recta y cuando $\lambda=0$ resultará en una estimación no penalizada. 
+\label{param-suav}
 \end{observación}
 
 ### Elección del parámetro de suavizado
@@ -589,12 +590,92 @@ $$
 \int_{x_1}^{x_k}f''(x)^2dx = \beta^T D^T B^{-1}D \beta = \beta^T S \beta
 $$
 Donde $S = D^TB^{-1}D$ se conoce como la matriz de penalizado asociada a tal base.
+\label{S}
 \end{observación}
 
 Además de proporcionar parámetros directamente interpretables, la base de splines cúbicos no requiere de ningún re-escalado de las covariables, sólo de la elección de los nodos $x_j$.
 
-**P-splines**
+```{r, echo = FALSE,out.width='80%',fig.cap = "\\label{figura01} ",fig.align='center'}
+knitr::include_graphics("figurasR/figura01.png")
+```
 
+Figura \ref{figura01}: A la izquierda se ve representada la funcion básica $b_4(x)$ para los splines cúbicos de regresión que se desarrollan en esta sección, esta toma el valor 1 en el nodo 0.5 y 0 en los demás. La cuadrícula de la derecha muestra cómo las funciones básicas se combinan para representar una curva de suavizado. Con menor grosor y con formatos de linea distintos se pueden distinguir las funciones básicas y de forma más llamativa se ve la suma escalada de ellas por los coeficientes $\beta_j$. (@Wood, p.203).
+
+**B-Splines**  \newline
+
+Veámos ahora otra base para el espacio de funciones de splines de grado p con nodos $x_1 < x_2 < \dots < x_{k+1}$ arbitrarios. La principal ventaja de la base de B-Splines es que las funciones básicas se definen de forma local, lo que ofrecerá ventajas computacionales frente a las demás bases.
+
+Para definir la base de B-Splines de forma recursiva como en @CursoMNP, denotaremos $M = p+1$ y consideraremos $2M$ nodos auxiliares $\tau_i$ de forma arbitraria de forma que: 
+$$
+\tau_1 \leq \tau_2 \leq \dots \leq \tau_M \leq x_0 \hspace{0.2cm} , \hspace{0.2cm}
+x_{k+1} \leq \tau_{k+M+1} \leq \dots \leq \tau_{k+2M}
+$$
+Observemos que los nuevos nodos al escogerse arbitrariamente se podrían tomar como: 
+$$
+\tau_1 = \dots = \tau_M = x_0 \hspace{0.2cm} , \hspace{0.2cm}
+x_{k+1} = \tau_{k+M+1} = \dots = \tau_{k+2M}
+$$
+Reescribiremos la nueva particion como: $\tau_{j+M} = x_j \hspace{0.2cm} \forall j = 1,\dots,k$. 
+Luego, se define la base de B-Splines de forma recursiva como: 
+$$
+B_j^{-1}(x) = \left\{
+\begin{array}{ l }
+1, \hspace{0.2cm} si \hspace{0.2cm} x_j \leq x < x_{j+1} \\ 
+0, \hspace{0.1cm} en \hspace{0.1cm} caso \hspace{0.1cm} contrario
+\end{array}
+\right. \hspace{0.3cm} \forall j = 1,\dots,k+2M-1
+$$
+
+$$
+B_j^m(x) = \frac{x - \tau_j}{\tau_{j+m-1} - \tau_j}B_j^{m-1}(x) + 
+           \frac{\tau_{j+m} - x}{\tau_{j+m} - \tau_{j+1}}B_{j+1}^{m-1}(x) 
+, \hspace{0.3cm} \forall j = 1,\dots,k+2M-m
+$$
+\begin{observación}
+Estas bases fueron desarrolladas como bases muy estables para la interpolación de splines a gran escala, sin embargo la mayoría de trabajos estadísticos con splines de regresión penalizados de rango menor (es decir, a métodos de suavizado que imponen una reduccion de rango en la matriz asociada al suavizado) deben utilizar métodos numéricos muy deficientes antes de que esta estabilidad sea perceptible. El verdadero interés de la estadística en los B-Splines surge en el desarrollo de los P-Splines.
+\end{observación}
+
+**P-Splines** \newline
+
+Los P-Splines se definen como suavizadores que utilizan bases de B-Splines para una partición uniforme de nodos a los que se les aplica una penalización de suavizado para los parámetros $\beta_i$. Una forma sencilla de definirlos es utilizando la penalización de la diferencia al cuadrado de los parámetros $\beta_j$ adyacentes, es decir, dados los nodos $x_1<\dots<x_k$ se considera la penalización: 
+$$
+\mathcal{P} = \sum_{i=1}^{k-1}(\beta_{i+1}-\beta_i)^2 = \beta^T P^TP\beta
+$$
+Donde:
+$$
+P = \begin{pmatrix} -1 & 1 & 0 & \dotsb & \dotsb \\
+                    0 & -1 & 1 & 0 & \dotsb \\
+                     \dotsb & \dotsb &  \dotsb & \dotsb & \ddots
+     \end{pmatrix},
+\hspace{0.3cm} 
+P\beta = \begin{pmatrix} \beta_2 - \beta_1 \\ \vdots \\ \beta_k - \beta_{k-1}
+\end{pmatrix}
+$$
+Luego: 
+$$
+\mathcal{P} = \beta \begin{pmatrix} -1 & 1 & 0 & \dotsb & \dotsb & \dotsb\\
+                    -1 & 2 & -1 & 0 & \dotsb & \dotsb\\
+                    0 & -1 & 2 & -1 & 0 & \dotsb \\
+                     \dotsb & \dotsb &  \dotsb & \dotsb & \dotsb & \ddots
+\end{pmatrix} \beta
+$$
+\begin{observación}
+Los P-Splines son fáciles de aplicar y ofrecen una buena flexibilidad a la hora de combinar cualquier orden de penalización con cualquier tamaño de base de los B-Splines. Sin embargo, si se utiliza una partición no uniforme de los nodos, su simplicidad disminuye.  
+\end{observación}
+
+Otra penalización que podemos utilizar es sobre las derivadas de los splines definidos en $[a,b]$. Sean $m_1$ el orden de la base de B-Splines y $m_2$ el orden de diferenciación requerido para la penalización:
+$$
+J = \int_a^b f^{m_2}(x)^2 dx = \beta^T S \beta 
+$$
+como en \ref{S}. Se debe entonces buscar $S$, para ello consideraremos una partición ordenada de nodos: $a = x_1 < \dots < x_{k-m_1+1}=b$ de modo que $h_j = x_{j+1}-x_j \hspace{0.2cm} \forall j =1,\dots,k-m$ que definirá la base de B-Splines y razonamos de la siguiente forma: 
+
+  1. Para cada intervalo $[x_j,x_{j+1}]$ generar $p+1$ puntos igualmente espaciados tal que para $p=0$ se elige el punto central del intervalo y para $p \geq 1$ se deben elegir los extremos $x_j$ y $x_{j+1}$. Denotaremos el conjunto ordenado de estos puntos por $\mathcal{C}$.
+  2. Obtener la matriz $G$ aplicando los coeficientes del spline a la $m_2$-ésima derivada del spline $f$ en los puntos de $\mathcal{C}$.
+  3. Si $p=0$, entonces $W = diag(h_j)$. 
+  4. Si $p>0$, entonces consideremos $P,H \in \mathcal{M}^{(p+1) \times (p+1)}$ con elementos: 
+  $P_{i,j} = (\frac{-1+2(i-1)}{p})^j$ y $H_{i,j} = \frac{1+(-1)^{i+j-2}}{i+j-1}$ $\forall i,j = 1,\dots,p+1$ y calculemos $\tilde{W} = P^{(-T)}HP^{-1}$. Además, tomar $W = \sum_q W^q$, donde $W^q$ es 0 en todos lados excepto en $W^q_{i+pq-p,j+pq-p}= \frac{h_q}{2}\tilde{W}_{i,j} \hspace{0.2cm} \forall i,j=1,\dots,p+1$. W es una matriz banda con $2p+1$ diagonales no nulas.
+  5. La matriz banda de coeficientes de penalización es: $S = G^TWG$.
+  
 
 ## Modelos aditivos generalizados
 
@@ -625,8 +706,50 @@ g(\mu_i) = A_i \gamma + \sum_{j=1}^p L_{ij}f_j(x_{j})
 $$
 La más básica de ella es: $L_{ij}f_j(x_j) = f_j(x_{ij})$ que da la forma habitual del MAG, pero existen otras variaciones de ellas y cada una tiene una utilidad específica.
 
-Luego, para cada $f_j$ se deben elegir una base de suavizado y una penalización, las cuales dan lugar a las matrices modelo $X^{[j]}$ y a la matriz de penalización $S^{[j]}$, de modo que $X_{ik}^{[j]} = b_{jk}(x_{ji})$ para $b_{jk}$ la k-ésima función básica para $f_j$.
+Luego, para cada $f_j$ se deben elegir una base de suavizado y una penalización, las cuales dan lugar a las matrices modelo $X^{[j]}$ y a la matriz de penalización $S^{[j]}$, de modo que $X_{ik}^{[j]} = b_{jk}(x_{ji})$ para $b_{jk}$ la k-ésima función básica para $f_j$. En lo que sigue, combinaremos la matriz $A$ con las $X^{[j]}$ por columnas para crear a la matriz del modelo completo: 
+$$
+\mathcal{X} = (A \hspace{0.1cm}|\hspace{0.1cm}X^{[1]} \hspace{0.1cm}|\hspace{0.1cm}X^{[2]}\hspace{0.1cm}| \dotsb )
+$$
 
 ### Ajuste del modelo
 
-Seguiremos las directrices dadas en @Wood para dar la estimación de los parámetros $\beta$ cuando suponemos dado los parámetros de suavizado $\lambda$. Partimos notando que el vector de parámetros $\beta$ contiene a $\gamma$ y a 
+Seguiremos las directrices dadas en @Wood para dar la estimación de los parámetros $\beta$ cuando suponemos dado los parámetros de suavizado $\lambda$. Partimos notando que el vector de parámetros $\beta$ contiene a $\gamma$ y a los vectores de parámetros de suavizado individuales. Partimos observando que una penalización del grado de suavizado global para el modelo viene dada por: 
+$$
+\sum_j \lambda_j \beta^T S_j \beta
+$$
+Donde $\lambda_j$ es un parámetro de suavizado y $S_j$ es por abuso de notación la anterior $S_j$ incrustada como un bloque diagonal en una matriz para que $\lambda_j \beta^T S_j \beta$ sea la penalización para $f_j$.
+
+Observemos que de este modo el modelo se reduce a un MLG sobreparametrizado de la forma:
+$$
+g(\mu_i) = \mathcal{X}_i \beta, \hspace{0.2cm} y_i \backsim EF(\mu_i,\theta_i)
+$$
+El cual se estima maximizando la log-verosimilitud penalizada: 
+\begin{equation}
+l_p(\beta) = l(\beta) - \frac{1}{2\phi} \sum_j \lambda_j \beta^T S_j \beta
+\label{obj-pen}
+\end{equation}
+
+\begin{observación}
+Aquí, como en \ref{param-suav}, los parámetros de suavizado controlan la compensación entre la calidad de ajuste del modelo y su grado de suavizado.
+\end{observación}
+
+Ahora, en @Wood se hace notar que esta función objetivo coincide con la de un Modelo Linear Generalizado Mixto (MLGM)[^1] y se propone estimarlo por la siguiente variación del \ref{IRLS}.
+
+\begin{definición}[Algoritmo de mínimos cuadrados penalizados reponderados iterativamente]
+  1. Inicialización: tomar $\hat{\mu_i} = y_i + \delta_i$ y $\hat{\eta_i} = g(\hat{\mu_i})$, donde $\delta_i$ suele ser 0 ó una constante que asegure que  $\hat{\eta_i}$ sea finito. \newline
+  2. Calcular: $z_i = g'(\mu_i) \frac{y_i-\hat{\mu_i}}{\alpha(\mu_i)} + \hat{\eta_i}$ y $\omega_i = \frac {\alpha(\hat{\mu}_i)}{g'(\hat{\mu}_i)^2V(\hat{\mu}_i)}$ \newline
+  3. Encontrar $\hat{\beta}$ el parámetro que minimiza la función objetivo de mínimos cuadrados ponderados penalizados $\ref{obj-pen}$: 
+$$
+||z-\mathcal{X} \beta||^2_W + \sum_j \lambda_j \beta^T S_j \beta
+$$
+  y actualizar $\hat{\eta} = \mathcal{X} \hat{\beta}$ y $\hat{\mu_i} = g^{-1}(\hat{\eta}_i)$
+
+\label{PIRLS}
+\end{definición}
+
+Donde $||a||^2_W = a^TWa$, $V(\mu)$ es la función de varianza asociada a la distribución de la familia exponencial y $\alpha(\mu_i) = [1+(y_i-\mu_i)(\frac{V'(\mu_i)}{V(\mu_i)} + \frac{g''(\mu_i)}{g'(\mu_i)})]$.
+
+
+
+
+
