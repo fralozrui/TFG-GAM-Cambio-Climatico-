@@ -7,4 +7,4 @@
 \contentsline {subsection}{\numberline {1.3.2}Ajuste de los modelos lineales generalizados}{9}{subsection.1.3.2}%
 \contentsline {subsection}{\numberline {1.3.3}Funciones de enlace canónicas}{11}{subsection.1.3.3}%
 \contentsline {subsection}{\numberline {1.3.4}Residuos}{11}{subsection.1.3.4}%
-\contentsline {chapter}{Bibliografía}{12}{observación.1.3.7}%
+\contentsline {chapter}{Bibliografía}{13}{chapter*.2}%
