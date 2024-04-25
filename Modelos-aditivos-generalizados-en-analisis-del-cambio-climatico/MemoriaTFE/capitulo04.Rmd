@@ -95,3 +95,58 @@ knitr::include_graphics("figurasR/figura03.png")
 ```
 
 ## Controversia 
+
+Sin embargo, aunque exista un consenso internacional sobre la existencia del cambio climático y uno científico sobre el efecto que tiene la humanidad en él, aún hay personas y organizaciones que niegan el cambio climático antropogénico. Este hecho conlleva a que las instituciones implicadas en la lucha del cambio climático se vean envueltas en una crisis de la desinformación, además de la crisis medioambiental que se proponen combatir. Estos contenidos negacionistas no solo socavan el apoyo público mediante información y anuncios dudosos, sino que también erosionan la confianza en estas instituciones. 
+
+Varios estudios de ciencias sociales han analizado estas posturas como formas de negacionismo, pseudociencia e incluso propaganda. La coalición de la Acción Contra la Desinformación Climática (CAAD sus siglas en inglés) realizó el informe @CAAD , resumido en el artículo de @desinfo de EuroNews, en el que se puede intuir quiénes están detrás de estas fuentes de desinformación y el por qué de sus intereses en ellas. En este artículo se recoge que ahora más que nunca es importante que las sociedades tengan una visión compartida sobre el cambio climático que se base en datos y en la integridad de la información. Sin embargo, la desinformación es una piedra en el camino para este objetivo, pues además de poner al cambio climático en el punto de mira de teoría conspirativas y de ser una causa para la división social, perjudica la implementación y el debate de nuevas políticas climáticas.
+
+En el informe antes mencionado se detallan tres casos en los que la desinformación y los bulos son perjuciales para la lucha del cambio climático:
+
+\begin{itemize}
+  \item Por un lado, nombra una serie de páginas webs y editoriales que publican desinformación sobre el clima y se lucran a través de bolsas de anuncion. Esto significa que muchas marcas posicionadas en contra de, por ejemplo, la emisión de gases contaminantes aparezcan junto a estos artículos y de forma indirecta permita su monetización.
+  \item Por otro lado, expone un caso asociado a los medios de comunicación estatales rusos. El CAAD afirma que estos medios utilizan campañas de desinformación con mensajes incoherentes y falsos para reforzar planes de influencia contra países Occidentales y el sur Global.
+  \item Por último habla sobre las grandes compañías petroleras, las cuales invierten millones de dólares en publicidad. Tienen presupuestos inmensos destinados al desarrollo de anuncios en los que suelen alardear de sus inversiones en energías renovables, pero el análisis del CAAD muestra que estas empresas sólo aportaron el 1% de la inversión mundial en energías limpias.
+\end{itemize}
+
+No obstante, estos ejemplos no son más que la punta del iceberg de una gran crisis de la información, ya que existen muchas mas entidades e individuos que sacan provecho de una cuestión tan importante como esta, a la par que perjudican a los organismos que pretenden combatirla.
+
+Citemos a continuación una serie de argumentos utilizados por los negacionistas: 
+\begin{itemize}
+  \item Sólo se tienen datos desde el 1960, el clima comenzó a calentarse antes de la revolución industrial.
+  \item El dióxido de carbono se quedará en la atmósfera durante décadas o siglos.
+  \item Se han producido otros cambios climáticos a lo largo de la historia.
+  \item Se achacan catástrofes al calentamiento global aunque no hay pruebas para vincularlas.
+  \item Si hay una ola de frío, ¿Cómo va a haber calentamiento global? (Dicho por Donald Trump en 2018).
+  \item El cambio climático tiene efectos positivos como obtener mejores cosechas de cereales en los países que son menos cálidos.
+  \item No hay calentamiento global desde 1998.
+  \item No están aumentando los fenómenos meteorológicos extremos.
+\end{itemize}
+
+## Resumen del cambio climático en la actualidad
+
+Nos basaremos en el quinto y sexto informes del Grupo Intergubernamental de Expertos sobre Cambio Climático (más conocido por sus siglas en inglés, IPCC). El IPCC es una entidad científica creada en 1988 por la Organización Meteorológica Mundial y el Programa de Naciones Unidas para el Medio Ambiente y tiene como principal propósito el proporcionar información objetiva, clara, equilibrada y neutral del estado actual de conocimientos sobre el cambio climático. Lo haremos refiriéndonos a los resúmenes en español realizados por la Oficina Española de Cambio Climático, los cuales se pueden encontrar en su web:
+
+El cambio climático constituye un fenómeno global, tanto por sus causas como por sus efectos, y
+requiere una respuesta multilateral basada en la colaboración de todos los países, ya no solo a nivel internacional, sino también a nivel regional.
+
+El primer grupo de trabajo abre el apartado sobre la situación actual del cambio climático con la siguiente aserción: " _Es indiscutible que las actividades humanas están causando un cambio climático, haciento que los eventos extremos sean más frecuentes y severos_". Tras ello, exponen las siguientes observaciones: 
+
+\begin{itemize}
+  \item La concentración de $CO_2$ en la atmósfera es la más alta en los últimos 2 millones de años.
+  \item El incremento de la subida del mar en el último siglo es mayor que al registrado en cualquier
+siglo anterior en los últimos 3000 años.
+  \item La superficie de hielo marino ártico está en su nivel más bajo en los últimos 1000 años.
+  \item La temperatura media en la última década (2011-2020) fue aproximadamente 1.09°C superior a la temperatura media entre 1850 y 1900.
+\end{itemize}
+
+Lo siguiente que nos interesa notar está desarrollado por el grupo III de trabajo del IPCC, el cual se encarga del informe de mitigación. Hacen una evaluación actual de las tendencias de las emisiones antropogénicas de gases contaminantes a nivel global y por sectores. Por un lado, afirman que las emisiones de gases de efecto invernadero (GEI) han seguido aumentando a nivel global entre 2010 y 2019, de hecho el promedio anual de emisiones de GEI durante este periodo ha sido más elevado que en cualquier década anterior. Aunque en la siguiente gráfica podemos observar que en comparación a la década anterior se ha reducido el aumento por año de las emisiones netas. [^1] [^2]
+
+```{r, echo = FALSE,out.width='110%',fig.cap = "\\label{figura04} Las emisiones de los GEI han frenado un 0.8% respecto de la década anterior, pero siguen aumentando hasta los 59Gt.",fig.align='center'}
+knitr::include_graphics("figurasR/figura04.png")
+```
+
+[^1]: LULUCF son las siglas en inglés de "uso de la tierra, cambio de uso de la tierra y selvicultura".
+[^2]: Gt$CO_2$-eq es una medida en toneladas de la huella de carbono,es decir, de la totalidad de la emisión de gases de efecto invernadero.
+
+Además de ello, comparan las emisiones netas acumuladas de $CO_2$ entre 2010 y 2019 con las que se pueden emitir a partir de 2020 para limitar el calentamiento global a 1.5°C y a 2°C, representaría $\frac{4}{5}$ de las emisiones para la primera y aproximadamente $\frac{1}{3}$ para la segunda. 
+
