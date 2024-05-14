@@ -38,7 +38,7 @@ output:
 
 ---
 nocite: | 
-  @Luque2017, @Wood, @Hastie, @M-Clark, @MLG-wikipedia, @fundamentos, @Stat-Learning
+  @Luque2017, @Wood, @Hastie, @M-Clark, @MLG-wikipedia, @fundamentos, @Stat-Learning, @CursoMNP, @consenso, @desinfo, @CAAD, @OficinaCC, @consecuencias
 ...
 
 
@@ -158,11 +158,9 @@ install.packages(c("ggplot2","kableExtra","dplyr"))
 -->
 
 
-<!-- \FloatBarrier -->
-
-<!-- ```{r child = 'capitulo05.Rmd'} -->
-<!-- ``` -->
-
+\FloatBarrier 
+```{r child = 'capitulo05.Rmd'} 
+``` 
 
 
 

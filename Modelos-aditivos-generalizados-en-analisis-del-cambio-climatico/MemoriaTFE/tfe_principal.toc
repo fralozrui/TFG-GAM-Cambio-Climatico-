@@ -23,12 +23,14 @@
 \contentsline {section}{\numberline {3.4}Smoothers}{20}{section.3.4}%
 \contentsline {subsection}{\numberline {3.4.1}Splines cúbicos}{21}{subsection.3.4.1}%
 \contentsline {subsection}{\numberline {3.4.2}Smoothers unidimensionales}{23}{subsection.3.4.2}%
-\contentsline {section}{\numberline {3.5}Modelos aditivos generalizados}{24}{section.3.5}%
-\contentsline {subsection}{\numberline {3.5.1}Ajuste del modelo}{25}{subsection.3.5.1}%
-\contentsline {chapter}{\numberline {4}Título del Capítulo}{27}{chapter.4}%
-\contentsline {section}{\numberline {4.1}Primera sección}{27}{section.4.1}%
-\contentsline {chapter}{\numberline {A}Apéndice: Título del Apéndice}{29}{appendix.Alph1}%
-\contentsline {section}{\numberline {A.1}Primera sección}{29}{section.Alph1.1}%
-\contentsline {chapter}{\numberline {B}Apéndice: Título del Apéndice}{31}{appendix.Alph2}%
-\contentsline {section}{\numberline {B.1}Primera sección}{31}{section.Alph2.1}%
-\contentsline {chapter}{Bibliografía}{33}{appendix*.7}%
+\contentsline {section}{\numberline {3.5}Modelos aditivos generalizados}{26}{section.3.5}%
+\contentsline {subsection}{\numberline {3.5.1}Ajuste del modelo}{27}{subsection.3.5.1}%
+\contentsline {chapter}{\numberline {4}Cambio climático}{29}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Consenso científico}{29}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Controversia}{31}{section.4.2}%
+\contentsline {section}{\numberline {4.3}Resumen del cambio climático en la actualidad}{32}{section.4.3}%
+\contentsline {chapter}{\numberline {A}Apéndice: Título del Apéndice}{35}{appendix.Alph1}%
+\contentsline {section}{\numberline {A.1}Primera sección}{35}{section.Alph1.1}%
+\contentsline {chapter}{\numberline {B}Apéndice: Título del Apéndice}{37}{appendix.Alph2}%
+\contentsline {section}{\numberline {B.1}Primera sección}{37}{section.Alph2.1}%
+\contentsline {chapter}{Bibliografía}{40}{appendix*.12}%
