@@ -632,7 +632,7 @@ B_j^m(x) = \frac{x - \tau_j}{\tau_{j+m-1} - \tau_j}B_j^{m-1}(x) +
 , \hspace{0.3cm} \forall j = 1,\dots,k+2M-m
 $$
 \begin{observación}
-Estas bases fueron desarrolladas como bases muy estables para la interpolación de splines a gran escala, sin embargo la mayoría de trabajos estadísticos con splines de regresión penalizados de rango menor (es decir, a métodos de suavizado que imponen una reduccion de rango en la matriz asociada al suavizado) deben utilizar métodos numéricos muy deficientes antes de que esta estabilidad sea perceptible. El verdadero interés de la estadística en los B-Splines surge en el desarrollo de los P-Splines.
+Estas bases fueron desarrolladas como bases muy estables para la interpolación de splines a gran escala, sin embargo la mayoría de trabajos estadísticos con splines de regresión penalizados de rango menor (es decir, con métodos de suavizado que imponen una reduccion de rango en la matriz asociada al suavizado) deben utilizar métodos numéricos muy deficientes antes de que esta estabilidad sea perceptible. El verdadero interés de la estadística en los B-Splines surge en el desarrollo de los P-Splines.
 \end{observación}
 
 **P-Splines** \newline
