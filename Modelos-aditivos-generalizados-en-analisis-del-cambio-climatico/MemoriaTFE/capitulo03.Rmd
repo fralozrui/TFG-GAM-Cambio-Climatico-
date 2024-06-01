@@ -69,14 +69,6 @@ knitr::opts_chunk$set(fig.path = 'figurasR/',
 \renewcommand{\headrulewidth}{0.4pt}
 \renewcommand{\footrulewidth}{0.4pt}
 
-\theoremstyle{remark}
-\newtheorem{observación}{Observación}[section]
-\theoremstyle{definition}
-\newtheorem{definición}{Definición}[section]
-\theoremstyle{definition}
-\newtheorem{proposición}{Proposición}[section]
-\theoremstyle{remark}
-\newtheorem{ejemplo}{Ejemplo}[section]
 
 # Modelos aditivos generalizados
 

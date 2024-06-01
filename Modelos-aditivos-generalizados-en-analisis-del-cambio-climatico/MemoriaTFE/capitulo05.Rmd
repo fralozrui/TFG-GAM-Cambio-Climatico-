@@ -79,27 +79,29 @@ R-knitr,R-rmarkdown,R-dplyr,R-ggplot2,Techopedia}
 
 # Aplicación de los MAG al análisis del cambio climático
 
-En esta sección nos proponemos el aplicar el contexto teórico visto hasta ahora sobre los modelos aditivos generalizados al análisis del cambio climático. Para ello principalmente utilizaremos el paquete de R: "mgcv" (siglas en inglés de "Vehículo de Computación para MAG Mixtos"), en particular haremos uso de su funcion "gam", la cual permite ajustar modelos aditivos generalizados, entre otros tipos de modelos, mediante splines de regresión penalizados (u smoothers similares) donde los parámetros de suavizado pueden ser estimados por distintos métodos, como por ejempli: mínima validación cruzada generalizada, mínimo AIC, por máxima verosimilitud o por REML (que es la opción por defecto).
+En esta sección nos proponemos aplicar el contexto teórico visto hasta ahora sobre los modelos aditivos generalizados al análisis del cambio climático. Para ello principalmente utilizaremos el paquete de R: *mgcv* (siglas en inglés de "Vehículo de Computación para MAG Mixtos"), en particular haremos uso de su funcion *gam*, la cual permite ajustar modelos aditivos generalizados, entre otros tipos de modelos, mediante splines de regresión penalizados (u smoothers similares) donde los parámetros de suavizado pueden ser estimados por distintos métodos, por ejemplo por: mínima validación cruzada generalizada, mínimo AIC, máxima verosimilitud o por REML, siglas en inglés de máxima verosimilitud restringida, que es la opción por defecto.
 
-Además del método de estimación, esta función también admite otras entradas que indican qué familia de distribuciones exponenciales se utiliza, si las observaciones toman distintos pesos, el método de optimización numérica utilizado, otros parámetros de control de estos métodos para el caso de que los habituales no converjan, etc.
+Además del método de estimación, la función *gam* también admite otras entradas que sirven para indicar qué familia de distribuciones exponenciales se utiliza, si las observaciones toman distintos pesos, el método de optimización numérica utilizado, otros parámetros de control de estos métodos para el caso de que los habituales no converjan, etc.
 
-Dividiremos las aplicaciones prácticas de los MAG en tres partes: la primera se centra en modelar la temperatura media mensual según una serie de variables climáticas y ver cómo ha variado con los años, en la siguiente veremos cómo han evolucionado a lo largo del tiempo las concentraciones de gases de efecto invernadero en la atmósfera y algunos de sus efectos, por último estudiaremos la media variacional del nivel del mar respecto del año 1993.
+Dividiremos las aplicaciones prácticas de los MAG en tres partes: la primera se centra en modelar la temperatura media mensual según una serie de variables climáticas y ver cómo ha variado con los años, en la siguiente veremos cómo han evolucionado a lo largo del tiempo las concentraciones de gases de efecto invernadero en la atmósfera, por último estudiaremos la media variacional del nivel del mar respecto del año 1993.
+
+La lectura y transformación de los datos no la mostraremos en esta sección, se encuentra en $\ref{Apendice1}$ y el código que genera las representaciones gráficas aparece en $\ref{Apendice2}$.
 
 ## Modelización de la temperatura media mensual 
 
-### Datos
+### Descripción de los datos {#Datos1}
 
-Para esta primera aplicación de los modelos aditivos generalizados utilizaremos datos de elementos climáticos proporcionados por la Agencia Estatal de Meteorología española (AEMET), para ello utilizaremos la libreria "climaemet" @climaemet:
+Para esta primera aplicación de los modelos aditivos generalizados utilizaremos datos de variables climáticas proporcionados por la Agencia Estatal de Meteorología española (AEMET), para ello utilizaremos la libreria "climaemet" @climaemet:
 
 ```{r,echo=TRUE,eval=TRUE}
 #install.packages('climaemet')
 library(climaemet)
 ```
-Como hemos dicho antes, el conjunto de datos sobre el que trabajaremos a lo largo de esta sección está formado por variables climáticas, estas se definen como elementos que caracterizan el tiempo atmosférico y que interactuan entre sí en la troposfera. Aunque son elementos relacionados con el campo de la meteorología, su estudio a largo plazo, fundamenta las bases científicas de la climatología. En particular, el conjunto de datos mensuales que nos proporciona la anterior librería contiene más de 40 variables climáticas, por comodidad y para una mejor interpretación de los modelos nos quedaremos con las variables que representen la temperatura media mensual, la humedad relativa, la media mensual de precipitaciones y la velocidad media del viento. Otras variables climáticas de interés pueden ser la presión atmosférica y la nubosidad. 
+Como hemos dicho antes, el conjunto de datos sobre el que trabajaremos a lo largo de esta sección está formado por variables climáticas, estas se definen como elementos que caracterizan el tiempo atmosférico y que interactuan entre sí en la troposfera. Aunque son elementos relacionados con el campo de la meteorología, su estudio a largo plazo, fundamenta las bases científicas de la climatología. En particular, el conjunto de datos mensuales que nos proporciona la anterior librería contiene más de 40 variables climáticas, por comodidad y para una mejor interpretación de los modelos nos quedaremos con las variables que representen la temperatura media mensual, la humedad relativa, la media mensual de precipitaciones, la presión media y la velocidad media del viento. 
 
-Estos datos provienen de una base de datos _open source_ que ofrece la AEMET y en particular utilizamos las mediciones tomadas por la estación situada en el aeropuerto de Sevilla, se puede leer más sobre ellos en: <https://opendata.aemet.es/centrodedescargas/inicio>. Procedamos con la lectura y limpieza de los datos mensuales desde 1960 a 2023: 
+Esta información provienen de una base de datos _open source_ que ofrece la AEMET, se puede leer más sobre ella en: <https://opendata.aemet.es/centrodedescargas/inicio>. En particular utilizaremos las mediciones tomadas por la estación situada en el aeropuerto de Sevilla.
 
-```{r,echo=TRUE,eval=TRUE}
+```{r,echo=FALSE,eval=TRUE}
 library(tidyr)
 library(dplyr)
 Clima <- aemet_monthly_period(station = "5783", start = 1960, end = 2023) 
@@ -112,7 +114,7 @@ Clima <- Clima %>% arrange(Año, Mes) # Ordenamos por año y mes
 Clima <- Clima[complete.cases(Clima$Mes),] # Retiramos las medias anuales
 ```
 
-Hagamos ahora la primera visualización de ellos observando su estructura y un resumen:
+Hagamos la primera visualización de los datos observando su estructura y resumen:
 
 ```{r,echo=TRUE,eval=TRUE}
 str(Clima)
@@ -123,13 +125,13 @@ summary(Clima)
 ```
 \begin{itemize}
   \item HR: la humedad relativa media es un valor porcentual de la cantidad de vapor de agua presente en el aire con respecto a la máxima posible para unas condiciones dadas de presión y temperatura.
-  \item PresM: la presión media mensual al nivel de la estación.
+  \item PresM: la presión media mensual al nivel de la estación medida en hectopascales (hPa).
   \item Prec: la precipitación total mensual medida en milímetros.
   \item WMed: la velocidad media del aire se mide en metros por segundo. 
   \item TMedM: la temperatura media mensual viene dada en grados centígrados. 
 \end{itemize}
 
-### Descripción del modelo 
+### Descripción del modelo {#Descripcion1} 
 
 Tomaremos a la variable *TMedM* como variable de respuesta y al resto como variables explicativas.
 Antes de definir el modelo debemos notar que la variable *Año* no se ha definido como variable categórica, como sí se hizo para la variable *Mes*, sino que se define como variable numérica para luego poder tener una mejor representación de los resultados obtenidos. Además, si se hubiera definido de tal forma, resultaría que la mayoría de factores son no significativos. Dicho esto definimos el modelo como:
@@ -143,7 +145,7 @@ library(mgcv)
 mag1 <- gam(TMedM~ s(HR)+s(PresM)+s(Prec)+s(WMed)+Año+Mes,data = Clima)
 summary(mag1)
 ```
-Como podemos ver en el resumen del modelo, se toma por defecto que la variable dependiente sigue la distribución normal y que la función de enlace es la identidad. Se obtiene que el modelo es capaz de explicar el 96.3% de la varianza con $R^2_{adj}=0.962$. Se tiene también que todas las variables predictoras son significativas. Observemos qué efecto tienen las variables predictoras sobre la temperatura media mensual:
+Como podemos ver en el resumen del modelo, se toma por defecto que la variable dependiente sigue la distribución normal y que la función de enlace es la identidad. Se tiene que el modelo es capaz de explicar el 96.3% de la varianza con $R^2_{adj}=0.962$ y que todas las variables predictoras son significativas. Observemos qué efecto tienen las variables predictoras sobre la temperatura media mensual:
 
 ```{r,echo=FALSE,eval=TRUE}
 par(mfrow = c(2, 2))
@@ -179,17 +181,17 @@ Para obtener más información sobre el modelo planteado se utiliza la siguiente
 gam.check(mag1)
 ```
 
-Por un lado, la salida por consola nos informa de que se obtiene la convergencia por optimización del GCV y que el modelo es de rango completo. Los p-valores que aparecen se corresponden a los tests de residuos aleatorios correspondientes para cada predictor, en este caso todos excepto el asociado a *Prec* son $<0.05$, lo que indica que los residuos no están distribuidos aleatoriamente y que se necesitaría una base de funciones de mayor dimensión. 
+Por un lado, la salida por consola nos informa de que se obtiene la convergencia por optimización del GCV y que el modelo es de rango completo. Los p-valores que aparecen se corresponden a los tests de residuos aleatorios correspondientes para cada predictor, en este caso todos excepto el asociado a *Prec* son $<0.05$, lo que indica que se necesitaría una base de funciones de mayor dimensión para la función de suavizado asociada a esta variable. No obstante, no se obtiene ninguna mejoría significativa del modelo con este razonamiento así que nos ahorraremos el incluirlo. 
 Por otro lado, observemos qué representa cada una de las gráficas generadas y cuál sería el caso ideal para cada una de ellas:
 
 \begin{itemize}
   \item Q-Q Plot: compara la distribución de los residuos con una distribución normal. Lo ideal es que los puntos se alineen aproximadamente en una línea recta.
-  \item Resids vs. linear pred: representa los residuos contra el predictor lineal, ayuda a verificar si los residuos se distribuyen aleatoriamente, que sería lo ideal.
-  \item Histogram of residuals: se trata de un histograma de los residuos, en este caso lo ideal es que muestre una distribución aproximadamente normal, centrada en cero, esto indicaría que los residuos no presentan sesgos significativos.
+  \item Resids vs. linear pred: representa los residuos frente el predictor lineal, ayuda a verificar si los residuos se distribuyen aleatoriamente, que sería lo ideal.
+  \item Histograma de residuos: se trata de un histograma de los residuos, en este caso lo ideal es que muestre una distribución aproximadamente normal, centrada en cero, esto indicaría que los residuos no presentan sesgos significativos.
   \item Response vs. Fitted Values: representa los valores observados frente a los valores ajustados, lo ideal sería que los puntos resultantes se aconglomerasen en torno a la recta $x=y$.
 \end{itemize}
 
-Por lo general este modelo se comporta de manera decente, ya que se aproxima mucho a los casos ideales de cada gráfica. Podemo utilizar la librería *visibly* de @M-Clark para hacer esta representación de forma más clara:
+Por lo general este modelo se comporta de manera correcta, ya que se aproxima mucho a los casos ideales de cada gráfica. Podemos utilizar la librería *visibly* de @M-Clark para hacer esta representación de forma más clara:
 
 ```{r,echo=TRUE,eval=TRUE}
 #install.packages('visibly')
@@ -198,11 +200,11 @@ plot_gam_check(mag1)
 ```
 
 
-### Visualización de los resultados
+### Visualización de resultados
 
-Una vez generado el modelo y comprobado que se tiene una bondad de ajuste decente, veamos cómo ajusta los datos para poder visualizar si se ha producido un cambio significativo en la temperatura media mensual a lo largo de los años. 
+Una vez generado el modelo y comprobado que se tiene una buena bondad de ajuste, veremos cómo ajusta los datos con el objetivo de identificar si se ha producido un cambio significativo en la temperatura media mensual a lo largo de los años. Para evitar las variaciones entre estaciones nos centraremos en la representación de los datos para un mes fijo, en este caso julio.
 
-```{r,echo=TRUE,eval=TRUE, warning=FALSE}
+```{r,echo=FALSE,eval=TRUE, warning=FALSE}
 Julio <- filter(Clima, Clima$Mes == 7)
 Julio$Preds <- predict(mag1, newdata = Julio)
 Julio <- Julio[complete.cases(Julio$Preds),]
@@ -212,50 +214,50 @@ Julio$LPreds <- predict(lm1,Julio)
 
 library(ggplot2)
 ggplot(Julio,aes(x=Año))+
-  geom_point(aes(y=TMedM),size=1.5,col = 'black')+
+  geom_point(aes(y=TMedM),size=1.5, col = 'black')+
   theme_minimal()+
-  geom_line(aes(y=Preds),linewidth=1,col = 'darkred')+
-  geom_line(aes(y=LPreds),linewidth=0.6,col = '#EB6146')+
-  labs(title ="Temperatura media mensual del mes de Julio",x="Año",y="Temperatura ºC",
-       legend = c('MAG1','Modelo Lineal'))+
-  theme(axis.title = element_text(face = "italic"),
+  geom_line(aes(y=Preds, color = 'MAG'),linewidth=1)+
+  geom_line(aes(y=LPreds, color = 'ML'),linewidth=0.6)+
+  labs(title ="Temperatura media mensual del mes de julio",x="Año",y="Temperatura ºC")+
+  scale_color_manual(values = c('MAG' = 'darkred', 'ML' = '#EB6146'), name = "Leyenda") + 
+  theme(axis.title = element_text(face = "bold"),
         legend.text = element_text( size = 10,colour = "black"),
-        legend.title = element_blank(),legend.position = c(0.5,0.9))
+        legend.position = 'right')
 ```
 
 Con esta gráfica podemos apreciar claramente como la temperatura media en el mes de Julio ha ido aumentado con el paso de los años en la estación meteorológica del aeropuerto de San Pablo. Hemos introducido la recta proporcionada por el modelo lineal para los datos de los meses de Julio para tener una mejor apreciación de tal incremento.
 
 ## Modelización de gases de efecto invernadero 
 
-### Descripción de los datos
+### Descripción de los datos {#Datos2}
 
-En esta sección ajustaremos modelos aditivos generalizados para estudiar la concentración atmosférica de gases de efecto invernadero, en particular analizaremos las medias mensuales globales de las concentraciones de dióxido de carbono ($CO_2$), Metano ($CH_4$) y óxido nitroso ($N_2O$). Para ello consideraremos los datos proporcionados por United Nations Environment Programme (UNEP), para el $CO_2$ se obtienen en <https://wesr.unep.org/climate/essential-climate-variables-ecv/atmospheric-co2-concentration> y para los dos siguientes en <https://wesr.unep.org/climate/essential-climate-variables-ecv/atmospheric-ch4-n2o-sf6-concentration>.
+En esta sección ajustaremos modelos aditivos generalizados con el objetivo de estudiar la concentración atmosférica de gases de efecto invernadero, en particular analizaremos las medias mensuales globales de las concentraciones de dióxido de carbono ($CO_2$), metano ($CH_4$) y óxido nitroso ($N_2O$). Para ello consideraremos los datos proporcionados por United Nations Environment Programme (UNEP), para el $CO_2$ se obtienen en <https://wesr.unep.org/climate/essential-climate-variables-ecv/atmospheric-co2-concentration> y para los dos siguientes en <https://wesr.unep.org/climate/essential-climate-variables-ecv/atmospheric-ch4-n2o-sf6-concentration>.
 
-Ya hablamos sobre las emisiones de gases contaminantes en \ref{Resumen del cambio climático en la actualidad} pero no se llego a definir en qué consistían. Estos gases son capaces de absorber y emitir radiación dentro del espectro inflarrojo y, por tanto son capaces de retener el calor del Sol, lo que permite que el clima terrestre sea habitable para la humanidad. Sin embargo, desde el inicio de la revolución industrial, la actividad humana ha producido un desequilibrio en los niveles de concentración de estos gases en la atmósfera. En particular estudiaremos las concentraciones de los tres tipos de gases antes mencionads por ser las que se emiten en mayor cantidad o por ser las más potentes (en términos de contribución al efecto invernadero). Por ejemplo, las emisiones de $CO_2$ se corresponden aproximadamente con tres cuartas partes del total de emisiones y tarda en descomponerse en la atmósfera más de 100 años, sin embargo el $CH_4$ y el $N_2O$ representan una parte mucho menor que el dióxido de carbono pero por unidad son mucho más potentes como gases de efecto invernadero.
+Ya hablamos sobre las emisiones de gases contaminantes en $\ref{ResumenCC}$ pero no se llegó a definir en qué consistían. Estos gases son capaces de absorber y emitir radiación dentro del espectro inflarrojo, por tanto son capaces de retener el calor del Sol, lo que permite que el clima terrestre sea habitable para la humanidad. Sin embargo, desde el inicio de la revolución industrial, la actividad humana ha producido un desequilibrio en los niveles de concentración de estos gases en la atmósfera. En particular estudiaremos las concentraciones de los tres tipos de gases antes mencionados por ser los que se emiten en mayor cantidad o por ser las más potentes (en términos de contribución al efecto invernadero). Por ejemplo, las emisiones de $CO_2$ se corresponden aproximadamente con tres cuartas partes del total de emisiones de GEI, sin embargo el $CH_4$ y el $N_2O$ representan una parte mucho menor que el dióxido de carbono pero por unidad son mucho más potentes como gases de efecto invernadero. @GEI.
 
+Para facilitar la lectura de los datos se ha transformado el archivo excel proporcionado por la fuente antes mecionada a *.xlsx* y se han utilizado las librerías *readxl* y *lubridate* para leerlo y obtener las variables temporales *Año* y *Mes*, respectivamente.
 
-
-Hagamos ahora una primera visualización de los datos. Para tener una mejor lectura de los datos, primero debemos transformar el archivo *.xlsx*, luego utilizamos la librería *readxl* para leerlo y la librería *lubridate* para obtener la fecha:
 
 ```{r,echo = TRUE,eval=TRUE}
+#install.packages('readxl')
 library(readxl)
+#install.packages('lubridate')
 library(lubridate)
 ```
 \begin{itemize}
 \item $CO_2$:
 \end{itemize}
-```{r,echo=TRUE,eval=TRUE}
+```{r,echo=FALSE,eval=TRUE}
 CO2 <- read_excel('trends-in-atmospheric-carbon-dioxide-concentration.xlsx')
 
-CO2$DateTime <- as.Date(CO2$DateTime) # Creamos las variables año y mes como categoricas
+CO2$DateTime <- as.Date(CO2$DateTime) 
 CO2$Año <- as.numeric(year(CO2$DateTime))
 CO2$Mes <- factor(month(CO2$DateTime),levels = as.character(1:12))
 CO2$Tmes <- as.numeric(CO2$'Monthly Data')
 CO2$Trend <- as.numeric(CO2$'Trend')
 CO2 <- CO2[,c(4,5,6,3)]
-CO2 <- CO2 %>% arrange(Año, Mes) # Ordenamos por año y mes
+CO2 <- CO2 %>% arrange(Año, Mes) 
 ```
-De este modo nos queda un data frame con 794 observaciones, correspondientes a los meses desde marzo del 1958 hasta abril de 2024, y con las variables *Año*, *Mes*, *Tmes* que se corresponde con la concentración media de $CO_2$ a nivel global medida en partes por millón (ppm) y *Trend* que es la media anual de las anteriores. 1 ppm significa que existe una molécula de ese gas por cada millón de moléculas de aire.
 
 ```{r,echo=TRUE,eval=TRUE}
 str(CO2)
@@ -263,21 +265,23 @@ str(CO2)
 ```{r,echo=TRUE,eval=TRUE}
 summary(CO2)
 ```
+
+De este modo nos queda un data frame con 794 observaciones, correspondientes a los meses desde marzo del 1958 hasta abril de 2024, y con las variables *Año*, *Mes*, *Tmes* que se corresponde con la concentración media de $CO_2$ a nivel global medida en partes por millón (ppm) y *Trend* que es la media anual de las anteriores. El tener 1 ppm de un gas en un medio significa que existe una molécula de ese gas por cada millón de moléculas de aire.
+
+
 \begin{itemize}
 \item $CH_4$:
 \end{itemize}
-```{r,echo=TRUE,eval=TRUE}
+```{r,echo=FALSE,eval=TRUE}
 CH4 <- read_excel('trends-in-atmospheric-methane-concentration.xlsx')
 
-CH4$DateTime <- as.Date(CH4$DateTime) # Creamos las variables año y mes 
+CH4$DateTime <- as.Date(CH4$DateTime)
 CH4$Año <- as.numeric(year(CH4$DateTime))
 CH4$Mes <- factor(month(CH4$DateTime),levels = as.character(1:12))
 CH4$Trend <- as.numeric(CH4$'Trend')
 CH4 <- CH4[,c(3,4,2)]
-CH4 <- CH4 %>% arrange(Año, Mes) # Ordenamos por año y mes
+CH4 <- CH4 %>% arrange(Año, Mes) 
 ```
-
-En este caso disponemos de 487 observaciones correspondientes a meses entre 1983 y 2024, las variables de tiempo *Año* y *Mes* y la variable *Trend* la cual representa la media mensual de concentración de metano a nivel global medida en partes por billón (ppb).
 
 ```{r,echo=TRUE,eval=TRUE}
 str(CH4)
@@ -285,21 +289,22 @@ str(CH4)
 ```{r,echo=TRUE,eval=TRUE}
 summary(CH4)
 ```
+
+En este caso disponemos de 487 observaciones correspondientes a los meses entre 1983 y 2024, las variables de tiempo *Año* y *Mes* y la variable *Trend* la cual representa la media mensual de concentración de metano a nivel global medida en *parts per billion* (ppb). La notación es en inglés, en español se correspondría a partes por miles de millones. 
+
 \begin{itemize}
 \item $N_2O$:
 \end{itemize}
-```{r,echo=TRUE,eval=TRUE}
+```{r,echo=FALSE,eval=TRUE}
 N2O <- read_excel('trends-in-atmospheric-nitrous-oxide-concentration.xlsx')
 
-N2O$DateTime <- as.Date(N2O$DateTime) # Creamos las variables año y mes 
+N2O$DateTime <- as.Date(N2O$DateTime) 
 N2O$Año <- as.numeric(year(N2O$DateTime))
 N2O$Mes <- factor(month(N2O$DateTime),levels = as.character(1:12))
 N2O$Trend <- as.numeric(N2O$'Trend')
 N2O <- N2O[,c(3,4,2)]
-N2O <- N2O %>% arrange(Año, Mes) # Ordenamos por año y mes
+N2O <- N2O %>% arrange(Año, Mes) 
 ```
-
-Para el caso del óxido nitroso sólo disponemos datos desde el 2001, por lo que obtenemos un conjunto de 277 observaciones para las variables *Año*, *Mes* y *Trend* que representa la media mensual de concentración de $N_2O$ a nivel global medida en partes por billón (ppb). 
 
 ```{r,echo=TRUE,eval=TRUE}
 str(N2O)
@@ -308,11 +313,13 @@ str(N2O)
 summary(N2O)
 ```
 
+Para el caso del óxido nitroso sólo disponemos datos desde el 2001, por lo que obtenemos un conjunto de 277 observaciones para las variables *Año*, *Mes* y *Trend* que representa la media mensual de concentración de $N_2O$ a nivel global medida en *parts per billion* (ppb). 
+
 Solo con los resúmenes de los datos para los tres gases, teniendo en cuenta las medidas en las que vienen dados, ya se puede ver la gran diferencia que hay entre sus proporciones en la atmósfera.
 
-### Descripción de los modelos
+### Descripción de los modelos {#Descripicion2}
 
-Partiremos definiendo un modelo aditivo generalizado para los datos de $CO_2$ que tenga como variable de respuesta la media mesual global de la concentración de este gas medida en ppm y como predictoras las variables *Año* y *Mes*:
+Partiremos definiendo un modelo lineal para los datos de $CO_2$ que tenga como variable de respuesta la media mesual global de la concentración de este gas medida en ppm y como predictoras las variables *Año* y *Mes*:
 
 ```{r,echo=TRUE,eval=TRUE}
 magCO2 <- gam(Tmes ~ Año + Mes, data = CO2)
@@ -326,35 +333,318 @@ plot_gam_check(magCO2)
 
 Gracias a estos gráfios se puede ver cómo el modelo falla en varios aspectos: 
 \begin{itemize}
-  \item Se puede ver claramente que el Q-Q plot no se adapta a la recta, es decir, la distribución de los residuos no es normal. Además
-  \item En la gráfica de arriba a la derecha se puede ver como los residuos toman un patrón claro respecto de los predictores, por lo que los residuos no se distribuyen aleatoriamente.
-  \item En la de abajo a la izquierda se ve facilmente no es una distribución normal centrada en el 0.
-  \item Por último, el gráfico Response vs. Fitted en general se ajusta bien, pero tiene claros errores.  
+  \item En primer lugar, el Q-Q plot no se adapta a la recta, es decir, la distribución de los residuos no es normal.
+  \item En la gráfica de arriba a la derecha se puede ver como los residuos toman un patrón claro respecto de los predictores, lo que implica que la hipótesis de homocedasticidad de los residuos no es cierta.
+  \item En la de abajo a la izquierda se ve facilmente que no es una distribución normal centrada en el 0, lo que confirma lo observado en el Q-Q plot.
+  \item Por último, en el gráfico Response vs. Fitted también se puede intuir la falta de homocedasticidad para los residuos. 
 \end{itemize}
 
+Luego, aunque el modelo representase un gran porcentaje de la desviación explicada, presenta errores significativos en el análisis de los residuos por lo que inferimos que el modelo no es adecuado. Para definir un modelo que se ajuste mejor nos referiremos a dichas gráficas. En primer lugar, que la gráfica de residuos frente predictores se asemeje a una función cuadrática nos indica que puede existir una relación no lineal entre la varible de respuesta y las predictoras (que es tal y como se definió el modelo), por lo que será conveniente añadir funciones de suavizado al modelo. Además, también puede implicar que la familia de distribuciones exponenciales para la variable de respuesta que estemos utilizando, la normal en este caso, no sea la adecuada. Podemos utilizar el test de normalidad univariante Shapiro-Wilk para comprobarlo: 
+
 ```{r,echo=TRUE,eval=TRUE}
-e <- residuals(magCO2); fv <- fitted(magCO2)
-lm(log(e^2) ~ log(fv))
+shapiro.test(CO2$Tmes)
+```
+Como el p-valor es muy cercano a 0, se rechaza la hipótesis nula de normalidad de la muestra. Lo que haremos entonces será razonar que como los datos tratados son niveles de concentraciones positivas, quizás nos interese utizar la distribución *Gamma* o la *Inverse Gaussian*. Para determinar cuál de las dos es más conveniente compararemos los modelos definidos para ambas familias con sus respectivas funciones de enlace.
+
+```{r,echo=TRUE,eval=TRUE}
+magCO2b <- gam(Tmes ~ s(Año) + Mes, data = CO2, 
+               family = inverse.gaussian(link = "1/mu^2"))
+summary(magCO2b)
+plot_gam_check(magCO2b)
 ```
 
-
 ```{r,echo=TRUE,eval=TRUE}
-magCO2b <- gam(Tmes ~ s(Año) + Mes, data = CO2, family = inverse.gaussian(link = "1/mu^2"))
-summary(magCO2b)
-
 magCO2c <- gam(Tmes ~ s(Año) + Mes, data = CO2, family = Gamma(link = "log"))
 summary(magCO2c)
-```
-```{r}
-preds <- sqrt(1/predict(magCO2c,CO2))
-
-plot(CO2$Año,CO2$Tmes, xlab = "años",ylab = "Concentracion mensual media de dioxido de carbono (ppm)")
-lines(CO2$Año,preds, col = "red", lwd = 2)
+plot_gam_check(magCO2c)
 ```
 
-```{r}
-preds <- exp(predict(magCO2c,CO2))
+Vemos ahora como las gráficas para ambos diagnósticos ofrecen resultados mucho mejores y que incluso los $R^2_{adj}$ llegan a 1 para ambos modelos. Comparémoslos: 
 
-plot(CO2$Año,CO2$Tmes, xlab = "años",ylab = "Concentracion mensual media de dioxido de carbono (ppm)")
-lines(CO2$Año,preds, col = "red", lwd = 2)
+```{r,echo=FALSE,eval=TRUE}
+comp <- data.frame( AIC = c(AIC(magCO2b),AIC(magCO2c)),
+                    GCV = c(magCO2b$gcv.ubre,magCO2c$gcv.ubre))
+rownames(comp) <- c('Inv. Gauss (b)','Gamma (c)')
+print(comp)
 ```
+
+Por un lado, el modelo c tiene un AIC significativamente menor que el modelo b. Esto sugiere que el modelo c es mejor en términos de bondad del ajuste, teniendo en cuenta la penalización de la complejidad. Por el otro lado, el modelo b tiene un GCV significativamente menor que el modelo c, por lo que tedrá una mejor capacidad predictiva. Con cuál quedarnos ya dependerá del objetivo que nos propongamos, para dar un buen ajuste de los datos preferiremos el que utiliza la familia *Gamma* y para predecir nuevas observaciones preferiremos el modelo con la familia *Inverse Gaussian*. Apliquemos estos dos casos. 
+
+### Visualización de resultados
+
+**Ajuste de la concentración del dióxido de carbono** \newline
+Como hemos indicado, el MAG que utiliza la distribución *Gamma* como familia de distribución exponencial proporciona una mejor bondad de ajuste teniendo en cuenta la complejidad del modelo, así que utilizaremos ese para representar el ajuste de los datos. Se debe tener presente que sobre las predicciones se debe invertir la función de enlace utilizada, en este caso la función logarítmica.
+
+```{r,echo=FALSE,eval=TRUE}
+predsc <- exp(predict(magCO2c,CO2))
+
+ggplot(CO2, aes(x = Año, y = Tmes)) +
+  geom_point(size = 2) + 
+  geom_line(aes(y = predsc), color = "darkgreen", linewidth = 1.2) + 
+  labs(x = "Años",y = "ppm", title = "Concentración mensual media de dióxido de carbono (ppm)") +
+  theme_minimal()
+
+```
+Se pueden observar claramente las oscilaciones interestacionales, como se indica en <https://climate.nasa.gov/en-espanol/signos-vitales/dioxido-de-carbono/?intent=111>, esto se debe a que en la primevera las plantas absorben una mayor cantidad de $CO_2$ para alimentar su crecimiento.
+A pesar de ello, se aprecia que el incremento en los niveles de concentración de dióxido de carbono en la atmósfera es de más de 100 ppm en los últimos 60 años. 
+
+**Predicciones de la concentración del dióxido de carbono** \newline
+Para representar las predicciones aplicaremos el modelo que utilizaba la distribución *Inverse Gaussian*, pues tenía un menor valor del error estimado por validación cruzada generalizada.
+```{r,echo=FALSE,eval=TRUE}
+
+futuro = CO2[1:324,1:2]
+s <- c()
+new <- function(x){
+  for (i in x){
+    for (j in 1:12){
+      s <- append(s,i)
+    }
+  }
+s}
+futuro$Año <- new(2024:2050)
+
+futuro$Tmes <- sqrt(1/predict(magCO2b,futuro))
+futuro$Trend <- 1:324 == NA
+futuro$col <- 'Predicciones' 
+
+pasado <- CO2
+pasado$col <- 'Datos'
+df <- rbind(pasado,futuro)
+
+ggplot(df, aes(x = Año, y = Tmes)) +
+  geom_line(aes(color = col, group = 1), linewidth = 1) +
+  geom_vline(aes(xintercept = 2024), color = 'black',, linetype = "dashed" , linewidth = 0.5)+
+  labs(x = "Años",y = "ppm", title = "Concentración mensual media de dióxido de carbono",
+       legend = c('Datos','Predicciones')) +
+  scale_color_manual(values = c('Datos' = 'darkgreen', 'Predicciones' = 'darkred'), name = "Leyenda")+
+  theme(axis.title = element_text(face = "bold"),
+        legend.text = element_text(size = 10,color = 'black'),
+        legend.position = 'right')
+```
+
+Obviamente esta es una predicción, que tan solo tiene en cuenta el paso del tiempo y los niveles de concentración medidos hasta ahora. Para poder hacer predicciones más exactas se necesitarían datos relativos a las emisiones de $CO_2$, al clima, al crecimiento de la población y crecimiento económico y se deberían tener en cuenta políticas sobre energías, economía y tecnología.
+
+Seguimos el mismo razonamiento para los conjuntos de datos que contienen las concentraciones de $CH_4$ y $N_2O$. Obtenemos la siguientes representaciones de los ajustes para cada modelo: 
+
+```{r, echo=FALSE,eval=TRUE}
+magCH4 <- gam(Trend ~ s(Año) + as.numeric(Mes), data = CH4, family = Gamma(link = "log"))
+
+magN2O <- gam(Trend ~ s(Año) + Mes, data = N2O, family = Gamma(link = "log"))
+
+
+predsCH4 <- exp(predict(magCH4,CH4))
+predsN2O <- exp(predict(magN2O,N2O))
+
+par(mfrow = c(1,2))
+
+ggplot(CH4, aes(x = Año, y = Trend)) +
+  geom_point(size = 2) + 
+  geom_line(aes(y = predsCH4), color = "darkorange2", linewidth = 1.2) + 
+  labs(x = "Años",y = "ppb", title = "Concentración mensual media de metano") +
+  theme_minimal()
+
+ggplot(N2O, aes(x = Año, y = Trend)) +
+  geom_point(size = 2) + 
+  geom_line(aes(y = predsN2O), color = "deepskyblue2", linewidth = 1.2) + 
+  labs(x = "Años",y = "ppb", title = "Concentración mensual media de óxido nitroso") +
+  theme_minimal()
+
+par(mfrow = c(1,1))
+
+```
+
+Se puede apreciar en la primera gráfica que la media mensual de concentración atmosférica de metano ha aumentado en más de 200 ppb desde 1983 y que la correspondiente al $N_2O$ ha aumentado en más de 20 ppb desde el 2001. Comparado con el incremento que se vio anteriormente para el $CO_2$ parece poco llamativo, pero como se comentó al principio de la sección, se debe tener en cuenta que estos dos gases captan mucha mas radiación que el primero, lo que hace que su aumento, por poco que sea, también genere preocupación. 
+
+
+## Modelización del aumento del nivel del mar
+
+Ya comentamos en la sección $\ref{ResumenCC}$ que la subida del nivel del mar dada en el último siglo es relevante comparada con la de cualquier siglo anterior. Como se argumenta en @SeaLevelEffects , si este aumento tan pronunciado se progonla a medio-largo plazo pueden darse grandes consecuencias tales como el incremento de la frecuencia y la importancia de las inundaciones en zonas costeras, el aumento de amenazas por fenómenos climáticos extremos como huracanes y grandes tormentas, la erosión del suelo y las costas que puede implicar la pérdida del hábitat de peces, pájaros y plantas, etc. Esto conlleva a que esta sea una de las causas del cambio climático con mayor interés de estudio. Sin embargo, para poder realizar un análisis aceptable de los datos asociados a este hecho primero se debe distinguir si se quiere hacer a nivel global o a nivel local y se necesita disponer de información relacionada con múltiples factores como: la salinidad del agua, la geología del terreno, el deshielo de los polos, las oscilaciones oceánicas, eventos climáticos extremos que puedan ocurrir o hayan ocurrido...
+
+En nuestro caso no disponemos de tanta información así que nos propondremos un objetivo más simple como es el definir un modelo aditivo generalizado que tenga como variable de respuesta la media mensual global del nivel del mar (GMSL por sus siglas en inglés) y como variables predictoras utilizaremos la media mensual de la temperatura de la superficie marítima global, la media de concentración atmosférica de $CO_2$ (la que utilizamos en la sección anterior como variable dependiente) y los datos temporales de meses y años.
+
+### Descripción de los datos {#Datos3}
+
+Como acabamos de comentar, las medidas de concentraciones de $CO_2$ que utilizaremos son las mismas que en la sección anterior así que no entraremos en más detalles para esos datos.
+
+Con respecto a las medidas del GMSL utilizamos la misma fuente de datos que para los gases de efecto invernadero: la UNEP <https://wesr.unep.org/climate/essential-climate-variables/sea-level-rise>, lo único que debemos tener en cuenta es que se ha modificado el excel de cierta forma para generar las columnas *Year* y *Month*, correspondientes a la fecha en la que se obtuvo la medición, y hemos creado la columna *GMSL* que indica la diferencia en milímetros del nivel del mar con respecto a la media en 1993. Antes de ese año los datos se corresponden con las medidas reconstruidas por la UNEP y a partir de él con la media de una serie de distintas medidas satelitales. El resumen de los datos asociados al nivel del mar es el siguiente:
+
+```{r,echo=FALSE,eval=TRUE, warning=FALSE}
+SeaL <- read_excel('SeaLevelv2.xlsx')
+
+# Retiramos datos con otro formato y nos quedamos con las variables necesarias.
+SeaL <- SeaL[-(1:240),c(8,9,11)] 
+# La variable Año es numérica para la representación como ya se ha indicado otras veces
+# y la mensual es categórica
+SeaL$Year <- as.numeric(SeaL$Year)
+SeaL$Month <- factor(SeaL$Month,levels = 1:12)
+colnames(SeaL) <- c('Año','Mes','GMSL')
+
+# Como en algunos casos se tienen varias mediciones por mes lo que hacemos es tomar como la 
+# GMSL mensual la media de todas ellas.
+SeaL <- SeaL %>%
+  group_by(Año, Mes) %>%
+  summarise(GMSL = mean(GMSL, na.rm = TRUE))
+summary(SeaL)
+```
+
+Por otro lado, para obtener los datos respectivos a la temperatura media global nos referiremos a los datos ofrecidos por la NASA en <https://data.giss.nasa.gov/gistemp/>. Su resumen viene dado por:
+
+```{r,echo=FALSE,eval=TRUE,warning=FALSE}
+library(tidyverse)
+
+raw_data <- read_excel("GSST.xlsx", col_names = FALSE)
+
+# Convertimos el data frame a un vector de caracteres
+data_vector <- as.vector(raw_data[[1]])
+
+# Separamos los valores por comas
+processed_data <- strsplit(data_vector, split = ",")
+
+# Convertimos la lista resultante en un data frame
+data_frame <- do.call(rbind, lapply(processed_data, function(x) as.numeric(x)))
+
+colnames(data_frame) <- c("Año", paste0("Temp", 1:(ncol(data_frame) - 1)))
+
+# Convertimos a tibble para facilitar la manipulación
+data_tibble <- as_tibble(data_frame)
+
+# Transponemos data_tibble a formato vertical
+data_long <- data_tibble %>%
+  pivot_longer(cols = starts_with("Temp"), names_to = "Mes", values_to = "Temp") %>%
+  mutate(Mes = as.numeric(gsub("Temp", "", Mes))) %>%
+  arrange(Año, Mes)
+
+SeaT <- data_long[!(data_long$Mes >12),]
+summary(SeaT)
+```
+Tras haber cargado los tres conjuntos de datos necesarios para aplicar el modelo, los unimos en un solo data frame con observaciones desde 1959 hasta 2014:
+
+```{r,echo=FALSE,eval=TRUE}
+SeaLb <- (SeaL[(2015 > SeaL$Año) &(SeaL$Año >1958),])[1:672,]
+SeaTb <- (SeaT[(2015 > SeaT$Año) & (SeaT$Año > 1958),])[1:672,]
+CO2b <-  CO2[(2015 > CO2$Año) & (CO2$Año > 1958),]
+
+Sea <- cbind(SeaLb,SeaTb,CO2b)
+Sea <- Sea[,c(1,2,3,6,9)]
+colnames(Sea) <- c('Año','Mes','GMSL','Temp','CO2')
+
+```
+
+```{r,echo=TRUE,eval=TRUE}
+str(Sea)
+summary(Sea)
+```
+
+### Descripción del modelo {#Descripcion3}
+
+Procedemos de forma similar a las secciones anteriores:
+```{r,echo=TRUE,eval=TRUE}
+magSL <- gam(GMSL ~ s(Temp) + s(CO2) + s(Año) + Mes, data = Sea) 
+summary(magSL)
+```
+La desviación explicada por el modelo es del 98.1% y el error estimado por validación cruzada generalizada es de 21.716. 
+
+```{r,echo=FALSE,eval=TRUE}
+par(mfrow = c(2, 2))
+plot(magSL, select = 1, main = 'Temperatura', shade = TRUE)
+plot(magSL, select = 2, main = 'Concentración de CO2', shade = TRUE)
+plot(magSL, select = 3, main = 'Años', shade = TRUE)
+par(mfrow = c(1, 1))
+```
+
+Hay indicios de que la relación de la variable *Temp* tenga un efecto lineal sobre la variable de respuesta. Lo comprobamos como hicimos en $\ref{Descripcion1}$.
+
+```{r, echo=TRUE,eval=TRUE}
+magSL2 <- gam(GMSL ~ Temp + s(CO2) + s(Año) + Mes, data = Sea)
+anova(magSL,magSL2,test = 'F')
+```
+En este caso como el p-valor es cercano a 0 se rechaza la hipótesis nula, por lo que se trata de modelos distintos. Por comodidad trabajaremos con el primero, partimos estudiando las gráficas de diagnóstico: 
+
+```{r,echo=FALSE,eval=TRUE}
+plot_gam_check(magSL)
+```
+
+En este caso nos encontramos principalmente frente a dos problemas. Por una parte, en la gráfica Q-Q plot podemos observar que en los extremos los puntos no se ajustan correctamente a la recta, se puede interpretar que se tienen colas más pesadas, es decir, los valores extremos se alejan de seguir una distribución normal. Por otra parte, en la gráfica de arriba a la derecha se puede intuir un patrón en los residuos, lo que sugiere que no se verifique la hipótesis de varianza constante.
+
+Podemos observar qué ocurre si permitimos que haya interacción entre las variables al definir el modelo aditivo generalizado: 
+
+```{r,echo=TRUE,eval=TRUE}
+magSL3 <- gam(GMSL ~ s(Temp) + s(CO2) + s(Año) + Mes + s(Temp,CO2,Año), 
+              data = Sea)
+summary(magSL3)
+```
+A simple vista vemos que representa solo un 0.8% mas de la desviación explicada y que el smoother para la variable $CO_2$ deja de ser relevante (de hecho si se retira del modelo se obtienen los mismos resultados). Observemos si se da una mejoría en los diagnósticos.
+
+```{r,echo=TRUE,eval=TRUE}
+plot_gam_check(magSL3)
+```
+Se sigue obsevando colas pesadas en el Q-Q plot y un patrón entre los residuos y los predictores, por lo que en este aspecto el modelo no ha mejorado. Comparémoslos con los criterios AIC y GCV:
+
+```{r,echo=FALSE,eval=TRUE}
+comp <- data.frame( AIC = c(AIC(magSL),AIC(magSL3)),
+                    GCV = c(magSL$gcv.ubre,magSL3$gcv.ubre))
+rownames(comp) <- c('Sin interacción','Con interacción')
+print(comp)
+```
+Bajo estos dos criterios se puede interpretar que el modelo en el que se permite la interacción entre las variables predictoras tiene un mejor desempeño que el que no lo permite.
+
+### Visualización de resultados
+
+Comparemos las representaciones de los datos ajustados por ambos modelos para las observaciones correspondientes a los meses de Julio desde 1959 hasta 2014. Es preferible ver cómo varía el nivel del mar para un mes fijo que representando todos los datos mensuales a la vez, ya que de tal modo se evita el ruido producido por las variaciones entre estaciones.
+
+```{r,echo=FALSE,eval=TRUE}
+Julio <- Sea[Sea$Mes == 7,]
+Julio$preds <- predict(magSL, newdata = Julio)
+Julio$preds3 <- predict(magSL3, newdata = Julio)
+
+ggplot(data = Julio, aes(x = Año, y = GMSL)) +
+  geom_point() +
+  geom_line(aes(x = Año, y = preds, color = 'Mod. sin int.'), linewidth = 1) +
+  geom_line(aes(x = Año, y = preds3, color = 'Mod. con int.'),  linewidth = 1) +
+  labs(x = "Años", y = "mm", 
+       title = "Comparación de modelos para GMSL") +
+  scale_color_manual(values = c('Mod. sin int.'= "darkblue", 'Mod. con int.' = "lightblue"), name = 'Leyenda') +
+  theme_minimal()
+
+```
+
+Se ve claramente que el modelo que admite interacción tiene más curvatura que el otro y, por ello, parece que se adapta mejor a los puntos representados. Sin embargo, ambos nos sirven para notar la subida del nivel del mar con el transcurso de los años.
+
+Además como disponemos de los datos de *Temp* y de *CO2* hasta abril de 2024 y de *GMSL* hasta 2022, podemos también comparar cómo se adaptan los modelos a nuevas observaciones.
+
+```{r,echo=FALSE,eval=TRUE,warning=FALSE}
+
+SeaTpreds <- (SeaT[(2015 <= SeaT$Año),])[1:112,]
+CO2preds <-  CO2[(2015 <= CO2$Año),]
+
+Seapreds <- cbind(SeaTpreds,CO2preds)
+Seapreds <- Seapreds[,c(1,2,3,6)]
+colnames(Seapreds) <- c('Año','Mes','Temp','CO2')
+
+na_rows <- as.data.frame(matrix(NA, nrow = 112, ncol = ncol(Sea)))
+colnames(na_rows) <- colnames(Sea)
+
+SeaP <- rbind(Sea, na_rows)
+
+SeaP$preds <- append(1:672 == NA,predict(magSL,Seapreds))
+SeaP$preds3 <- append(1:672 == NA,predict(magSL3,Seapreds))
+SeaP$Año <- append(Sea$Año,Seapreds$Año) 
+SeaP$Mes <- append(Sea$Mes,Seapreds$Mes) 
+SeaP$GMSL <- append(SeaL$GMSL[(1959 <= SeaL$Año)],rep(NA, 16))
+
+ggplot(data = SeaP, aes(x = Año, y = GMSL)) +
+  geom_line(aes(x = Año, y = GMSL , color = 'Datos'), linewidth = 1) + 
+  geom_line(aes(x = Año, y = preds, color = 'Mod. sin int.'), linewidth = 1) +
+  geom_line(aes(x = Año, y = preds3, color = 'Mod. con int.'),  linewidth = 1) +
+  labs(x = "Años", y = "mm", title = "Predicciones de la media global del nivel del mar") +
+  geom_vline(aes(xintercept = 2015), color = 'black',, linetype = "dashed" , linewidth = 0.5)+
+  scale_color_manual(values = c('Datos' = 'lightgreen', 'Mod. sin int.' = 'darkblue','Mod. con int.' = 'lightblue'), name = "Leyenda")+
+  theme(axis.title = element_text(face = "bold"),
+        legend.text = element_text(size = 10,color = 'black'),
+        legend.position = 'right')
+
+```
+
+Se puede observar una gran diferencia entre las predicciones hechas por cada modelo. Si nos fijamos en los datos que se tenían del *GMSL* para los años desde 2015 hasta 2022, podemos ver que el modelo sin interacciones entre las variables realiza predicciones mucho más precisas que el que sí permite interacciones entre ellas. Esto puede ser debido al sobreajuste, es decir, el segundo modelo ajusta tan bien los datos disponibles que luego no es capaz de adaptarse de forma adecuada a nuevas observaciones.
+
+

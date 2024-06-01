@@ -443,12 +443,14 @@ Se dice que una función de enlace $g_c$ es canónica para una distribución de 
 \end{definición}
 
 \begin{proposición}[Propiedades de las funciones de enlace canónicas]
+\textcolor{white}{....................................................................}
 \begin{itemize}
   \item Su uso en el modelo $\ref{Estructura básica de un MLG}$ resulta en: $\theta_i = X_i\beta$
   \item Hacen que $\alpha(\mu_i)=1$.
   \item El Hessiano de la función de verosimilitud logarítmica coincida con su valor esperado.
   \item El sistema a resolver para obtener los estimadores de máxima verosimilitud de $\beta$, es decir, el formado por las derivadas parciales $\frac{\partial l}{\partial \beta_j}$ igualadas a 0 se reduce a: $X^ty - X^T\hat{\mu} = 0 \Rightarrow X^ty = X^T\hat{\mu}$ pues $\frac{\partial \theta_i}{\partial \beta_j} = X_{ij}$
 \end{itemize}
+
 \end{proposición}
 
 ### Residuos

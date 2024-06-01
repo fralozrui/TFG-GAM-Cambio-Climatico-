@@ -14,6 +14,8 @@ biblio-style: "plainnat"
 csl: acm-sig-proceedings-long-author-list.csl      # no numera mejor en las citas
 #csl: acm-sig-proceedings-long-author-list.csl  # numera peor en las citas
 link-citations: yes
+linkcolor: black
+urlcolor: blue
 output: 
   pdf_document:
     keep_tex: no
