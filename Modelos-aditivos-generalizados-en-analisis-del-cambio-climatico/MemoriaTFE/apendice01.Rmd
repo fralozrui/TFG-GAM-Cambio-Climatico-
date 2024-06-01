@@ -70,9 +70,139 @@ knitr::opts_chunk$set(fig.path = 'figurasR/',
 \renewcommand{\headrulewidth}{0.4pt}
 \renewcommand{\footrulewidth}{0.4pt}
 
-# Apéndice: Título del Apéndice
+# Apéndice: Carga y limpieza de datos {#Apendice1}
 
+**Clima arepuerto SVQ** 
 
-## Primera sección
+$\ref{Datos1}$
 
+```{r,echo=TRUE,eval=FALSE}
+library(tidyr)
+library(dplyr)
+Clima <- aemet_monthly_period(station = "5783", start = 1960, end = 2023) 
+Clima <- Clima %>% separate(fecha, into = c("Año", "Mes"), sep = "-")
+Clima$Año <- as.numeric(Clima$Año)
+Clima$Mes <- factor(Clima$Mes, levels = as.character(1:12))
+Clima <- Clima[,c(1,2,6,11,27,29,32)] # Seleccionamos las variables que nos interesan
+colnames(Clima) <- c('Año','Mes','HR','PresM','Prec','WMed','TMedM')
+Clima <- Clima %>% arrange(Año, Mes) # Ordenamos por año y mes
+Clima <- Clima[complete.cases(Clima$Mes),] # Retiramos las medias anuales
+```
 
+**Concentración atmosférica de CO2**
+
+$\ref{Datos2}$
+
+```{r,echo=TRUE,eval=FALSE}
+CO2 <- read_excel('trends-in-atmospheric-carbon-dioxide-concentration.xlsx')
+
+CO2$DateTime <- as.Date(CO2$DateTime) 
+CO2$Año <- as.numeric(year(CO2$DateTime))
+CO2$Mes <- factor(month(CO2$DateTime),levels = as.character(1:12))
+CO2$Tmes <- as.numeric(CO2$'Monthly Data')
+CO2$Trend <- as.numeric(CO2$'Trend')
+CO2 <- CO2[,c(4,5,6,3)]
+CO2 <- CO2 %>% arrange(Año, Mes) 
+```
+
+**Concentración atmosférica de CH4**
+
+$\ref{Datos2}$
+
+```{r,echo=TRUE,eval=FALSE}
+CH4 <- read_excel('trends-in-atmospheric-methane-concentration.xlsx')
+
+CH4$DateTime <- as.Date(CH4$DateTime)
+CH4$Año <- as.numeric(year(CH4$DateTime))
+CH4$Mes <- factor(month(CH4$DateTime),levels = as.character(1:12))
+CH4$Trend <- as.numeric(CH4$'Trend')
+CH4 <- CH4[,c(3,4,2)]
+CH4 <- CH4 %>% arrange(Año, Mes) 
+```
+
+**Concentración atmosférica de N2O**
+
+$\ref{Datos2}$
+
+```{r,echo=TRUE,eval=FALSE}
+N2O <- read_excel('trends-in-atmospheric-nitrous-oxide-concentration.xlsx')
+
+N2O$DateTime <- as.Date(N2O$DateTime) 
+N2O$Año <- as.numeric(year(N2O$DateTime))
+N2O$Mes <- factor(month(N2O$DateTime),levels = as.character(1:12))
+N2O$Trend <- as.numeric(N2O$'Trend')
+N2O <- N2O[,c(3,4,2)]
+N2O <- N2O %>% arrange(Año, Mes) 
+```
+
+**Global Mean Sea Level**
+
+$\ref{Datos3}$
+
+```{r,echo=TRUE,eval=FALSE, warning=FALSE}
+SeaL <- read_excel('SeaLevelv2.xlsx')
+
+# Retiramos datos con otro formato y nos quedamos con las variables 
+# necesarias.
+SeaL <- SeaL[-(1:240),c(8,9,11)] 
+# La variable Año es numérica para la representación como ya se ha indicado
+# otras veces
+# y la mensual es categórica
+SeaL$Year <- as.numeric(SeaL$Year)
+SeaL$Month <- factor(SeaL$Month,levels = 1:12)
+colnames(SeaL) <- c('Año','Mes','GMSL')
+
+# Como en algunos casos se tienen varias mediciones por mes lo que hacemos
+# es tomar como la GMSL mensual la media de todas ellas.
+SeaL <- SeaL %>%
+  group_by(Año, Mes) %>%
+  summarise(GMSL = mean(GMSL, na.rm = TRUE))
+summary(SeaL)
+```
+
+**Temperatura media global al nivel del mar** 
+
+$\ref{Datos3}$
+
+```{r,echo=TRUE,eval=FALSE,warning=FALSE}
+library(tidyverse)
+
+raw_data <- read_excel("GSST.xlsx", col_names = FALSE)
+
+# Convertimos el data frame a un vector de caracteres
+data_vector <- as.vector(raw_data[[1]])
+
+# Separamos los valores por comas
+processed_data <- strsplit(data_vector, split = ",")
+
+# Convertimos la lista resultante en un data frame
+data_frame <- do.call(rbind, lapply(processed_data, function(x) as.numeric(x)))
+
+colnames(data_frame) <- c("Año", paste0("Temp", 1:(ncol(data_frame) - 1)))
+
+# Convertimos a tibble para facilitar la manipulación
+data_tibble <- as_tibble(data_frame)
+
+# Transponemos data_tibble a formato vertical
+data_long <- data_tibble %>%
+  pivot_longer(cols = starts_with("Temp"), names_to = "Mes", values_to = "Temp") %>%
+  mutate(Mes = as.numeric(gsub("Temp", "", Mes))) %>%
+  arrange(Año, Mes)
+
+SeaT <- data_long[!(data_long$Mes >12),]
+summary(SeaT)
+```
+
+**Unión de los conjuntos de datos para el modelo del nivel del mar**
+
+```{r,echo=TRUE,eval=FALSE}
+SeaLb <- (SeaL[(2015 > SeaL$Año) &(SeaL$Año >1958),])[1:672,]
+SeaTb <- (SeaT[(2015 > SeaT$Año) & (SeaT$Año > 1958),])[1:672,]
+CO2b <-  CO2[(2015 > CO2$Año) & (CO2$Año > 1958),]
+
+Sea <- cbind(SeaLb,SeaTb,CO2b)
+Sea <- Sea[,c(1,2,3,6,9)]
+colnames(Sea) <- c('Año','Mes','GMSL','Temp','CO2')
+str(Sea)
+summary(Sea)
+```

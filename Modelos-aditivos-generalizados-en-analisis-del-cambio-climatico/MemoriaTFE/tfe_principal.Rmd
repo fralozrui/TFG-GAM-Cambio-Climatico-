@@ -14,6 +14,8 @@ biblio-style: "plainnat"
 csl: acm-sig-proceedings-long-author-list.csl      # no numera mejor en las citas
 #csl: acm-sig-proceedings-long-author-list.csl  # numera peor en las citas
 link-citations: yes
+linkcolor: black
+urlcolor: blue
 output: 
   pdf_document:
     keep_tex: no
@@ -38,7 +40,7 @@ output:
 
 ---
 nocite: | 
-  @Luque2017, @Wood, @Hastie, @M-Clark, @MLG-wikipedia, @fundamentos, @Stat-Learning
+  @Luque2017, @Wood, @Hastie, @M-Clark, @MLG-wikipedia, @fundamentos, @Stat-Learning, @CursoMNP, @consenso, @desinfo, @CAAD, @OficinaCC, @consecuencias
 ...
 
 
@@ -158,11 +160,9 @@ install.packages(c("ggplot2","kableExtra","dplyr"))
 -->
 
 
-<!-- \FloatBarrier -->
-
-<!-- ```{r child = 'capitulo05.Rmd'} -->
-<!-- ``` -->
-
+\FloatBarrier 
+```{r child = 'capitulo05.Rmd'} 
+``` 
 
 
 

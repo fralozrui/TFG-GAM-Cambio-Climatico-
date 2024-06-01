@@ -1,5 +1,5 @@
 ---
-author: "Nombre Completo Autor"
+author: "Francisco José Lozano Ruiz"
 date: "27/10/2017"
 documentclass: book
 forprint: true  # true: imprime a dos caras, false: libro digital
@@ -77,1643 +77,574 @@ R-knitr,R-rmarkdown,R-dplyr,R-ggplot2,Techopedia}
 \renewcommand{\headrulewidth}{0.4pt}
 \renewcommand{\footrulewidth}{0.4pt}
 
+# Aplicación de los MAG al análisis del cambio climático
 
-# Tareas habituales al escribir documentos R Markdown
+En esta sección nos proponemos aplicar el contexto teórico visto hasta ahora sobre los modelos aditivos generalizados al análisis del cambio climático. Para ello principalmente utilizaremos el paquete de R: *mgcv* (siglas en inglés de "Vehículo de Computación para MAG Mixtos"), en particular haremos uso de su funcion *gam*, la cual permite ajustar modelos aditivos generalizados, entre otros tipos de modelos, mediante splines de regresión penalizados (u smoothers similares) donde los parámetros de suavizado pueden ser estimados por distintos métodos, por ejemplo por: mínima validación cruzada generalizada, mínimo AIC, máxima verosimilitud o por REML, siglas en inglés de máxima verosimilitud restringida, que es la opción por defecto.
 
+Además del método de estimación, la función *gam* también admite otras entradas que sirven para indicar qué familia de distribuciones exponenciales se utiliza, si las observaciones toman distintos pesos, el método de optimización numérica utilizado, otros parámetros de control de estos métodos para el caso de que los habituales no converjan, etc.
 
+Dividiremos las aplicaciones prácticas de los MAG en tres partes: la primera se centra en modelar la temperatura media mensual según una serie de variables climáticas y ver cómo ha variado con los años, en la siguiente veremos cómo han evolucionado a lo largo del tiempo las concentraciones de gases de efecto invernadero en la atmósfera, por último estudiaremos la media variacional del nivel del mar respecto del año 1993.
 
+La lectura y transformación de los datos no la mostraremos en esta sección, se encuentra en $\ref{Apendice1}$ y el código que genera las representaciones gráficas aparece en $\ref{Apendice2}$.
 
-Este capítulo está escrito en el fichero R Markdown **"capitulo05.Rmd"** y se ha incluido para 
-que pueda copiar y pegar en su trabajo la solución a algunas de las cuestiones más habituales
-al escribir un trabajo escrito. 
+## Modelización de la temperatura media mensual 
 
+### Descripción de los datos {#Datos1}
 
+Para esta primera aplicación de los modelos aditivos generalizados utilizaremos datos de variables climáticas proporcionados por la Agencia Estatal de Meteorología española (AEMET), para ello utilizaremos la libreria "climaemet" @climaemet:
 
-## Mostrar los chunks de código R y las opciones
-
-
-Un chunk de código R comienza con tres acentos abiertos:  ```` ```{r} ```` donde `r` indica el nombre del lenguaje,^[No se limita al lenguaje R, se pueden usar otros lenguajes, ver: [Ingenierías de lenguaje con knitr](https://rmarkdown.rstudio.com/authoring_knitr_engines.html%23sql).] y finaliza con tres acentos abiertos. Pueden escribirse opciones adicionales a un chunk en las llaves (por ejemplo, se define la altura de un gráfico en 5 centímetros: ```` ```{r fig.height='5cm'} ````). 
-
-**Nota importante**: las opciones de un chunk deben estar escritas en una misma línea de texto.
-
-Un "expresión R en línea" o en el interior de un párrafo comienza con `` `r `` y finaliza con un acento abierto `` ` ``.
-
-Para marcar texto como "código en línea" use un par de acentos abiertos, por ejemplo, `` `code` ``. Para incluir $n$ acentos abiertos literalmente, se deben usar al menos $n+1$ acentos abiertos que los envuelvan, por ejemplo, pueden usarse 4 acentos abiertos para preservar 3 acentos abiertos dentro: ````` ```` ```code``` ```` `````, lo cual se mostrará como: ```` ```code``` ````.
-
-
-Si lo que se quiere es mostrar literalmente los chunks de código junto a las opciones seleccionadas, ver el siguiente ejemplo en el que se ha utilizado: 
-
-`````
-
-````markdown
-código markdown que quiera mostrarse
-
-````
-
-`````
-
-
-
-
-```{r}
-b = c(3,2,3)
+```{r,echo=TRUE,eval=TRUE}
+#install.packages('climaemet')
+library(climaemet)
 ```
+Como hemos dicho antes, el conjunto de datos sobre el que trabajaremos a lo largo de esta sección está formado por variables climáticas, estas se definen como elementos que caracterizan el tiempo atmosférico y que interactuan entre sí en la troposfera. Aunque son elementos relacionados con el campo de la meteorología, su estudio a largo plazo, fundamenta las bases científicas de la climatología. En particular, el conjunto de datos mensuales que nos proporciona la anterior librería contiene más de 40 variables climáticas, por comodidad y para una mejor interpretación de los modelos nos quedaremos con las variables que representen la temperatura media mensual, la humedad relativa, la media mensual de precipitaciones, la presión media y la velocidad media del viento. 
 
+Esta información provienen de una base de datos _open source_ que ofrece la AEMET, se puede leer más sobre ella en: <https://opendata.aemet.es/centrodedescargas/inicio>. En particular utilizaremos las mediciones tomadas por la estación situada en el aeropuerto de Sevilla.
 
-````markdown
-Esto es un párrafo en un documento R Markdown.
-
-A continuación se muestra un chunk de código R:
-
-`r ''````{r}
-fit = lm(dist ~ speed, data = cars)
-b   = coef(fit)
-plot(cars)
-abline(fit)
-```
-
-La pendiente de la regresión es `r '\x60r b[1]\x60'`
-
-````
-
-La pendiente de la regresión es `r b[1]`.
-
-
-Hay una gran cantidad de opciones para los chunks en knitr documentadas en <https://yihui.name/knitr/options>. 
-A continuación, enumeramos un subconjunto de ellas:
-
-- **eval**: si evalúa un fragmento de código o no.
-
-- **echo**: si se debe hacer eco o presentar el código fuente en el documento de salida (en algunas ocasiones es posible no quiera leer el código fuente, solamente los resultados).
-
-- **result**: 
-
-    + cuando se establece en `'hide'` (ocultar), la salida de texto se ocultará; 
-        
-        \bmarkdownsal
-        ```{r echo=TRUE,results='hide'}
-        cat('**Markdown** es genial. \n')
-        ```
-        \emarkdownsal
-    
-    + cuando se establece en `'asis'`, la salida de texto se escribe "tal cual", por ejemplo, puede escribirse el texto markdown sin procesar el código R (como `cat('**Markdown** es genial. \n')`). 
-
-        \bmarkdownsal
-        ```{r echo=TRUE,results='asis'}
-        cat('**Markdown** es genial. \n')
-        ```
-        \emarkdownsal
-        
-    + De forma predeterminada (`'markup'` y `'hold'`), la salida de texto se envolverá en elementos textuales (generalmente bloques de código simple).
-
-        \bmarkdownsal
-        ```{r echo=TRUE}
-        cat('**Markdown** es genial. \n')
-        ```
-        \emarkdownsal
-        
-- **warning**, **message**, y **error**: si se muestran o no advertencias, mensajes y errores en el documento de salida. Tenga en cuenta que si establece `error = FALSE`, `rmarkdown::render()` se detendrá al encontrar un error en un fragmento de código, y el error se mostrará en la consola R, si `error = TRUE`, no se detendrá cuando encuentre un error en el chunk y mostrará el mensaje de error. De manera similar, cuando `warning = FALSE` o `message = FALSE`, estos mensajes se mostrarán en la consola R.
-
-    \bmarkdownsal
-    ```{r echo=TRUE,error=TRUE}
-    si(3.2)
-    ```
-    \emarkdownsal
-    
-- **child**: puede incluir un documento hijo a un documento principal. Esta opción toma una ruta a un archivo externo.
-
-En este enlace [url-bookdown](https://bookdown.org/yihui/rmarkdown/r-code.html) puede obtenerse más información sobre las opciones en un chunk de código R.
-
-
-
-## Cómo incluir un gráfico {#sec:incluirgrafico}
-
-
-### Incluir un fichero gráfico en el documento
-
-Se tiene el fichero gráfico "capitulo05ejemplo01.png" en la subcarpeta "graficos". Este fichero gráfico
-puede proceder de 
-
-- un fichero gráfico descargado de internet,
-- una captura de pantalla que hemos obtenido de nuestro ordenador,
-- una ilustración que hemos diseñado con carácter didáctico que hemos guardado en un fichero gráfico, etc.
-
-\clearpage
-
-
-#### Gráfico sin leyenda y justo aquí
-
-Si queremos incluirlo sin ningún tipo de leyenda explicativa y justamente en la posición que lo hemos colocado, podríamos hacerlo con ayuda del siguiente "chunk de código R":
-
-
-````markdown
-`r ''````{r echo=FALSE,out.width='70%',fig.align='center',fig.pos="H"}
-knitr::include_graphics("graficos/capitulo05ejemplo01.png")
-```
-````
-
-```{r echo=FALSE,out.width='70%',fig.align='center',fig.pos="H"}
-knitr::include_graphics("graficos/capitulo05ejemplo01.png")
-```
-
-
-
-
-#### Gráfico con leyenda y justo aquí
-
-Si queremos incluirlo con una leyenda explicativa con una numeración que lo identifica para poder hacer referencia a él en cualquier parte del documento y además aparezca justamente en la posición que lo hemos colocado, podríamos hacerlo con ayuda del siguiente "chunk de código R":
-
-
-````markdown
-`r ''````{r echo=FALSE,out.width='8cm',fig.align='center',
-fig.cap="\\label{fig:c05ej01}Se muestra el panel Files de RStudio. 
-\\newline{}Fuente: elaboraci\\'on propia",fig.pos="H"}
-knitr::include_graphics("graficos/capitulo05ejemplo01.png")
-```
-
-````
-
-```{r echo=FALSE,out.width='8cm',fig.align='center',fig.cap="\\label{fig:c05ej01}Se muestra el panel Files de RStudio. \\newline{}Fuente: elaboraci\\'on propia",fig.pos="H"}
-knitr::include_graphics("graficos/capitulo05ejemplo01.png")
-```
-
-
-En cualquier parte del documento, delante o detrás del gráfico, puede 
-hacerse referencia a la figura \ref{fig:c05ej01} y además puede indicarse 
-la página en la que se encuentra: página \pageref{fig:c05ej01}.
-
-
-
-
-````markdown
-En cualquier parte del documento, delante o detrás del gráfico, puede 
-hacerse referencia a la figura \ref{fig:c05ej01} y además puede indicarse 
-la página en la que se encuentra: página \pageref{fig:c05ej01}.
-````
-
-
-#### Gráfico con leyenda y posición flotante: superior o inferior
-
-En muchos tipos de publicaciones se recomienda que las figuras y tablas se coloquen por motivos estéticos en la parte superior o inferior de una página. 
-
-Esta forma de trabajar evita un efecto no deseado de espacios verticales en blanco. Ya que cuando se quiere colocar una figura en una posición particular, muchas veces se queda un espacio en blanco, debido a que por su tamaño tenga que llevarse a la página siguiente (LaTeX actúa automáticamente repartiendo ese espacio vertical sobrante entre los elementos de la página, ver lo que ocurre en la página \pageref{sec:incluirgrafico}).
-
-Esto requerirá que cuando se habla de la Figura o Tabla, se utilice un elemento que la identifique. Para ello, se utilizará la pareja "label-ref" vista en el apartado anterior.
-
-Lo habitual es hacer la primera referencia cerca de donde esté ubicada. Como vemos en la Figura \ref{fig:c05ej02} (ver [url](https://resource-cms.springernature.com/springer-cms/rest/v1/content/19112/data/v5)).
-
-En R Markdown se tiene que utilizar en la opción del chunk correspondiente: **`fig.pos="t"`**  para colocarla en la parte superior, **`fig.pos="b"`**  para colocarla en la parte inferior de una página y **`fig.pos="htbp"`** para colocarla por orden: "aquí-superior-inferior-páginasolotablas", pero a partir de la página en la que se haya colocado la figura (se decide automáticamente).
-
-**Nota**. Se recomienda el uso de la opción **`fig.pos="htbp"`** o **`fig.pos="!htbp"`** para que no aparezcan espacios en blanco adicionales (`!` obliga). Se puede obligar a que en el caso que no se especifique se comporte obligadamente como indiquemos con `floatplacement{figure}{}` o `floatplacement{table}{}` . Por ejemplo, si queremos obligar que las figuras se coloquen como: "!bthp".
-
-```latex
-\floatplacement{figure}{!bthp}
-```
-
-
-**Nota**. El comando LaTeX: **`\clearpage`** produce salto de página pero obliga a que todas las figuras o tablas que se hayan incluido anteriormente sean mostradas.
-Ver más en [ayuda overleaf](https://es.overleaf.com/learn/latex/Line_breaks_and_blank_spaces#Espacios_verticales_en_blanco).
-
-
-````markdown
-`r ''````{r echo=FALSE,out.width='8cm',fig.align='center',
-fig.cap="\\label{fig:c05ej02}Un ejemplo de figura colocada 
-en la parte superior de un documento. 
-\\newline{}Fuente: \\url{http://destio.us.es/calvo}",fig.pos="t"}
-knitr::include_graphics("graficos/capitulo05ejemplo01.png")
-```
-````
-
-```{r echo=FALSE,out.width='8cm',fig.align='center',fig.cap="\\label{fig:c05ej02}Un ejemplo de figura colocada en la parte superior de un documento. \\newline{}Fuente: \\url{http://destio.us.es/calvo}",fig.pos="t"}
-knitr::include_graphics("graficos/capitulo05ejemplo01.png")
-```
-
-
-
-### Incluir un gráfico creado con R en el documento
-
-
-Se tienen las mismas posibilidades que el caso de un fichero gráfico, pero habitualmente en este caso el gráfico se construye con funciones de R en un chunk de código R. 
-
-También es posible construir el gráfico con funciones R en un fichero de script R y guardar el resultado en un fichero gráfico (ver comandos: **`png()`** y **`dev.off()`**, **`ggplot2::ggsave()`**). Para incluirlo en el documento R Markdown se haría lo visto en la sección anterior.
-
-El siguiente código ilustra cómo crear un fichero con ayuda del paquete "ggplot2" y lo grabamos en un fichero ".png" con ayuda de la función **`ggsave()`**.
-
-```{r echo=TRUE}
-library(ggplot2)
-p = ggplot(mtcars, aes(mpg, wt)) + 
-  geom_point()
-ggsave("figurasR/capi05mtcars.png",plot=p)
-```
-
-
-Para incluirlo en el documento se podría utilizar el siguiente chunk de código R (lo coloca aquí porque por defecto se ha definido **`fig.pos="H"`**): 
-
-````markdown
-`r ''````{r echo=FALSE,out.width='70%',fig.align='center'}
-knitr::include_graphics("figurasR/capi05mtcars.png")
-```
-````
-
-```{r echo=FALSE,out.width='70%',fig.align='center'}
-knitr::include_graphics("figurasR/capi05mtcars.png")
-```
-
-También se pueden grabar con las funciones **`png()`**, **`jpeg()`**, **`pdf()`**, etc, y **`dev.off()`**, como se ilustra en los siguientes ejemplos de código R:
-
-```{r eval=FALSE,echo=TRUE}
-png(file = "figurasR/capi05myplot.png", bg = "transparent")
-plot(1:10)
-rect(1, 5, 3, 7, col = "white")
-dev.off()
-```
-
-```{r eval=FALSE,echo=TRUE}
- # creará myplot1.jpg y myplot2.jpg
-jpeg(file = "figurasR/capi05myplot%d.jpg")
-example(rect)
-dev.off()
-```
-
-
-#### Incluir un gráfico creado con R sin leyenda y justo aquí
-
-Se demuestra con un ejemplo que usa el paquete "ggplot2", en el que además el gráfico aparece centrado (se ha indicado: `fig.align='center'`, pero hay otros valores para esta opción: `'left'`, `'right'`. Si no se utiliza aparece justificada a la izquierda).
-
-````markdown
-`r ''````{r echo=FALSE,out.width='80%',fig.align='center',fig.pos='H'}
-library(ggplot2)
-p = ggplot(mtcars, aes(mpg, wt)) + 
-  geom_point()
-p  
-```
-````
-
-```{r echo=FALSE,out.width='80%',fig.align='center',fig.pos='H'}
-library(ggplot2)
-p = ggplot(mtcars, aes(mpg, wt)) + 
-  geom_point()
-p
-```
-
-
-
-
-#### Incluir un gráfico creado con R con leyenda y situado en la parte superior
-
-El gráfico de la Figura \ref{fig:cap05gg02} es un ejemplo de gráfico creado con R y aparece con una leyenda explicativa y colocado en la parte superior de la página.
-
-````markdown
-`r ''````{r echo=FALSE,out.width='80%',fig.align='center',fig.pos='htbp',
-fig.cap="\\label{fig:cap05gg02}Gr\\'afico de L\\'{\\i}neas creado con ggplot2. 
-Fuente: elaboraci\\'on propia"}
-library(ggplot2)
-ggplot(mtcars, aes(mpg, wt)) + 
-  geom_line(col="blue")
-```
-````
-
-```{r echo=FALSE,out.width='80%',fig.align='center',fig.pos='htbp',fig.cap="\\label{fig:cap05gg02}Gr\\'afico de L\\'{\\i}aneas creado con ggplot2. Fuente: elaboraci\\'on propia"}
-library(ggplot2)
-ggplot(mtcars, aes(mpg, wt)) + 
-  geom_line(col="blue")
-```
-
-
-
-
-
-<!-- \pagebreak\FloatBarrier -->
-
-#### Varios gráficos creados con R con varias leyendas
-
-Con el siguiente código se pueden presentar dos gráficos en una única figura y además se puede colocar una leyenda explicativa a cada gráfico (obtenido en: [stackoverflow](https://stackoverflow.com/questions/53850299/how-to-get-a-newline-in-a-figure-caption-in-rmarkdown-bookdown-pdfdocument2)).
-
-
-**Observe** que no se ha usado **label** en `fig.cap`, el identificador se ha construido del identificador del chunk: "plot-cars" al que se le ha añadido como prefijo: "fig:", quedando el identificador para usar con **ref**: "fig:plot-cars". A las subfiguras se les ha añadido números consecutivos.
-
-````markdown
-
-Vea la Figura \ref{fig:plot-cars}, la cual contiene la Figura 
-\ref{fig:plot-cars1} y la Figura \ref{fig:plot-cars2}.
-
-```{r plot-cars, fig.height = 3, fig.width = 4,out.width='49%', 
-fig.cap="Dos gr\\'aficos", fig.subcap = c("Regresi\\'on", 
-"Gr\\'afico sobre cars"),fig.pos="htbp"}
-plot(mpg ~ wt, data = mtcars)
-plot(cars)
-```
-
-````
-
-
-
-Vea la Figura \ref{fig:plot-cars}, la cual contiene la Figura 
-\ref{fig:plot-cars1} y la Figura \ref{fig:plot-cars2}.
-
-```{r plot-cars, fig.height = 3, fig.width = 4, out.width='49%', fig.cap="Dos gr\\'aficos", fig.subcap = c("Regresi\\'on", "Gr\\'afico sobre cars"),fig.pos="htbp"}
-plot(mpg ~ wt, data = mtcars)
-plot(cars)
-```
-
-
-
-
-
-Otro ejemplo en el que solamente se usa una leyenda para los dos gráficos (también se modifican los márgenes). Importante el uso de la opción de chunk: **fig.show="hold"**.
-
-
-````markdown
-```{r out.width='45%',fig.show="hold",
-        fig.cap="Dos gr\\'aficos R cara a cara",fig.pos="htbp"}
-par(mar = c(4, 4, 0.1, 0.1))
-plot(pressure, pch = 19, type = "b")
-plot(cars, pch = 19)
-```
-
-````
-
-Produce la Figura \ref{fig:fig2}.
-
-```{r fig2, out.width='45%',fig.show="hold",fig.cap="Dos gr\\'aficos R cara a cara",fig.pos="htbp"}
-par(mar = c(4, 4, 0.1, 0.1))
-plot(pressure, pch = 19, type = "b")
-plot(cars, pch = 19)
-```
-
-
-## Cómo incluir una tabla o cuadro con información
-
-Para profundizar en el tema de la presentación de tablas de información se recomienda visitar la siguiente url: [Cómo Crear tablas de información en  R Markdown](http://destio.us.es/calvo/post/como-crear-tablas-de-informacion-en-r-markdown/).
-
-
-### Incluir una tabla con leyenda
-
-
-La presentación de las primeras 10 filas de un data.frame de R, por ejemplo, el dataset `iris`, puede hacerse del siguiente modo:
-
-```{r echo=TRUE}
-head(iris,10)
-```
-
-Pero para mejorar la presentación se pueden utilizar paquetes R especializados, como: [knitr](https://cran.r-project.org/web/packages/knitr/index.html), [kableExtra](https://cran.r-project.org/web/packages/kableExtra/index.html), [huxtable](https://cran.r-project.org/web/packages/huxtable/) (trata aspectos muy avanzados), etc. El siguiente ejemplo ilustra el uso de "kableExtra". Se comentan algunas de las opciones usadas:
-
-- **`"hold_position"`**: usa el posicionamiento como en las figuras **"h"**.
-- **`position="center"`**: presenta la tabla centrada.
-- **`"striped"`**: alterna el color de las filas.
-- **`caption="\\label{}Explicación..."`**: Añade una leyenda que explique el contenido de la tabla junto a un identificador para hacer referencia a ella con **`\ref{}`**.
-
-````markdown
-`r ''````{r}
-library(knitr)
-library(kableExtra) 
-head(iris,10) %>%
- kable(booktabs = TRUE,format = "latex",
-  caption = "\\label{tabla02}Leyenda explicativa de la segunda tabla") %>%
- kable_styling(
-  latex_options = c("striped", "condensed","hold_position"), 
-  position = "center",full_width = FALSE)
-```
-````
-
-
-Produce el siguiente resultado:
-
-```{r}
-library(knitr)
-library(kableExtra) 
-head(iris,10) %>%
-  kable(booktabs = TRUE,format = "latex",
-    caption = "\\label{tabla02}Leyenda explicativa de la segunda tabla") %>%
-  kable_styling(
-    latex_options = c("striped", "condensed","hold_position"), 
-    position = "center",full_width = FALSE)
-```
-
-
-
-### Incluir una tabla que ocupe varias páginas
-
-Para corregir esa situación, la librería "kableExtra" nos permite presentar tablas que ocupen varias páginas utilizando los siguientes argumentos, como puede comprobarse en el ejemplo que se muestra:
-
-- Se ha añadido a **latex_options** la opción: **repeat_header**.
-
-- Se ha indicado el texto que aparecerá antes de pasar a la siguiente página:
-**`repeat_header_continued="contin\\'ua en la siguiente p\\'agina"`**.
-
-- Se ha indicado también el texto que aparecerá antes de escribir información de la tabla en la siguiente página: **`repeat_header_text = "continuaci\\'on"`**.
-
-El siguiente código:
-
-````markdown
-`r ''````{r}
-library(kableExtra) 
-iris[1:50,] %>% 
-  kable(booktabs = TRUE,format = "latex",digits = 1, longtable=TRUE) %>%
-  kable_styling(
-   latex_options = c("striped", "condensed","repeat_header"), 
-   position = "center",full_width = FALSE,
-   repeat_header_text = "continuaci\\'on", 
-   repeat_header_continued="contin\\'ua en la siguiente p\\'agina"
-  )
-```
-````
-
-Produce el siguiente resultado:
-
-```{r}
-library(kableExtra) 
-iris[1:50,] %>% 
-  kable(booktabs = TRUE,format = "latex",digits = 1, longtable=TRUE) %>%
-  kable_styling(
-   latex_options = c("striped", "condensed","repeat_header"), 
-   position = "center",full_width = FALSE,
-   repeat_header_text = "continuaci\\'on", 
-   repeat_header_continued="contin\\'ua en la siguiente p\\'agina"
-  )
-```
-
-
-### Incluir una tabla con aspecto de lista-diccionario
-
-El siguiente código:
-
-````markdown
-`r ''````{r}
-text_tbl <- data.frame(
-  Items = c("Item 1", "Item 2", "Item 3"), 
-  Features = c(
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-    Proin vehicula tempor ex. Morbi malesuada sagittis turpis,
-    at venenatis nisl luctus a. ",
-    "In eu urna at magna luctus rhoncus quis in nisl. Fusce in velit
-    varius, posuere risus et, cursus augue. Duis eleifend aliquam ante,
-    a aliquet ex tincidunt in. ",
-    "Vivamus venenatis egestas eros ut tempus. Vivamus id est nisi.
-    Aliquam molestie erat et sollicitudin venenatis. In ac lacus at
-    velit scelerisque mattis. "
-    ) 
-  )
-
-kable(text_tbl, "latex", booktabs = T) %>% 
-  kable_styling(full_width = F) %>% 
-  column_spec(1, bold = T, color = "red") %>% 
-  column_spec(2, width = "30em")
-```
-
-````
-
-
-Produce el siguiente resultado:
-
-```{r}
-text_tbl <- data.frame(
-  Items = c("Item 1", "Item 2", "Item 3"), 
-  Features = c(
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-    Proin vehicula tempor ex. Morbi malesuada sagittis turpis,
-    at venenatis nisl luctus a. ",
-    "In eu urna at magna luctus rhoncus quis in nisl. Fusce in velit
-    varius, posuere risus et, cursus augue. Duis eleifend aliquam ante,
-    a aliquet ex tincidunt in. ",
-    "Vivamus venenatis egestas eros ut tempus. Vivamus id est nisi.
-    Aliquam molestie erat et sollicitudin venenatis. In ac lacus at
-    velit scelerisque mattis. "
-    ) 
-  )
-
-kable(text_tbl, "latex", booktabs = T) %>% 
-  kable_styling(full_width = F) %>% 
-  column_spec(1, bold = T, color = "red") %>% 
-  column_spec(2, width = "30em")
-```
-
-
-### Incluir una tabla con notas a pie de tabla
-
-El siguiente código 
-
-````markdown
-`r ''````{r}
-library(kableExtra)
-dt <- mtcars[1:5, 1:6]
-
-kable(dt, "latex", align = "cccrcc", booktabs = T) %>%
-    kable_styling(position = "left") %>% 
-    footnote(general = "Elaboración propia. ",
-             number = c("Footnote 1; ", "Footnote 2; "),
-             alphabet = c("Footnote A; ", "Footnote B; "),
-             symbol = c("Footnote Symbol 1; ", "Footnote Symbol 2"), 
-             general_title = "Fuente: ", 
-             number_title = "Type I: ", 
-             alphabet_title = "Type II: ", 
-             symbol_title = "Type III: ", 
-             footnote_as_chunk = T, 
-             title_format = c("italic", "underline") )
-```
-
-````
-
-Produce la siguiente salida (la tabla está justificada a la izquierda **`position = "left"`**):
-
-```{r}
-library(kableExtra)
-dt <- mtcars[1:5, 1:6]
-
-kable(dt, "latex", align = "cccrcc", booktabs = T) %>%
-    kable_styling(position = "left") %>% 
-    footnote(general = "Elaboración propia. ",
-             number = c("Footnote 1; ", "Footnote 2; "),
-             alphabet = c("Footnote A; ", "Footnote B; "),
-             symbol = c("Footnote Symbol 1; ", "Footnote Symbol 2"), 
-             general_title = "Fuente: ", 
-             number_title = "Type I: ", 
-             alphabet_title = "Type II: ", 
-             symbol_title = "Type III: ", 
-             footnote_as_chunk = T, 
-             title_format = c("italic", "underline") )
-```
-
-
-### Presentar una tabla en modo apaisado
-
-Se presentan tres ejemplos de tablas apaisadas.
-
-1. La tabla \ref{tab:apaisada} tiene de especial que se usa la función **`landscape()`**.
-
-````markdown
-`r ''````{r}
-text_tbl <- data.frame(
-  Items = c("Item 1", "Item 2", "Item 3","Item 4", "Item 5", "Item 6",
-    "Item 7", "Item 8", "Item 9"), 
-  Features = c(
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-    Proin vehicula tempor ex. Morbi malesuada sagittis turpis,
-    at venenatis nisl luctus a. ",
-    "In eu urna at magna luctus rhoncus quis in nisl. Fusce in velit
-    varius, posuere risus et, cursus augue. Duis eleifend aliquam ante,
-    a aliquet ex tincidunt in. ",
-    "Vivamus venenatis egestas eros ut tempus. Vivamus id est nisi.
-    Aliquam molestie erat et sollicitudin venenatis. In ac lacus at
-    velit scelerisque mattis. ",
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-    Proin vehicula tempor ex. Morbi malesuada sagittis turpis,
-    at venenatis nisl luctus a. ",
-    "In eu urna at magna luctus rhoncus quis in nisl. Fusce in velit
-    varius, posuere risus et, cursus augue. Duis eleifend aliquam ante,
-    a aliquet ex tincidunt in. ",
-    "Vivamus venenatis egestas eros ut tempus. Vivamus id est nisi.
-    Aliquam molestie erat et sollicitudin venenatis. In ac lacus at
-    velit scelerisque mattis. ",
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-    Proin vehicula tempor ex. Morbi malesuada sagittis turpis,
-    at venenatis nisl luctus a. ",
-    "In eu urna at magna luctus rhoncus quis in nisl. Fusce in velit
-    varius, posuere risus et, cursus augue. Duis eleifend aliquam ante,
-    a aliquet ex tincidunt in. ",
-    "Vivamus venenatis egestas eros ut tempus. Vivamus id est nisi.
-    Aliquam molestie erat et sollicitudin venenatis. In ac lacus at
-    velit scelerisque mattis. "
-    ) 
-  )
-text_tbl %>%
-  kable(booktabs = TRUE,caption="\\label{tab:apaisada}Esta tabla 
-          est\\'a apaisada y en una p\\'agina separada") %>% 
-      column_spec(c(1), 
-          width = "2cm") %>% 
-      column_spec(c(2), 
-          width = "10cm") %>% 
-      landscape()
-```
-
-````
-
-
-2. La tabla \ref{tab:apaisada2} tiene las siguientes características:
-
-    - `\hspace{2cm}`: desplaza la tabla hacia la derecha desde el margen izquierdo-largo.
-    - `skip=50pt`: desplaza verticalmente la tabla hacia abajo.
-
-
-````markdown
-
-\begingroup
-\captionsetup{type=table,skip=50pt}
-\caption{Es una tabla apaisada ...} \label{tab:apaisada2}
-\hspace{2cm}
-\Rotatebox{90}{
-`r ''````{r echo=FALSE, warning=FALSE}
-library(knitr)
-library(kableExtra)
+```{r,echo=FALSE,eval=TRUE}
+library(tidyr)
 library(dplyr)
-
-text_tbl %>%
-  kable(booktabs = TRUE) %>% 
-      column_spec(c(1), width = "2cm") %>% 
-      column_spec(c(2), width = "14cm")
-
-```
-}
-\endgroup
-
-\newpage
-````
-
-3. La tabla \ref{tab:sidewaystable} es un ejemplo de uso del entorno LaTeX "sidewaystable" (en el paquete "rotating" incluido) que rota la tabla y la leyenda.
-
-
-```{r}
-text_tbl <- data.frame(
-  Items = c("Item 1", "Item 2", "Item 3","Item 4", "Item 5", "Item 6","Item 7", "Item 8", "Item 9"), 
-  Features = c(
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-    Proin vehicula tempor ex. Morbi malesuada sagittis turpis,
-    at venenatis nisl luctus a. ",
-    "In eu urna at magna luctus rhoncus quis in nisl. Fusce in velit
-    varius, posuere risus et, cursus augue. Duis eleifend aliquam ante,
-    a aliquet ex tincidunt in. ",
-    "Vivamus venenatis egestas eros ut tempus. Vivamus id est nisi.
-    Aliquam molestie erat et sollicitudin venenatis. In ac lacus at
-    velit scelerisque mattis. ",
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-    Proin vehicula tempor ex. Morbi malesuada sagittis turpis,
-    at venenatis nisl luctus a. ",
-    "In eu urna at magna luctus rhoncus quis in nisl. Fusce in velit
-    varius, posuere risus et, cursus augue. Duis eleifend aliquam ante,
-    a aliquet ex tincidunt in. ",
-    "Vivamus venenatis egestas eros ut tempus. Vivamus id est nisi.
-    Aliquam molestie erat et sollicitudin venenatis. In ac lacus at
-    velit scelerisque mattis. ",
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-    Proin vehicula tempor ex. Morbi malesuada sagittis turpis,
-    at venenatis nisl luctus a. ",
-    "In eu urna at magna luctus rhoncus quis in nisl. Fusce in velit
-    varius, posuere risus et, cursus augue. Duis eleifend aliquam ante,
-    a aliquet ex tincidunt in. ",
-    "Vivamus venenatis egestas eros ut tempus. Vivamus id est nisi.
-    Aliquam molestie erat et sollicitudin venenatis. In ac lacus at
-    velit scelerisque mattis. "
-    ) 
-  )
-text_tbl %>%
-  kable(booktabs = TRUE,caption="\\label{tab:apaisada}Esta tabla 
-          est\\'a apaisada y en una p\\'agina separada") %>% 
-      column_spec(c(1), 
-          width = "2cm") %>% 
-      column_spec(c(2), 
-          width = "10cm") %>% 
-      landscape()
-
+Clima <- aemet_monthly_period(station = "5783", start = 1960, end = 2023) 
+Clima <- Clima %>% separate(fecha, into = c("Año", "Mes"), sep = "-")
+Clima$Año <- as.numeric(Clima$Año)
+Clima$Mes <- factor(Clima$Mes, levels = as.character(1:12))
+Clima <- Clima[,c(1,2,6,11,27,29,32)] # Seleccionamos las variables que nos interesan
+colnames(Clima) <- c('Año','Mes','HR','PresM','Prec','WMed','TMedM')
+Clima <- Clima %>% arrange(Año, Mes) # Ordenamos por año y mes
+Clima <- Clima[complete.cases(Clima$Mes),] # Retiramos las medias anuales
 ```
 
+Hagamos la primera visualización de los datos observando su estructura y resumen:
 
-\newpage
-
-<!-- https://stackoverflow.com/questions/51633434/prevent-pagebreak-in-kableextra-landscape-table -->
-<!-- \floatplacement{table}{!htbp} -->
-<!-- \captionsetup{type=table,format=plain, font=small, labelfont=bf,skip=100pt} -->
-
-\begingroup
-\captionsetup{type=table,skip=50pt}
-\caption{Es una tabla apaisada ...} \label{tab:apaisada2}
-\hspace{2cm}
-\Rotatebox{90}{
-```{r echo=FALSE, warning=FALSE}
-library(knitr)
-library(kableExtra)
-library(dplyr)
-text_tbl <- data.frame(
-  Items = c("Item 1", "Item 2", "Item 3","Item 4", "Item 5", "Item 6","Item 7", "Item 8", "Item 9"), 
-  Features = c(
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-    Proin vehicula tempor ex. Morbi malesuada sagittis turpis,
-    at venenatis nisl luctus a. ",
-    "In eu urna at magna luctus rhoncus quis in nisl. Fusce in velit
-    varius, posuere risus et, cursus augue. Duis eleifend aliquam ante,
-    a aliquet ex tincidunt in. ",
-    "Vivamus venenatis egestas eros ut tempus. Vivamus id est nisi.
-    Aliquam molestie erat et sollicitudin venenatis. In ac lacus at
-    velit scelerisque mattis. ",
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-    Proin vehicula tempor ex. Morbi malesuada sagittis turpis,
-    at venenatis nisl luctus a. ",
-    "In eu urna at magna luctus rhoncus quis in nisl. Fusce in velit
-    varius, posuere risus et, cursus augue. Duis eleifend aliquam ante,
-    a aliquet ex tincidunt in. ",
-    "Vivamus venenatis egestas eros ut tempus. Vivamus id est nisi.
-    Aliquam molestie erat et sollicitudin venenatis. In ac lacus at
-    velit scelerisque mattis. ",
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-    Proin vehicula tempor ex. Morbi malesuada sagittis turpis,
-    at venenatis nisl luctus a. ",
-    "In eu urna at magna luctus rhoncus quis in nisl. Fusce in velit
-    varius, posuere risus et, cursus augue. Duis eleifend aliquam ante,
-    a aliquet ex tincidunt in. ",
-    "Vivamus venenatis egestas eros ut tempus. Vivamus id est nisi.
-    Aliquam molestie erat et sollicitudin venenatis. In ac lacus at
-    velit scelerisque mattis. "
-    ) 
-  )
-
-text_tbl %>%
-  kable(booktabs = TRUE) %>% 
-      column_spec(c(1), width = "2cm") %>% 
-      column_spec(c(2), width = "14cm")
-
-```
-}
-\endgroup
-
-\newpage
-
-
-
-\begingroup
-\begin{sidewaystable}
-\centering
-\caption{Es una tabla apaisada ...} \label{tab:sidewaystable}
-```{r echo=FALSE, warning=FALSE}
-library(knitr)
-library(kableExtra)
-library(dplyr)
-text_tbl <- data.frame(
-  Items = c("Item 1", "Item 2", "Item 3","Item 4", "Item 5", "Item 6","Item 7", "Item 8", "Item 9"), 
-  Features = c(
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-    Proin vehicula tempor ex. Morbi malesuada sagittis turpis,
-    at venenatis nisl luctus a. ",
-    "In eu urna at magna luctus rhoncus quis in nisl. Fusce in velit
-    varius, posuere risus et, cursus augue. Duis eleifend aliquam ante,
-    a aliquet ex tincidunt in. ",
-    "Vivamus venenatis egestas eros ut tempus. Vivamus id est nisi.
-    Aliquam molestie erat et sollicitudin venenatis. In ac lacus at
-    velit scelerisque mattis. ",
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-    Proin vehicula tempor ex. Morbi malesuada sagittis turpis,
-    at venenatis nisl luctus a. ",
-    "In eu urna at magna luctus rhoncus quis in nisl. Fusce in velit
-    varius, posuere risus et, cursus augue. Duis eleifend aliquam ante,
-    a aliquet ex tincidunt in. ",
-    "Vivamus venenatis egestas eros ut tempus. Vivamus id est nisi.
-    Aliquam molestie erat et sollicitudin venenatis. In ac lacus at
-    velit scelerisque mattis. ",
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-    Proin vehicula tempor ex. Morbi malesuada sagittis turpis,
-    at venenatis nisl luctus a. ",
-    "In eu urna at magna luctus rhoncus quis in nisl. Fusce in velit
-    varius, posuere risus et, cursus augue. Duis eleifend aliquam ante,
-    a aliquet ex tincidunt in. ",
-    "Vivamus venenatis egestas eros ut tempus. Vivamus id est nisi.
-    Aliquam molestie erat et sollicitudin venenatis. In ac lacus at
-    velit scelerisque mattis. "
-    ) 
-  )
-
-text_tbl %>%
-  kable(booktabs = TRUE) %>% 
-      column_spec(c(1), width = "2cm") %>% 
-      column_spec(c(2), width = "14cm")
-
-```
-\end{sidewaystable}
-\endgroup
-
-\clearpage
-
-
-
-### Cambiar la etiqueta "Tabla"
-
-Para que en lugar de "Tabla" aparezca "Cuadro" (este término es el que recomienda la RAE), se deberían hacer las siguientes modificaciones en: 
-
-- en el fichero principal "tfe_principal.Rmd"
-
-    ```latex
-    \addcontentsline{toc}{section}{Índice de Tablas}
-    ```
-
-- Quitar la opción "es-tabla" en el fichero "latex/templateMemoriaTFE.tex" 
-
-    ```latex
-    %\usepackage[spanish,es-nodecimaldot,es-noshorthands,es-tabla]{babel}
-    \usepackage[spanish,es-nodecimaldot,es-noshorthands]{babel}
-    ```
-
-Más información en la url siguiente: [Documentación babel-spanish en CTAN](https://osl.ugr.es/CTAN/macros/latex/contrib/babel-contrib/spanish/spanish.pdf).
-
-<!-- ### Cambiar la etiqueta "Cuadro" -->
-
-<!-- Para que en lugar de "Cuadro" aparezca "Tabla", se debería incluir una de las siguientes opciones en el fichero principal  -->
-
-<!-- ```latex -->
-<!-- \renewcommand\tablename{Tabla} -->
-<!-- ``` -->
-
-<!-- Con el paquete babel y la opción "spanish" (o al final de: "latex/latex_preambulo.tex"): -->
-
-<!-- ```latex -->
-<!-- \renewcommand\spanishtablename{Tabla} -->
-<!-- ``` -->
-
-
-## Uso de expresiones matemáticas
-
-
-En el siguiente enlace [overleaf: alfabeto griego y símbolos matemáticos](https://www.overleaf.com/learn/latex/List_of_Greek_letters_and_math_symbols) puede encontrarse una recopilación de los comandos LaTeX para representar todo el alfabeto griego y muchos de los símbolos más usados en expresiones matemáticas.
-
-
-
-
-### Algunas expresiones matemáticas
-
-
-Las fracciones pueden usarse en el texto, por ejemplo $\frac{1}{2}$, y en un estilo matemático centrado como puede verse a continuación:
- 
-\[\frac{1}{2}\]
-
-El código utilizado ha sido:
-
-```markdown
-Las fracciones pueden usarse en el texto, por ejemplo \( \frac{1}{2} \), 
-y en un estilo matemático centrado como puede verse a continuación:
- 
-\[\frac{1}{2}\]
-
+```{r,echo=TRUE,eval=TRUE}
+str(Clima)
 ```
 
-- Como puede verse **`\( \)`** se utiliza para modo matemático en el texto. También se puede escribir la expresión matemática entre un signo de dólar a cada lado: **`$  $`**.
+```{r,echo=TRUE,eval=TRUE}
+summary(Clima)
+```
+\begin{itemize}
+  \item HR: la humedad relativa media es un valor porcentual de la cantidad de vapor de agua presente en el aire con respecto a la máxima posible para unas condiciones dadas de presión y temperatura.
+  \item PresM: la presión media mensual al nivel de la estación medida en hectopascales (hPa).
+  \item Prec: la precipitación total mensual medida en milímetros.
+  \item WMed: la velocidad media del aire se mide en metros por segundo. 
+  \item TMedM: la temperatura media mensual viene dada en grados centígrados. 
+\end{itemize}
 
-- Como puede verse **`\[ \]`** se utiliza para modo matemático centrado en el texto. También se puede escribir la expresión matemática entre un doble signo de dólar a cada lado: **`$$  $$`**.
+### Descripción del modelo {#Descripcion1} 
 
+Tomaremos a la variable *TMedM* como variable de respuesta y al resto como variables explicativas.
+Antes de definir el modelo debemos notar que la variable *Año* no se ha definido como variable categórica, como sí se hizo para la variable *Mes*, sino que se define como variable numérica para luego poder tener una mejor representación de los resultados obtenidos. Además, si se hubiera definido de tal forma, resultaría que la mayoría de factores son no significativos. Dicho esto definimos el modelo como:
 
-**Nota**. Cuando se usa el modo matemático visto anteriormente no es posible añadir etiquetado de ecuaciones para hacer referencia a ellas. Para el etiquetado se usa el entorno LaTeX: **`\begin{equation} \label{identificador} ... \end{equation}`**, el cual se verá en el apartado \ref{etiquetadomatematico}.
-
-Veamos más ejemplos de uso de LaTeX en R Markdown para escribir expresiones matemáticas:
-
-\[ \int_0^1 x^2 + y^2 \ dx \]
-
-\[ \int\limits_0^1 x^2 + y^2 \ dx \]
-
-\[ a_1^2 + a_2^2 = a_3^2 \]
-
-\[ x^{2 \alpha} - 1 = y_{ij} + y_{ij}  \]
-
-\[ (a^n)^{r+s} = a^{nr+ns}  \]
-
-\[ \sum_{i=1}^{\infty} \frac{1}{n^s} 
-= \prod_p \frac{1}{1 - p^{-s}} \]
-
-
-
-$$ 
-F = G \left( \frac{m_1 m_2}{r^2} \right)
-$$
-
-
-
-$$ 
- \left[  \frac{ N } { \left( \frac{L}{p} \right)  - (m+n) }  \right]
-$$
-
-Controlando el tamaño de los elementos separadores:
-
-$$
- \Bigg \langle 3x+7 \bigg \rangle
-$$
-
-El código LaTeX utilizado respectivamente ha sido:
-
-```latex
-\[ \int_0^1 x^2 + y^2 \ dx \]
-
-\[ \int\limits_0^1 x^2 + y^2 \ dx \]
-
-\[ a_1^2 + a_2^2 = a_3^2 \]
-
-\[ x^{2 \alpha} - 1 = y_{ij} + y_{ij}  \]
-
-\[ (a^n)^{r+s} = a^{nr+ns}  \]
-
-\[ \sum_{i=1}^{\infty} \frac{1}{n^s} 
-= \prod_p \frac{1}{1 - p^{-s}} \]
-
-$$ 
-F = G \left( \frac{m_1 m_2}{r^2} \right)
-$$
-
-$$ 
- \left[  \frac{ N } { \left( \frac{L}{p} \right)  - (m+n) }  \right]
-$$
-
-$$
- \Bigg \langle 3x+7 \bigg \rangle
-$$
+```{r,echo=TRUE,eval=TRUE}
+#install.packages('mgcv')
+library(mgcv)
 ```
 
-### Expresiones matriciales
+```{r,echo=TRUE,eval=TRUE}
+mag1 <- gam(TMedM~ s(HR)+s(PresM)+s(Prec)+s(WMed)+Año+Mes,data = Clima)
+summary(mag1)
+```
+Como podemos ver en el resumen del modelo, se toma por defecto que la variable dependiente sigue la distribución normal y que la función de enlace es la identidad. Se tiene que el modelo es capaz de explicar el 96.3% de la varianza con $R^2_{adj}=0.962$ y que todas las variables predictoras son significativas. Observemos qué efecto tienen las variables predictoras sobre la temperatura media mensual:
 
-El uso de `\begin{array}{} ... \end{array}` nos permite escribir expresiones en forma de tabla. Veamos con algunos ejemplos su uso básico.
+```{r,echo=FALSE,eval=TRUE}
+par(mfrow = c(2, 2))
+plot(mag1, select = 1, main = 'Humedad Relativa', shade = TRUE)
+plot(mag1, select = 2, main = 'Presion', shade = TRUE)
+plot(mag1, select = 3, main = 'Precipitaciones totales', shade = TRUE)
+plot(mag1, select = 4, main = 'Velocidad media del viento', shade = TRUE)
+par(mfrow = c(1, 1))
+```
+De las gráficas de la derecha se puede interpretar que los efectos de *PresM* y *WMed* sobre la temperatura media mensual son lineales. Ajustamos entonces un nuevo modelo aditivo generalizado del mismo modo que antes pero imponiendo que el efecto de estas variables sea lineal:
 
-- Ejemplo 1:
-
-El  \emph{polinomio característico} $\chi(\lambda)$ de la matriz
-$3 \times 3$
-\[ \left( \begin{array}{ccc}
-a & b & c \\
-d & e & f \\
-g & h & i \end{array} \right)\] 
-viene dado por la fórmula
-\[ 
-\chi(\lambda) = 
-\left| 
-\begin{array}{ccc}
-\lambda - a & -b & -c \\
--d & \lambda - e & -f \\
--g & -h & \lambda - i 
-\end{array} 
-\right|.
-\] 
-
-```latex
-El  \emph{polinomio característico} $\chi(\lambda)$ de la matriz
-$3 \times 3$
-\[ \left( \begin{array}{ccc}
-a & b & c \\
-d & e & f \\
-g & h & i \end{array} \right)\] 
-viene dado por la fórmula
-\[ 
-\chi(\lambda) = 
-\left| 
-\begin{array}{ccc}
-\lambda - a & -b & -c \\
--d & \lambda - e & -f \\
--g & -h & \lambda - i 
-\end{array} 
-\right|.
-\] 
+```{r,echo=TRUE,eval=TRUE}
+mag2 <- gam(TMedM~ s(HR)+PresM+s(Prec)+WMed+Año+Mes,data = Clima)
+summary(mag2)
 ```
 
-Otros ejemplos de uso de `\begin{array}{} ... \end{array}`:
+Podemos ver que tanto la desviación explicada como la estimación del error por validación cruzada coinciden con las del modelo anterior, sin embargo utilizaremos la función *anova* para dar una prueba de razón de verosimilitud que determine si el modelo más complejo mejora significativamente el ajuste.
 
-- Ejemplo 2:
+```{r,echo=TRUE,eval=TRUE}
+anova(mag1,mag2,test = "F")
+```
+Como el p-valor resultante del contraste de hipótesis es $>0.05$, no tenemos evidencias significativas como para rechazar la hipótesis nula, es decir, se acepta que ambos modelos tienen el mismo ajuste.
 
-\[ 
-\begin{array}{lcr}
-\mbox{First number} & x & 8 \\
-\mbox{Second number} & y & 15 \\
-\mbox{Sum} & x + y & 23 \\
-\mbox{Difference} & x - y & -7 \\
-\mbox{Product} & xy & 120 \end{array}
-\] 
+También es posible compararlos mediante otros criterios, por ejemplo el AIC (Akaike Information Criterion) que tiene en cuenta el número de parámetros a estimar y el valor objetivo de la función de log-verosimilitud:
+```{r,echo=TRUE,eval=TRUE}
+AIC(mag1,mag2)
+```
+En este caso son casi idénticos, aunque el primer modelo tiene menor AIC. 
 
-```latex
-\[ 
-\begin{array}{lcr}
-\mbox{First number} & x & 8 \\
-\mbox{Second number} & y & 15 \\
-\mbox{Sum} & x + y & 23 \\
-\mbox{Difference} & x - y & -7 \\
-\mbox{Product} & xy & 120 \end{array}
-\] 
+Para obtener más información sobre el modelo planteado se utiliza la siguiente rutina de diagnósticos que nos proporciona información y gráficos útiles para evaluar la calidad del ajuste del modelo.
+
+```{r, eval=TRUE, warning=FALSE,echo=TRUE}
+gam.check(mag1)
 ```
 
-- Ejemplo 3:
+Por un lado, la salida por consola nos informa de que se obtiene la convergencia por optimización del GCV y que el modelo es de rango completo. Los p-valores que aparecen se corresponden a los tests de residuos aleatorios correspondientes para cada predictor, en este caso todos excepto el asociado a *Prec* son $<0.05$, lo que indica que se necesitaría una base de funciones de mayor dimensión para la función de suavizado asociada a esta variable. No obstante, no se obtiene ninguna mejoría significativa del modelo con este razonamiento así que nos ahorraremos el incluirlo. 
+Por otro lado, observemos qué representa cada una de las gráficas generadas y cuál sería el caso ideal para cada una de ellas:
 
-\[ |x| = \left\{ \begin{array}{ll}
-         x & \mbox{if $x \geq 0$};\\
-        -x & \mbox{if $x < 0$}.\end{array} \right. \] 
+\begin{itemize}
+  \item Q-Q Plot: compara la distribución de los residuos con una distribución normal. Lo ideal es que los puntos se alineen aproximadamente en una línea recta.
+  \item Resids vs. linear pred: representa los residuos frente el predictor lineal, ayuda a verificar si los residuos se distribuyen aleatoriamente, que sería lo ideal.
+  \item Histograma de residuos: se trata de un histograma de los residuos, en este caso lo ideal es que muestre una distribución aproximadamente normal, centrada en cero, esto indicaría que los residuos no presentan sesgos significativos.
+  \item Response vs. Fitted Values: representa los valores observados frente a los valores ajustados, lo ideal sería que los puntos resultantes se aconglomerasen en torno a la recta $x=y$.
+\end{itemize}
 
-```latex
-\[ |x| = \left\{ \begin{array}{ll}
-         x & \mbox{if $x \geq 0$};\\
-        -x & \mbox{if $x < 0$}.\end{array} \right. \] 
-```
+Por lo general este modelo se comporta de manera correcta, ya que se aproxima mucho a los casos ideales de cada gráfica. Podemos utilizar la librería *visibly* de @M-Clark para hacer esta representación de forma más clara:
 
-- Ejemplo 4:
-$$
-f(n) = 
-\begin{cases} 
-  n/2,  & \mbox{if } n\mbox{ is even} \\ 
-  3n+1, & \mbox{if } n\mbox{ is odd} 
-\end{cases}
-$$
-
-```latex
-$$
-f(n) = 
-\begin{cases} 
-  n/2,  & \mbox{if } n\mbox{ is even} \\ 
-  3n+1, & \mbox{if } n\mbox{ is odd} 
-\end{cases}
-$$
+```{r,echo=TRUE,eval=TRUE}
+#install.packages('visibly')
+library(visibly)
+plot_gam_check(mag1)
 ```
 
 
+### Visualización de resultados
 
-### Alineando ecuaciones y etiquetado {#etiquetadomatematico}
+Una vez generado el modelo y comprobado que se tiene una buena bondad de ajuste, veremos cómo ajusta los datos con el objetivo de identificar si se ha producido un cambio significativo en la temperatura media mensual a lo largo de los años. Para evitar las variaciones entre estaciones nos centraremos en la representación de los datos para un mes fijo, en este caso julio.
 
-Para alinear ecuaciones en R Markdown habrá que utilizar las habilidades de los paquetes LaTeX. Ver [overleaf](https://www.overleaf.com/learn/latex/Aligning_equations_with_amsmath).
+```{r,echo=FALSE,eval=TRUE, warning=FALSE}
+Julio <- filter(Clima, Clima$Mes == 7)
+Julio$Preds <- predict(mag1, newdata = Julio)
+Julio <- Julio[complete.cases(Julio$Preds),]
 
-A continuación se mostrará el código LaTeX necesario para construir expresiones matemáticas.
+lm1 <- gam(TMedM ~ Año,data = Julio)
+Julio$LPreds <- predict(lm1,Julio)
 
-
-- Uso de "equation-split" y etiquetado con "label" (ver la ecuación \ref{eq1})
-
-```latex
-(ver la ecuación \ref{eq1})
-\begin{equation} \label{eq1}
-\begin{split}
-A & = \frac{\pi r^2}{2} \\
- & = \frac{1}{2} \pi r^2
-\end{split}
-\end{equation}
+library(ggplot2)
+ggplot(Julio,aes(x=Año))+
+  geom_point(aes(y=TMedM),size=1.5, col = 'black')+
+  theme_minimal()+
+  geom_line(aes(y=Preds, color = 'MAG'),linewidth=1)+
+  geom_line(aes(y=LPreds, color = 'ML'),linewidth=0.6)+
+  labs(title ="Temperatura media mensual del mes de julio",x="Año",y="Temperatura ºC")+
+  scale_color_manual(values = c('MAG' = 'darkred', 'ML' = '#EB6146'), name = "Leyenda") + 
+  theme(axis.title = element_text(face = "bold"),
+        legend.text = element_text( size = 10,colour = "black"),
+        legend.position = 'right')
 ```
 
-\begin{equation} \label{eq1}
-\begin{split}
-A & = \frac{\pi r^2}{2} \\
- & = \frac{1}{2} \pi r^2
-\end{split}
-\end{equation}
+Con esta gráfica podemos apreciar claramente como la temperatura media en el mes de Julio ha ido aumentado con el paso de los años en la estación meteorológica del aeropuerto de San Pablo. Hemos introducido la recta proporcionada por el modelo lineal para los datos de los meses de Julio para tener una mejor apreciación de tal incremento.
+
+## Modelización de gases de efecto invernadero 
+
+### Descripción de los datos {#Datos2}
+
+En esta sección ajustaremos modelos aditivos generalizados con el objetivo de estudiar la concentración atmosférica de gases de efecto invernadero, en particular analizaremos las medias mensuales globales de las concentraciones de dióxido de carbono ($CO_2$), metano ($CH_4$) y óxido nitroso ($N_2O$). Para ello consideraremos los datos proporcionados por United Nations Environment Programme (UNEP), para el $CO_2$ se obtienen en <https://wesr.unep.org/climate/essential-climate-variables-ecv/atmospheric-co2-concentration> y para los dos siguientes en <https://wesr.unep.org/climate/essential-climate-variables-ecv/atmospheric-ch4-n2o-sf6-concentration>.
+
+Ya hablamos sobre las emisiones de gases contaminantes en $\ref{ResumenCC}$ pero no se llegó a definir en qué consistían. Estos gases son capaces de absorber y emitir radiación dentro del espectro inflarrojo, por tanto son capaces de retener el calor del Sol, lo que permite que el clima terrestre sea habitable para la humanidad. Sin embargo, desde el inicio de la revolución industrial, la actividad humana ha producido un desequilibrio en los niveles de concentración de estos gases en la atmósfera. En particular estudiaremos las concentraciones de los tres tipos de gases antes mencionados por ser los que se emiten en mayor cantidad o por ser las más potentes (en términos de contribución al efecto invernadero). Por ejemplo, las emisiones de $CO_2$ se corresponden aproximadamente con tres cuartas partes del total de emisiones de GEI, sin embargo el $CH_4$ y el $N_2O$ representan una parte mucho menor que el dióxido de carbono pero por unidad son mucho más potentes como gases de efecto invernadero. @GEI.
+
+Para facilitar la lectura de los datos se ha transformado el archivo excel proporcionado por la fuente antes mecionada a *.xlsx* y se han utilizado las librerías *readxl* y *lubridate* para leerlo y obtener las variables temporales *Año* y *Mes*, respectivamente.
 
 
-- Uso de "`multline*`" para mostrar ecuaciones largas:
+```{r,echo = TRUE,eval=TRUE}
+#install.packages('readxl')
+library(readxl)
+#install.packages('lubridate')
+library(lubridate)
+```
+\begin{itemize}
+\item $CO_2$:
+\end{itemize}
+```{r,echo=FALSE,eval=TRUE}
+CO2 <- read_excel('trends-in-atmospheric-carbon-dioxide-concentration.xlsx')
 
-```latex
-\begin{multline*}
-p(x) = 3x^6 + 14x^5y + 590x^4y^2 + 19x^3y^3 
-            - 32x^2y^4 - 22xy^5 + 12y^6 - 7a^3b^3\\ 
-- 12x^2y^4 - 12xy^5 + 2y^6 - a^3b^3
-\end{multline*}
+CO2$DateTime <- as.Date(CO2$DateTime) 
+CO2$Año <- as.numeric(year(CO2$DateTime))
+CO2$Mes <- factor(month(CO2$DateTime),levels = as.character(1:12))
+CO2$Tmes <- as.numeric(CO2$'Monthly Data')
+CO2$Trend <- as.numeric(CO2$'Trend')
+CO2 <- CO2[,c(4,5,6,3)]
+CO2 <- CO2 %>% arrange(Año, Mes) 
 ```
 
-\begin{multline*}
-p(x) = 3x^6 + 14x^5y + 590x^4y^2 + 19x^3y^3 
-            - 32x^2y^4 - 22xy^5 + 12y^6 - 7a^3b^3 \\ 
-- 12x^2y^4 - 12xy^5 + 2y^6 - a^3b^3
-\end{multline*}
-
-
-- Uso de "`align`" y "`align*`" (diferencia entre incluir "*" y no incluirlo) para alinear varias ecuaciones:
-
-```latex
-\begin{align} 
-2x - 5y &=  8  \label{eqalign01}\\ 
-3x + 9y &=  -12 \label{eqalign02}
-\end{align}
+```{r,echo=TRUE,eval=TRUE}
+str(CO2)
+```
+```{r,echo=TRUE,eval=TRUE}
+summary(CO2)
 ```
 
-\begin{align} 
-2x - 5y &=  8  \label{eqalign01}\\ 
-3x + 9y &=  -12 \label{eqalign02}
-\end{align}
+De este modo nos queda un data frame con 794 observaciones, correspondientes a los meses desde marzo del 1958 hasta abril de 2024, y con las variables *Año*, *Mes*, *Tmes* que se corresponde con la concentración media de $CO_2$ a nivel global medida en partes por millón (ppm) y *Trend* que es la media anual de las anteriores. El tener 1 ppm de un gas en un medio significa que existe una molécula de ese gas por cada millón de moléculas de aire.
 
-```latex
-\begin{align*}
-x&=y           &  w &=z              &  a&=b+c\\
-2x&=-y         &  3w&=\frac{1}{2}z   &  a&=b\\
--4 + 5x&=2+y   &  w+2&=-1+w          &  ab&=cb
-\end{align*}
+
+\begin{itemize}
+\item $CH_4$:
+\end{itemize}
+```{r,echo=FALSE,eval=TRUE}
+CH4 <- read_excel('trends-in-atmospheric-methane-concentration.xlsx')
+
+CH4$DateTime <- as.Date(CH4$DateTime)
+CH4$Año <- as.numeric(year(CH4$DateTime))
+CH4$Mes <- factor(month(CH4$DateTime),levels = as.character(1:12))
+CH4$Trend <- as.numeric(CH4$'Trend')
+CH4 <- CH4[,c(3,4,2)]
+CH4 <- CH4 %>% arrange(Año, Mes) 
 ```
 
-\begin{align*}
-x&=y           &  w &=z              &  a&=b+c\\
-2x&=-y         &  3w&=\frac{1}{2}z   &  a&=b\\
--4 + 5x&=2+y   &  w+2&=-1+w          &  ab&=cb
-\end{align*}
-
-- Uso de "`gather*`" para agrupar y centrar ecuaciones:
-
-```latex
-\begin{gather*} 
-2x - 5y =  8 \\ 
-3x^2 + 9y =  3a + c
-\end{gather*}
+```{r,echo=TRUE,eval=TRUE}
+str(CH4)
+```
+```{r,echo=TRUE,eval=TRUE}
+summary(CH4)
 ```
 
-\begin{gather*} 
-2x - 5y =  8 \\ 
-3x^2 + 9y =  3a + c
-\end{gather*}
+En este caso disponemos de 487 observaciones correspondientes a los meses entre 1983 y 2024, las variables de tiempo *Año* y *Mes* y la variable *Trend* la cual representa la media mensual de concentración de metano a nivel global medida en *parts per billion* (ppb). La notación es en inglés, en español se correspondría a partes por miles de millones. 
 
+\begin{itemize}
+\item $N_2O$:
+\end{itemize}
+```{r,echo=FALSE,eval=TRUE}
+N2O <- read_excel('trends-in-atmospheric-nitrous-oxide-concentration.xlsx')
 
-
-
-### Escribiendo resultados matemáticos
-
-Se pueden utilizar entornos matemáticos para establecer: "Definiciones", "Teoremas", "Corolarios", "Demostraciones", "Ejemplos", etc. Se ha dado un aspecto personalizado a estas construcciones, que pueden consultarse (y modificarse) en el interior del fichero de estilos LaTeX: "latex/latex_preambulo.tex".
-
-A continuación se recoge un ejemplo con el código necesario.
-
-```markdown
-\bedefinition
-Se **define**... 
-\eedefinition
+N2O$DateTime <- as.Date(N2O$DateTime) 
+N2O$Año <- as.numeric(year(N2O$DateTime))
+N2O$Mes <- factor(month(N2O$DateTime),levels = as.character(1:12))
+N2O$Trend <- as.numeric(N2O$'Trend')
+N2O <- N2O[,c(3,4,2)]
+N2O <- N2O %>% arrange(Año, Mes) 
 ```
 
-\bedefinition
-Se **define**... 
-\eedefinition
-
-```markdown
-\betheorem
-Dado...
-\eetheorem
+```{r,echo=TRUE,eval=TRUE}
+str(N2O)
+```
+```{r,echo=TRUE,eval=TRUE}
+summary(N2O)
 ```
 
+Para el caso del óxido nitroso sólo disponemos datos desde el 2001, por lo que obtenemos un conjunto de 277 observaciones para las variables *Año*, *Mes* y *Trend* que representa la media mensual de concentración de $N_2O$ a nivel global medida en *parts per billion* (ppb). 
 
-\betheorem
-Dado...
-\eetheorem
+Solo con los resúmenes de los datos para los tres gases, teniendo en cuenta las medidas en las que vienen dados, ya se puede ver la gran diferencia que hay entre sus proporciones en la atmósfera.
 
-```markdown
-\becorollary
-Se verifica...
-\eecorollary
+### Descripción de los modelos {#Descripicion2}
+
+Partiremos definiendo un modelo lineal para los datos de $CO_2$ que tenga como variable de respuesta la media mesual global de la concentración de este gas medida en ppm y como predictoras las variables *Año* y *Mes*:
+
+```{r,echo=TRUE,eval=TRUE}
+magCO2 <- gam(Tmes ~ Año + Mes, data = CO2)
+summary(magCO2)
 ```
 
-
-\becorollary
-Se verifica...
-\eecorollary
-
-```markdown
-\beproof
-Para demostrar...
-\eeproof
+Podemos observar que representa un 98.1% de la desviación explicada, por lo que en principio no parece un mal ajuste, comprobémoslo con el diagnóstico de residuos como se hizo en el apartado anterior:
+```{r,echo=TRUE,eval=TRUE}
+plot_gam_check(magCO2)
 ```
 
+Gracias a estos gráfios se puede ver cómo el modelo falla en varios aspectos: 
+\begin{itemize}
+  \item En primer lugar, el Q-Q plot no se adapta a la recta, es decir, la distribución de los residuos no es normal.
+  \item En la gráfica de arriba a la derecha se puede ver como los residuos toman un patrón claro respecto de los predictores, lo que implica que la hipótesis de homocedasticidad de los residuos no es cierta.
+  \item En la de abajo a la izquierda se ve facilmente que no es una distribución normal centrada en el 0, lo que confirma lo observado en el Q-Q plot.
+  \item Por último, en el gráfico Response vs. Fitted también se puede intuir la falta de homocedasticidad para los residuos. 
+\end{itemize}
 
-\beproof
-Para demostrar...
-\eeproof
+Luego, aunque el modelo representase un gran porcentaje de la desviación explicada, presenta errores significativos en el análisis de los residuos por lo que inferimos que el modelo no es adecuado. Para definir un modelo que se ajuste mejor nos referiremos a dichas gráficas. En primer lugar, que la gráfica de residuos frente predictores se asemeje a una función cuadrática nos indica que puede existir una relación no lineal entre la varible de respuesta y las predictoras (que es tal y como se definió el modelo), por lo que será conveniente añadir funciones de suavizado al modelo. Además, también puede implicar que la familia de distribuciones exponenciales para la variable de respuesta que estemos utilizando, la normal en este caso, no sea la adecuada. Podemos utilizar el test de normalidad univariante Shapiro-Wilk para comprobarlo: 
 
-```markdown
-\beexample
-Se considera el siguiente ejemplo...
-\eeexample
+```{r,echo=TRUE,eval=TRUE}
+shapiro.test(CO2$Tmes)
+```
+Como el p-valor es muy cercano a 0, se rechaza la hipótesis nula de normalidad de la muestra. Lo que haremos entonces será razonar que como los datos tratados son niveles de concentraciones positivas, quizás nos interese utizar la distribución *Gamma* o la *Inverse Gaussian*. Para determinar cuál de las dos es más conveniente compararemos los modelos definidos para ambas familias con sus respectivas funciones de enlace.
+
+```{r,echo=TRUE,eval=TRUE}
+magCO2b <- gam(Tmes ~ s(Año) + Mes, data = CO2, 
+               family = inverse.gaussian(link = "1/mu^2"))
+summary(magCO2b)
+plot_gam_check(magCO2b)
 ```
 
-\beexample
-Se considera el siguiente ejemplo...
-\eeexample
-
-## Uso de la bibliografía
-
-Se aconseja guardar todas las referencias bibliográficas en ficheros con formato bibtex. En este caso se usan dos ficheros de bibliografía (podrían tener otros nombres):
-
-- "bib/library.bib": en este fichero podremos tener todas las referencias bibliográficas que vayamos encontrando convenientemente formateadas. Se podría utilizar en otros proyectos o trabajos. 
-
-- "bib/paquetes.bib": este fichero lo genera automáticamente R cuando creamos la salida R Markdown del fichero principal: "tfe_principal.Rmd", de ahí que no se debe modificar porque se perderían los cambios introducidos. En este se recogerán las referencias bibliográficas de los paquetes R que le indiquemos. Si quisiéramos personalizar alguna referencia a un paquete R se debería incluir en el fichero: "library.bib". Por ejemplo, en el chunk inicial del fichero "tfe_principal.Rmd" se han indicado para que paquetes R se incluirán referencias bibliográficas.
-
-\bigskip
-
-```{r eval=F,echo=T}
-knitr::write_bib(c("knitr","rmarkdown","dplyr","ggplot2","xtable",
-                   "stringr","shiny","flexdashboard","htmlwidgets",
-                   "bookdown"),
-                 file="bib/paquetes.bib", 
-                 width = 60)
+```{r,echo=TRUE,eval=TRUE}
+magCO2c <- gam(Tmes ~ s(Año) + Mes, data = CO2, family = Gamma(link = "log"))
+summary(magCO2c)
+plot_gam_check(magCO2c)
 ```
 
+Vemos ahora como las gráficas para ambos diagnósticos ofrecen resultados mucho mejores y que incluso los $R^2_{adj}$ llegan a 1 para ambos modelos. Comparémoslos: 
 
-
-Algunas de las referencias bibliográficas incluidas en el fichero "bib/library.bib" aparecen a continuación. Se recogen ejemplos de publicaciones de tipos diferentes: "Manual", "book", "article", "misc", pero existen muchas más.
-
-Hay que resaltar, que cada una de estas referencias bibliográficas tiene un identificador ("Luque2017", "R-base", "Wickham2017", etc) que será el que nos permita hacer referencia a las correspondientes referencias al añadir el prefijo `@`, es decir, por ejemplo: `@Luque2017`.
-
-```bibtex
-@Manual{Luque2017,
-  title = {Escribir un Trabajo Fin de Estudios con R Markdown},
-  author = {Pedro L. Luque-Calvo},
-  year = "2017",
-  howpublished = {Disponible en \url{http://destio.us.es/calvo}}
-}
-
-@Manual{R-base,
-  title = {R: A Language and Environment for Statistical
-    Computing},
-  author = {{R Core Team}},
-  organization = {R Foundation for Statistical Computing},
-  address = {Vienna, Austria},
-  year = {2016},
-  url = {https://www.R-project.org/},
-}
-
-
-@book{Wickham2017,
-	Author = {Hadley Wickham and Garrett Grolemund},
-	Edition = {First Edition},
-	Publisher = {O'Reilly},
-	Title = {R for Data Science: Import, Tidy, Transform, 
-	Visualize, and Model Data},
-	Year = {2017}
-}
-
-@ARTICLE {Example1999,
-    author  = "Example, The",
-    title   = "This is an exmaple article not cited in the text",
-    journal = "Journal of Examples",
-    year    = "1999",
-    volume  = "4",
-    number  = "2",
-    pages   = "1-9"
-}
-
-@Misc{Techopedia,
-  title = {"Definition - What does Business Intelligence (BI) mean?"},
-  author = {Techopedia},
-  howpublished = {Disponible en
-  \url{https://www.techopedia.com/definition/345/business-intelligence-bi}}
-}
-
-
+```{r,echo=FALSE,eval=TRUE}
+comp <- data.frame( AIC = c(AIC(magCO2b),AIC(magCO2c)),
+                    GCV = c(magCO2b$gcv.ubre,magCO2c$gcv.ubre))
+rownames(comp) <- c('Inv. Gauss (b)','Gamma (c)')
+print(comp)
 ```
 
+Por un lado, el modelo c tiene un AIC significativamente menor que el modelo b. Esto sugiere que el modelo c es mejor en términos de bondad del ajuste, teniendo en cuenta la penalización de la complejidad. Por el otro lado, el modelo b tiene un GCV significativamente menor que el modelo c, por lo que tedrá una mejor capacidad predictiva. Con cuál quedarnos ya dependerá del objetivo que nos propongamos, para dar un buen ajuste de los datos preferiremos el que utiliza la familia *Gamma* y para predecir nuevas observaciones preferiremos el modelo con la familia *Inverse Gaussian*. Apliquemos estos dos casos. 
 
-Podrían generarse en la consola de R, al utilizar la función **`citation("paqueteR")`**, por ejemplo: 
+### Visualización de resultados
 
-\footnotesize
+**Ajuste de la concentración del dióxido de carbono** \newline
+Como hemos indicado, el MAG que utiliza la distribución *Gamma* como familia de distribución exponencial proporciona una mejor bondad de ajuste teniendo en cuenta la complejidad del modelo, así que utilizaremos ese para representar el ajuste de los datos. Se debe tener presente que sobre las predicciones se debe invertir la función de enlace utilizada, en este caso la función logarítmica.
 
-```r
-> citation("dplyr")
+```{r,echo=FALSE,eval=TRUE}
+predsc <- exp(predict(magCO2c,CO2))
 
-To cite package ‘dplyr’ in publications use:
+ggplot(CO2, aes(x = Año, y = Tmes)) +
+  geom_point(size = 2) + 
+  geom_line(aes(y = predsc), color = "darkgreen", linewidth = 1.2) + 
+  labs(x = "Años",y = "ppm", title = "Concentración mensual media de dióxido de carbono (ppm)") +
+  theme_minimal()
 
-  Hadley Wickham, Romain François, Lionel Henry and Kirill Müller (2019). dplyr: A
-  Grammar of Data Manipulation. R package version 0.8.3.
-  https://CRAN.R-project.org/package=dplyr
+```
+Se pueden observar claramente las oscilaciones interestacionales, como se indica en <https://climate.nasa.gov/en-espanol/signos-vitales/dioxido-de-carbono/?intent=111>, esto se debe a que en la primevera las plantas absorben una mayor cantidad de $CO_2$ para alimentar su crecimiento.
+A pesar de ello, se aprecia que el incremento en los niveles de concentración de dióxido de carbono en la atmósfera es de más de 100 ppm en los últimos 60 años. 
 
-A BibTeX entry for LaTeX users is
+**Predicciones de la concentración del dióxido de carbono** \newline
+Para representar las predicciones aplicaremos el modelo que utilizaba la distribución *Inverse Gaussian*, pues tenía un menor valor del error estimado por validación cruzada generalizada.
+```{r,echo=FALSE,eval=TRUE}
 
-  @Manual{,
-    title = {dplyr: A Grammar of Data Manipulation},
-    author = {Hadley Wickham and Romain François and Lionel Henry and Kirill Müller},
-    year = {2019},
-    note = {R package version 0.8.3},
-    url = {https://CRAN.R-project.org/package=dplyr},
+futuro = CO2[1:324,1:2]
+s <- c()
+new <- function(x){
+  for (i in x){
+    for (j in 1:12){
+      s <- append(s,i)
+    }
   }
+s}
+futuro$Año <- new(2024:2050)
+
+futuro$Tmes <- sqrt(1/predict(magCO2b,futuro))
+futuro$Trend <- 1:324 == NA
+futuro$col <- 'Predicciones' 
+
+pasado <- CO2
+pasado$col <- 'Datos'
+df <- rbind(pasado,futuro)
+
+ggplot(df, aes(x = Año, y = Tmes)) +
+  geom_line(aes(color = col, group = 1), linewidth = 1) +
+  geom_vline(aes(xintercept = 2024), color = 'black',, linetype = "dashed" , linewidth = 0.5)+
+  labs(x = "Años",y = "ppm", title = "Concentración mensual media de dióxido de carbono",
+       legend = c('Datos','Predicciones')) +
+  scale_color_manual(values = c('Datos' = 'darkgreen', 'Predicciones' = 'darkred'), name = "Leyenda")+
+  theme(axis.title = element_text(face = "bold"),
+        legend.text = element_text(size = 10,color = 'black'),
+        legend.position = 'right')
+```
+
+Obviamente esta es una predicción, que tan solo tiene en cuenta el paso del tiempo y los niveles de concentración medidos hasta ahora. Para poder hacer predicciones más exactas se necesitarían datos relativos a las emisiones de $CO_2$, al clima, al crecimiento de la población y crecimiento económico y se deberían tener en cuenta políticas sobre energías, economía y tecnología.
+
+Seguimos el mismo razonamiento para los conjuntos de datos que contienen las concentraciones de $CH_4$ y $N_2O$. Obtenemos la siguientes representaciones de los ajustes para cada modelo: 
+
+```{r, echo=FALSE,eval=TRUE}
+magCH4 <- gam(Trend ~ s(Año) + as.numeric(Mes), data = CH4, family = Gamma(link = "log"))
+
+magN2O <- gam(Trend ~ s(Año) + Mes, data = N2O, family = Gamma(link = "log"))
+
+
+predsCH4 <- exp(predict(magCH4,CH4))
+predsN2O <- exp(predict(magN2O,N2O))
+
+par(mfrow = c(1,2))
+
+ggplot(CH4, aes(x = Año, y = Trend)) +
+  geom_point(size = 2) + 
+  geom_line(aes(y = predsCH4), color = "darkorange2", linewidth = 1.2) + 
+  labs(x = "Años",y = "ppb", title = "Concentración mensual media de metano") +
+  theme_minimal()
+
+ggplot(N2O, aes(x = Año, y = Trend)) +
+  geom_point(size = 2) + 
+  geom_line(aes(y = predsN2O), color = "deepskyblue2", linewidth = 1.2) + 
+  labs(x = "Años",y = "ppb", title = "Concentración mensual media de óxido nitroso") +
+  theme_minimal()
+
+par(mfrow = c(1,1))
 
 ```
 
-\normalsize
+Se puede apreciar en la primera gráfica que la media mensual de concentración atmosférica de metano ha aumentado en más de 200 ppb desde 1983 y que la correspondiente al $N_2O$ ha aumentado en más de 20 ppb desde el 2001. Comparado con el incremento que se vio anteriormente para el $CO_2$ parece poco llamativo, pero como se comentó al principio de la sección, se debe tener en cuenta que estos dos gases captan mucha mas radiación que el primero, lo que hace que su aumento, por poco que sea, también genere preocupación. 
 
 
-Para obtener más información sobre la realización de citas en R Markdown visitar la url [R Markdown: Bibliographies and Citations](https://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html).
+## Modelización del aumento del nivel del mar
 
-### Hacer citaciones
+Ya comentamos en la sección $\ref{ResumenCC}$ que la subida del nivel del mar dada en el último siglo es relevante comparada con la de cualquier siglo anterior. Como se argumenta en @SeaLevelEffects , si este aumento tan pronunciado se progonla a medio-largo plazo pueden darse grandes consecuencias tales como el incremento de la frecuencia y la importancia de las inundaciones en zonas costeras, el aumento de amenazas por fenómenos climáticos extremos como huracanes y grandes tormentas, la erosión del suelo y las costas que puede implicar la pérdida del hábitat de peces, pájaros y plantas, etc. Esto conlleva a que esta sea una de las causas del cambio climático con mayor interés de estudio. Sin embargo, para poder realizar un análisis aceptable de los datos asociados a este hecho primero se debe distinguir si se quiere hacer a nivel global o a nivel local y se necesita disponer de información relacionada con múltiples factores como: la salinidad del agua, la geología del terreno, el deshielo de los polos, las oscilaciones oceánicas, eventos climáticos extremos que puedan ocurrir o hayan ocurrido...
 
-Las citas van entre corchetes y están separadas por punto y coma. Cada cita debe tener una clave, compuesta de "`@`" + el identificador de cita de la base de datos, y opcionalmente puede tener un prefijo, un localizador y un sufijo. A continuación  se muestran algunos ejemplos:
+En nuestro caso no disponemos de tanta información así que nos propondremos un objetivo más simple como es el definir un modelo aditivo generalizado que tenga como variable de respuesta la media mensual global del nivel del mar (GMSL por sus siglas en inglés) y como variables predictoras utilizaremos la media mensual de la temperatura de la superficie marítima global, la media de concentración atmosférica de $CO_2$ (la que utilizamos en la sección anterior como variable dependiente) y los datos temporales de meses y años.
 
-```markdown
-Blah blah [vea @Luque2017, págs. 33-35; también @Luque2019, cap. 1].
+### Descripción de los datos {#Datos3}
 
-Blah blah [@Luque2017, págs. 33-35, 38-39 y *passim*].
+Como acabamos de comentar, las medidas de concentraciones de $CO_2$ que utilizaremos son las mismas que en la sección anterior así que no entraremos en más detalles para esos datos.
 
-Blah blah [@Luque2017; @Wickham2017].
+Con respecto a las medidas del GMSL utilizamos la misma fuente de datos que para los gases de efecto invernadero: la UNEP <https://wesr.unep.org/climate/essential-climate-variables/sea-level-rise>, lo único que debemos tener en cuenta es que se ha modificado el excel de cierta forma para generar las columnas *Year* y *Month*, correspondientes a la fecha en la que se obtuvo la medición, y hemos creado la columna *GMSL* que indica la diferencia en milímetros del nivel del mar con respecto a la media en 1993. Antes de ese año los datos se corresponden con las medidas reconstruidas por la UNEP y a partir de él con la media de una serie de distintas medidas satelitales. El resumen de los datos asociados al nivel del mar es el siguiente:
+
+```{r,echo=FALSE,eval=TRUE, warning=FALSE}
+SeaL <- read_excel('SeaLevelv2.xlsx')
+
+# Retiramos datos con otro formato y nos quedamos con las variables necesarias.
+SeaL <- SeaL[-(1:240),c(8,9,11)] 
+# La variable Año es numérica para la representación como ya se ha indicado otras veces
+# y la mensual es categórica
+SeaL$Year <- as.numeric(SeaL$Year)
+SeaL$Month <- factor(SeaL$Month,levels = 1:12)
+colnames(SeaL) <- c('Año','Mes','GMSL')
+
+# Como en algunos casos se tienen varias mediciones por mes lo que hacemos es tomar como la 
+# GMSL mensual la media de todas ellas.
+SeaL <- SeaL %>%
+  group_by(Año, Mes) %>%
+  summarise(GMSL = mean(GMSL, na.rm = TRUE))
+summary(SeaL)
 ```
 
-*Produce la siguiente salida:*
+Por otro lado, para obtener los datos respectivos a la temperatura media global nos referiremos a los datos ofrecidos por la NASA en <https://data.giss.nasa.gov/gistemp/>. Su resumen viene dado por:
 
-Blah blah [vea @Luque2017, págs. 33-35; también @Luque2019, cap. 1].
+```{r,echo=FALSE,eval=TRUE,warning=FALSE}
+library(tidyverse)
 
-Blah blah [@Luque2017, págs. 33-35, 38-39 y *passim*].
+raw_data <- read_excel("GSST.xlsx", col_names = FALSE)
 
-Blah blah [@Luque2017; @Wickham2017].
+# Convertimos el data frame a un vector de caracteres
+data_vector <- as.vector(raw_data[[1]])
 
+# Separamos los valores por comas
+processed_data <- strsplit(data_vector, split = ",")
 
-Un signo menos (-) antes de la @ suprimirá la mención del autor en la cita. Esto puede ser útil cuando el autor ya se menciona en el texto:
+# Convertimos la lista resultante en un data frame
+data_frame <- do.call(rbind, lapply(processed_data, function(x) as.numeric(x)))
 
-<!-- A minus sign (-) before the @ will suppress mention of the author in the citation. This can be useful when the author is already mentioned in the text: -->
+colnames(data_frame) <- c("Año", paste0("Temp", 1:(ncol(data_frame) - 1)))
 
-```markdown
-Luque dice blah [-@Luque2017].
+# Convertimos a tibble para facilitar la manipulación
+data_tibble <- as_tibble(data_frame)
+
+# Transponemos data_tibble a formato vertical
+data_long <- data_tibble %>%
+  pivot_longer(cols = starts_with("Temp"), names_to = "Mes", values_to = "Temp") %>%
+  mutate(Mes = as.numeric(gsub("Temp", "", Mes))) %>%
+  arrange(Año, Mes)
+
+SeaT <- data_long[!(data_long$Mes >12),]
+summary(SeaT)
+```
+Tras haber cargado los tres conjuntos de datos necesarios para aplicar el modelo, los unimos en un solo data frame con observaciones desde 1959 hasta 2014:
+
+```{r,echo=FALSE,eval=TRUE}
+SeaLb <- (SeaL[(2015 > SeaL$Año) &(SeaL$Año >1958),])[1:672,]
+SeaTb <- (SeaT[(2015 > SeaT$Año) & (SeaT$Año > 1958),])[1:672,]
+CO2b <-  CO2[(2015 > CO2$Año) & (CO2$Año > 1958),]
+
+Sea <- cbind(SeaLb,SeaTb,CO2b)
+Sea <- Sea[,c(1,2,3,6,9)]
+colnames(Sea) <- c('Año','Mes','GMSL','Temp','CO2')
+
 ```
 
-*Produce la siguiente salida:*
-
-Luque dice blah [-@Luque2017].
-
-También puede escribir una cita en el texto, de la siguiente manera:
-
-```markdown
-@Luque2017 dice blah.
-
-@Luque2017 [pág. 33] dice blah.
+```{r,echo=TRUE,eval=TRUE}
+str(Sea)
+summary(Sea)
 ```
 
-*Produce la siguiente salida:*
+### Descripción del modelo {#Descripcion3}
 
-@Luque2017 dice blah.
+Procedemos de forma similar a las secciones anteriores:
+```{r,echo=TRUE,eval=TRUE}
+magSL <- gam(GMSL ~ s(Temp) + s(CO2) + s(Año) + Mes, data = Sea) 
+summary(magSL)
+```
+La desviación explicada por el modelo es del 98.1% y el error estimado por validación cruzada generalizada es de 21.716. 
 
-@Luque2017 [pág. 33] dice blah.
-
-
-### Estilos de citación
-
-Por defecto, pandoc usará un formato de "fecha-autor" del estilo "Chicago" para citas y referencias. Para usar otro estilo, deberá especificar un archivo de estilo CSL 1.0 en el campo de metadatos csl. Por ejemplo:
-
-```yaml
----
-title: "Sample Document"
-output: html_document
-bibliography: bibliography.bib
-csl: biomed-central.csl
----
+```{r,echo=FALSE,eval=TRUE}
+par(mfrow = c(2, 2))
+plot(magSL, select = 1, main = 'Temperatura', shade = TRUE)
+plot(magSL, select = 2, main = 'Concentración de CO2', shade = TRUE)
+plot(magSL, select = 3, main = 'Años', shade = TRUE)
+par(mfrow = c(1, 1))
 ```
 
-Puede encontrar una introducción a la creación y modificación de estilos CSL en <http://citationstyles.org/downloads/primer.html>. Puede encontrar un repositorio de estilos CSL en <https://github.com/citation-style-language/styles>. Consulte también <http://zotero.org/styles> para navegar fácilmente por ellos.
+Hay indicios de que la relación de la variable *Temp* tenga un efecto lineal sobre la variable de respuesta. Lo comprobamos como hicimos en $\ref{Descripcion1}$.
 
-
-**Citaciones para salidas PDF**. Por defecto, las citas son generadas por la utilidad "pandoc-citeproc", y funciona para todos los formatos de salida. Cuando la salida es LaTeX/PDF, también puede usar paquetes LaTeX (por ejemplo, natbib) para generar citas; ver [documentos PDF](https://bookdown.org/yihui/rmarkdown/pdf-document.html) para más detalles.
-
-
-
-
-
-
-### Estilos bibliográficos con natbib: método 1
-
-Este método es el que está activado por defecto.
-
-**Importante**. Hay que asegurarse que en el fichero principal: "tfe_principal.Rmd" aparecen sin comentar las siguientes líneas (habría que comentar las del otro método):
-
-- En la cabecera "yaml":
-
-\footnotesize
-```markdown
-# metodobib -> true: natbib (descomentar: citation_package: natbib) 
-#           -> false: pandoc (comentar: citation_package: natbib)
-metodobib: true
-#natbib: plainnat, abbrvnat, unsrtnat
-biblio-style: "plainnat"
-output: 
-  pdf_document: 
-    citation_package: natbib
+```{r, echo=TRUE,eval=TRUE}
+magSL2 <- gam(GMSL ~ Temp + s(CO2) + s(Año) + Mes, data = Sea)
+anova(magSL,magSL2,test = 'F')
 ```
-\normalsize
+En este caso como el p-valor es cercano a 0 se rechaza la hipótesis nula, por lo que se trata de modelos distintos. Por comodidad trabajaremos con el primero, partimos estudiando las gráficas de diagnóstico: 
 
-
-
-
-
-
-**Importante**. En la bibligrafía  que **se muestra al final del documento**  aparecerán las referencias bibliográficas de aquellas que hayan sido citadas en el documento escrito.
-
-También es posible incluir algunas referencias bibliográficas que no hayan sido citadas, con ayuda del comando `\nocite{}` situado al final del fichero: "tfe_principal.Rmd", como puede verse en el siguiente código:
-
-\footnotesize
-````markdown
-\ifdefined\ifcitapandoc
-
-\else
-
-<!-- \nocite{*} -->
-\nocite{Luque2017,Luque2019,RStudio,R-base,
-R-knitr,R-rmarkdown,R-dplyr,R-ggplot2,Techopedia}
-
-\fi 
-
-````
-\normalsize
-
- 
-
-
-En la cabecera "yaml" del fichero "tfe_principal.Rmd" aparece la clave "biblio-style:", que permite presentar la bibliografía siguiendo unas pautas habituales en publicaciones científicas. 
-
-Por defecto se ha elegido el estilo "plainnat":
-
-```yaml
-biblio-style: "plainnat" 
+```{r,echo=FALSE,eval=TRUE}
+plot_gam_check(magSL)
 ```
 
-pero se pueden elegir otras variantes de "natbib":
+En este caso nos encontramos principalmente frente a dos problemas. Por una parte, en la gráfica Q-Q plot podemos observar que en los extremos los puntos no se ajustan correctamente a la recta, se puede interpretar que se tienen colas más pesadas, es decir, los valores extremos se alejan de seguir una distribución normal. Por otra parte, en la gráfica de arriba a la derecha se puede intuir un patrón en los residuos, lo que sugiere que no se verifique la hipótesis de varianza constante.
 
-- plainnat, abbrvnat, unsrtnat
+Podemos observar qué ocurre si permitimos que haya interacción entre las variables al definir el modelo aditivo generalizado: 
 
-<!-- - **usa números**: unsrt, siam, plain, ieeetr, acm, abbrv -->
-<!-- - **usa etiquetas**: apalike, alpha -->
-
-Para obtener más información sobre este tema consultar el siguiente enlace: [overleaf-Bibtex](https://www.overleaf.com/learn/latex/Bibtex_bibliography_styles)
-y 
-[overleaf-Bibtex-natbib](https://www.overleaf.com/learn/latex/Bibliography_management_with_natbib)
-
-<!-- Si se comentan las opciones "csl" de la cabecera "yaml" se puede personalizar por otra vía la presentación de la bibliografía con el comando (ver más información en [overleaf](https://www.overleaf.com/learn/latex/Bibtex_bibliography_styles): -->
-
-
-
-
-**Nota**: además de a través del paquete "natbib" hay otra forma de manejar bibliografías  con el paquete [biblatex](https://www.overleaf.com/learn/latex/Bibliography_management_with_biblatex) que posee características adicionales al sistema bibtex, pero necesita la instalación de nuevo software.
-
-[overleaf biblatex](https://www.overleaf.com/learn/latex/Articles/Getting_started_with_BibLaTeX) y [documentación completa biblatex](http://mirror.ox.ac.uk/sites/ctan.org/macros/latex/contrib/biblatex/doc/biblatex.pdf)
-
-
-<!-- #csl: 3-biotech.csl -->
-<!-- #csl: 3d-research.csl -->
-<!-- #csl: journal-of-chemometrics.csl -->
-<!-- #Método 3 de bibliografía: descomente -->
-<!-- #citation_package: biblatex -->
-<!-- # \usepackage[style=numeric]{biblatex} -->
-<!-- # \usepackage[citestyle=alphabetic,bibstyle=authortitle]{biblatex} -->
-<!-- # numeric,alphabetic, reading, authoryear -->
-<!-- # \usepackage[style=authoryear,sorting=ynt]{biblatex} -->
-<!-- # nty—sorts entries by name, title, year; -->
-<!-- # nyt—sorts entries by name, year, title; -->
-<!-- # nyvt—sorts entries by name, year, volume, title; -->
-<!-- # anyt—sorts entries by alphabetic label, name, year, title; -->
-<!-- # anyvt—sorts entries by alphabetic label, name, year, volume, title; -->
-<!-- # ynt—sorts entries by year, name, title; -->
-<!-- # ydnt—sorts entries by year (descending order), name, title; -->
-<!-- # none—no sorting. Entries appear in the order they appear in the text. -->
-<!-- #biblio-style: authoryear,sorting=ynt,citestyle=alphabetic,bibstyle=numeric -->
-<!-- #biblio-style: numeric,sorting=ynt,citestyle=alphabetic,bibstyle=numeric -->
-<!-- # -->
-<!-- #biblio-style: authoryear,sorting=ydnt,backend=bibtex,hyperref,backref,backrefstyle=none -->
-<!-- #biblio-style: numeric,sorting=ydnt,backend=bibtex,hyperref,backref,backrefstyle=none -->
-<!-- # -->
-<!-- #biblio-style: authoryear,sorting=ynt  https://stackoverflow.com/questions/49042613/how-to-change-citation-style-in-biblatex-in-r-markdown -->
-<!-- #latex_engine: pdflatex  #pdflatex  # xelatex -->
-<!-- #citation_package: biblatex #natbib -->
-
-
-
-### Estilos bibliográficos con pandoc: método 2 {#bibliografiametodo2}
-
-
-**Importante**. Hay que asegurarse que en el fichero principal: "tfe_principal.Rmd" aparecen sin comentar las siguientes líneas (habría que comentar las del otro método):
-
-- En la cabecera "yaml":
-
-\footnotesize
-```markdown
-# metodobib -> true: natbib (descomentar: citation_package: natbib) 
-#           -> false: pandoc (comentar: citation_package: natbib)
-metodobib: false
-output: 
-  pdf_document: 
-    #citation_package: natbib
+```{r,echo=TRUE,eval=TRUE}
+magSL3 <- gam(GMSL ~ s(Temp) + s(CO2) + s(Año) + Mes + s(Temp,CO2,Año), 
+              data = Sea)
+summary(magSL3)
 ```
-\normalsize
+A simple vista vemos que representa solo un 0.8% mas de la desviación explicada y que el smoother para la variable $CO_2$ deja de ser relevante (de hecho si se retira del modelo se obtienen los mismos resultados). Observemos si se da una mejoría en los diagnósticos.
 
+```{r,echo=TRUE,eval=TRUE}
+plot_gam_check(magSL3)
+```
+Se sigue obsevando colas pesadas en el Q-Q plot y un patrón entre los residuos y los predictores, por lo que en este aspecto el modelo no ha mejorado. Comparémoslos con los criterios AIC y GCV:
 
-<!-- #### Cómo citar y estilos bibliográficos en el método 2 -->
+```{r,echo=FALSE,eval=TRUE}
+comp <- data.frame( AIC = c(AIC(magSL),AIC(magSL3)),
+                    GCV = c(magSL$gcv.ubre,magSL3$gcv.ubre))
+rownames(comp) <- c('Sin interacción','Con interacción')
+print(comp)
+```
+Bajo estos dos criterios se puede interpretar que el modelo en el que se permite la interacción entre las variables predictoras tiene un mejor desempeño que el que no lo permite.
 
-<!-- En el texto se podrán incluir citas a cualquiera de las referencias bibliográficas incluidas en los ficheros de bibliografía ".bib" con ayuda de código como el siguiente: -->
+### Visualización de resultados
 
-<!-- ```markdown -->
-<!-- Como se indica en las siguientes referencias -->
-<!-- @Luque2017, [@R-base] y @Wickham2017 en págs.3-7,  -->
-<!-- o también se podría ver en [@Luque2017; @Wickham2017]. -->
-<!-- ``` -->
+Comparemos las representaciones de los datos ajustados por ambos modelos para las observaciones correspondientes a los meses de Julio desde 1959 hasta 2014. Es preferible ver cómo varía el nivel del mar para un mes fijo que representando todos los datos mensuales a la vez, ya que de tal modo se evita el ruido producido por las variaciones entre estaciones.
 
-<!-- Produce el siguiente resultado: -->
+```{r,echo=FALSE,eval=TRUE}
+Julio <- Sea[Sea$Mes == 7,]
+Julio$preds <- predict(magSL, newdata = Julio)
+Julio$preds3 <- predict(magSL3, newdata = Julio)
 
-<!-- Como se indica en las siguientes referencias -->
-<!-- @Luque2017, [@R-base] y @Wickham2017 en págs.3-7,  -->
-<!-- o también se podría ver en [@Luque2017; @Wickham2017]. -->
+ggplot(data = Julio, aes(x = Año, y = GMSL)) +
+  geom_point() +
+  geom_line(aes(x = Año, y = preds, color = 'Mod. sin int.'), linewidth = 1) +
+  geom_line(aes(x = Año, y = preds3, color = 'Mod. con int.'),  linewidth = 1) +
+  labs(x = "Años", y = "mm", 
+       title = "Comparación de modelos para GMSL") +
+  scale_color_manual(values = c('Mod. sin int.'= "darkblue", 'Mod. con int.' = "lightblue"), name = 'Leyenda') +
+  theme_minimal()
 
-
-<!-- **Nota**. Hay problemas al usar la referencia sin corchete con el método 1: `@Luque2017`. -->
-
-**Importante**. En la bibligrafía  que **se muestra al final del documento**  aparecerán las referencias bibliográficas de aquellas que hayan sido citadas, es decir, hayan aparecido en un comando **`@identificador`** en el documento.
-
-
-
-También es posible incluir algunas referencias bibliográficas que no hayan sido citadas, con ayuda del comando `nocite` situado al inicio del documento R Markdown (en este proyecto al inicio del fichero "tfe_principal.Rmd"), como puede verse en el siguiente código:
-
-````markdown
----
-nocite: | 
-  @Luque2017,@RStudio,@R-base,
-  @R-knitr,@R-rmarkdown,@R-dplyr,@R-ggplot2,@Techopedia
-...
-
-````
-
-
-En la cabecera "yaml" del fichero "tfe_principal.Rmd" aparece la clave "csl:", que permite presentar la bibliografía siguiendo las pautas que se exigen en algunas revistas científicas (listado para descargar en [zotero csl](https://www.zotero.org/styles/), también [más información](https://citationstyles.org/publishers/)).
-
-```yaml
-csl: acm-sig-proceedings-long-author-list.csl
-#csl: methods-in-ecology-and-evolution.csl
 ```
 
+Se ve claramente que el modelo que admite interacción tiene más curvatura que el otro y, por ello, parece que se adapta mejor a los puntos representados. Sin embargo, ambos nos sirven para notar la subida del nivel del mar con el transcurso de los años.
 
+Además como disponemos de los datos de *Temp* y de *CO2* hasta abril de 2024 y de *GMSL* hasta 2022, podemos también comparar cómo se adaptan los modelos a nuevas observaciones.
 
-## Otras cuestiones de interés
+```{r,echo=FALSE,eval=TRUE,warning=FALSE}
 
-### Cómo hacer referencias a otras partes del documento
+SeaTpreds <- (SeaT[(2015 <= SeaT$Año),])[1:112,]
+CO2preds <-  CO2[(2015 <= CO2$Año),]
 
-Se pueden hacer referencias a capítulos, secciones, subsecciones, u otros subniveles. Para ello es conveniente saber cómo insertar identificadores a estas partes. Para incluir un identificador,
-al final de la definición de un apartado se añaden unas llaves entre las que se ha puesto el identificador deseado con el prefijo `#`. 
+Seapreds <- cbind(SeaTpreds,CO2preds)
+Seapreds <- Seapreds[,c(1,2,3,6)]
+colnames(Seapreds) <- c('Año','Mes','Temp','CO2')
 
-Para hacer referencia a este identificador se pueden emplear los comandos LaTeX: **`\ref{identificador}`** para referirse a la numeración del apartado o **`\pageref{identificador}`** para referirse a la página en la que se encuentra definido el apartado.
+na_rows <- as.data.frame(matrix(NA, nrow = 112, ncol = ncol(Sea)))
+colnames(na_rows) <- colnames(Sea)
 
+SeaP <- rbind(Sea, na_rows)
 
-En el siguiente ejemplo se ha definido a una sección el identificador "sec:incluirgrafico", 
-```markdown
-## Cómo incluir un gráfico {#sec:incluirgrafico}
-```
+SeaP$preds <- append(1:672 == NA,predict(magSL,Seapreds))
+SeaP$preds3 <- append(1:672 == NA,predict(magSL3,Seapreds))
+SeaP$Año <- append(Sea$Año,Seapreds$Año) 
+SeaP$Mes <- append(Sea$Mes,Seapreds$Mes) 
+SeaP$GMSL <- append(SeaL$GMSL[(1959 <= SeaL$Año)],rep(NA, 16))
 
-**Nota**. No se pueden definir identificadores iguales a secciones distintas.
-
-
-
-### Colorear texto
-
-El siguiente código
-```
-\textcolor{blue!90!}{Texto azul} y 
-\textcolor{green!10!orange!90!}{texto resaltado}
-```
-produce
-
-\textcolor{blue!90!}{Texto azul} y 
-\textcolor{green!10!orange!90!}{texto resaltado}
-
-
-
-### Colorear texto en cajas
-
-El siguiente código
-```
-\colorlet{Mycolor1}{green!10!orange!90!}
-\colorbox{Mycolor1}{\textcolor{White}{Texto resaltado}}
-```
-produce
-
-\colorlet{Mycolor1}{green!10!orange!90!}
-\colorbox{Mycolor1}{\textcolor{White}{Texto resaltado}}
-
-
-### Colorear párrafos de texto
-
-En el siguiente código se utilizan varios comandos LaTeX para producir cajas coloreadas:
-
-- **`\colorbox{color}{texto}`**
-- **`\begin{minipage}{anchocaja}    \end{minipage}`**
-- **`\textcolor{color}{texto}`**
-- **`\color{color}`**
+ggplot(data = SeaP, aes(x = Año, y = GMSL)) +
+  geom_line(aes(x = Año, y = GMSL , color = 'Datos'), linewidth = 1) + 
+  geom_line(aes(x = Año, y = preds, color = 'Mod. sin int.'), linewidth = 1) +
+  geom_line(aes(x = Año, y = preds3, color = 'Mod. con int.'),  linewidth = 1) +
+  labs(x = "Años", y = "mm", title = "Predicciones de la media global del nivel del mar") +
+  geom_vline(aes(xintercept = 2015), color = 'black',, linetype = "dashed" , linewidth = 0.5)+
+  scale_color_manual(values = c('Datos' = 'lightgreen', 'Mod. sin int.' = 'darkblue','Mod. con int.' = 'lightblue'), name = "Leyenda")+
+  theme(axis.title = element_text(face = "bold"),
+        legend.text = element_text(size = 10,color = 'black'),
+        legend.position = 'right')
 
 ```
-\noindent\colorbox{blue}{
-\begin{minipage}{0.30\textwidth}
-\color{white}
-Lo que se ve en esta \textcolor{red}{minipágina} 
-tiene un color de fondo azul y
-el texto está escrito en blanco. 
-\end{minipage}}\hspace{0.5cm} 
-\colorbox{yellow}{\begin{minipage}{0.60\textwidth} 
-Lo que se ve en esta \textcolor{red}{minipágina} 
-tiene un color de fondo amarillo y
-el texto está escrito en negro
-\end{minipage}}
-```
 
-produce:
-
-\noindent\colorbox{blue}{
-\begin{minipage}{0.30\textwidth}
-\color{white}
-Lo que se ve en esta \textcolor{red}{minipágina} 
-tiene un color de fondo negro y
-el texto está escrito en blanco. 
-\end{minipage}}\hspace{0.5cm} 
-\colorbox{yellow}{\begin{minipage}{0.60\textwidth} 
-Lo que se ve en esta \textcolor{red}{minipágina} 
-tiene un color de fondo negro y
-el texto está escrito en blanco
-\end{minipage}}
-
-```` ```` 
-
-
-### Incluir ficheros pdf externos
-
-
-Es posible incluir un documento pdf externo dentro de nuestro documento con ayuda del comando LaTeX **`\includepdf`** del paquete: "pdfpages" (incluido en este proyecto). 
-
-En el siguiente ejemplo (no se muestra en este documento el resultado) se insertarían en nuestro documento las páginas 8 y 14 del fichero local “xaringanej01_defecto.pdf” con un escalado de 75% (de la 11 a 14, habría que escribir: pages=11-14):
-
-
-```latex
-\includepdf[scale=0.75,pages={8,14}, 
-  pagecommand=\section*{Ejemplo de inserción de un pdf en un documento}, 
-  offset=00 -30]{xaringanej01_defecto.pdf}
-```
-
-
-En el siguiente ejemplo se incluye el fichero pdf (vendría apaisado y puede que sin numerar) pero rotándolo 90 grados para que quede en vertical:
-
-```latex
-\includepdf[scale=0.90,pages=1-,angle=90,pagecommand=,
-offset=00 -20]{chuleta_tabla_kableExtra_apaisada_texrevisado.pdf}
-```
-como puede verse en la siguiente página.
-
-\includepdf[scale=0.90,pages=1-,angle=90,pagecommand=,
-offset=00 -20]{graficos/chuleta_tabla_kableExtra_apaisada.pdf}
+Se puede observar una gran diferencia entre las predicciones hechas por cada modelo. Si nos fijamos en los datos que se tenían del *GMSL* para los años desde 2015 hasta 2022, podemos ver que el modelo sin interacciones entre las variables realiza predicciones mucho más precisas que el que sí permite interacciones entre ellas. Esto puede ser debido al sobreajuste, es decir, el segundo modelo ajusta tan bien los datos disponibles que luego no es capaz de adaptarse de forma adecuada a nuevas observaciones.
 
 

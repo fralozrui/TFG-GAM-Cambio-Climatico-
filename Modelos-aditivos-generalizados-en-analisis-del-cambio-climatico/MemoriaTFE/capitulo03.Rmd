@@ -69,14 +69,6 @@ knitr::opts_chunk$set(fig.path = 'figurasR/',
 \renewcommand{\headrulewidth}{0.4pt}
 \renewcommand{\footrulewidth}{0.4pt}
 
-\theoremstyle{remark}
-\newtheorem{observación}{Observación}[section]
-\theoremstyle{definition}
-\newtheorem{definición}{Definición}[section]
-\theoremstyle{definición}
-\newtheorem{proposición}{Proposición}[section]
-\theoremstyle{remark}
-\newtheorem{ejemplo}{Ejemplo}[section]
 
 # Modelos aditivos generalizados
 
@@ -226,14 +218,14 @@ Notemos primero que podemos representar la penalización a la curvatura de $f$ c
 $$
 \int(f'')^2
 $$
-Y en el caso de utilizar la base de funciones lineales por partes se puede aproximar[^1] por:
+Y en el caso de utilizar la base de funciones lineales por partes se puede aproximar[^2] por:
 $$
 \sum_{j=2}^{k-1}(f(x_{j-1}^*)-2f(x_j^*)+f(x_{j+1}^*))^2
 $$
 
 Es fácil observar que cuando $f$ es una línea recta la penalización es 0 y cuando presenta muchas fluctuaciones en su curvatura este término es mayor.
 
-[^1]: Se supone que se los nodos están espaciados de manera uniforme, pues en el caso de no que no lo estuvieran habría que añadir pesos a la suma.
+[^2]: Se supone que se los nodos están espaciados de manera uniforme, pues en el caso de no que lo estuvieran habría que añadir pesos a la suma.
 
 Luego, en vez de ajustar el modelo por mínimos cuadrados, ahora se hará añadiendo la anterior penalización, es decir, minimizando: 
 \begin{equation}
@@ -595,7 +587,7 @@ Donde $S = D^TB^{-1}D$ se conoce como la matriz de penalizado asociada a tal bas
 
 Además de proporcionar parámetros directamente interpretables, la base de splines cúbicos no requiere de ningún re-escalado de las covariables, sólo de la elección de los nodos $x_j$.
 
-```{r, echo = FALSE,out.width='80%',fig.cap = "\\label{figura01} ",fig.align='center'}
+```{r, echo = FALSE,out.width='80%',fig.cap = "\\label{figura01} Ejemplos de función básica y spline cúbico",fig.align='center'}
 knitr::include_graphics("figurasR/figura01.png")
 ```
 
@@ -632,7 +624,7 @@ B_j^m(x) = \frac{x - \tau_j}{\tau_{j+m-1} - \tau_j}B_j^{m-1}(x) +
 , \hspace{0.3cm} \forall j = 1,\dots,k+2M-m
 $$
 \begin{observación}
-Estas bases fueron desarrolladas como bases muy estables para la interpolación de splines a gran escala, sin embargo la mayoría de trabajos estadísticos con splines de regresión penalizados de rango menor (es decir, a métodos de suavizado que imponen una reduccion de rango en la matriz asociada al suavizado) deben utilizar métodos numéricos muy deficientes antes de que esta estabilidad sea perceptible. El verdadero interés de la estadística en los B-Splines surge en el desarrollo de los P-Splines.
+Estas bases fueron desarrolladas como bases muy estables para la interpolación de splines a gran escala, sin embargo la mayoría de trabajos estadísticos con splines de regresión penalizados de rango menor (es decir, con métodos de suavizado que imponen una reduccion de rango en la matriz asociada al suavizado) deben utilizar métodos numéricos muy deficientes antes de que esta estabilidad sea perceptible. El verdadero interés de la estadística en los B-Splines surge en el desarrollo de los P-Splines.
 \end{observación}
 
 **P-Splines** \newline
@@ -702,7 +694,7 @@ g(\mu_i) = A_i \gamma + \sum_{j=1}^p f_j(x_{ij})
 
 @Wood también propone una definición alternativa utilizando distintas formas de $L_{ij}$:
 $$
-g(\mu_i) = A_i \gamma + \sum_{j=1}^p L_{ij}f_j(x_{j})
+g(\mu_i) = A_i \gamma + \sum_{j=1}^p L_{ij}f_j(x_{ij})
 $$
 La más básica de ella es: $L_{ij}f_j(x_j) = f_j(x_{ij})$ que da la forma habitual del MAG, pero existen otras variaciones de ellas y cada una tiene una utilidad específica.
 
@@ -713,7 +705,7 @@ $$
 
 ### Ajuste del modelo
 
-Seguiremos las directrices dadas en @Wood para dar la estimación de los parámetros $\beta$ cuando suponemos dado los parámetros de suavizado $\lambda$. Partimos notando que el vector de parámetros $\beta$ contiene a $\gamma$ y a los vectores de parámetros de suavizado individuales. Partimos observando que una penalización del grado de suavizado global para el modelo viene dada por: 
+Seguiremos las directrices dadas en @Wood para dar la estimación de los parámetros $\beta$ cuando suponemos dado los parámetros de suavizado $\lambda$. Partimos notando que el vector de parámetros $\beta$ contiene a $\gamma$ y a los vectores de parámetros de suavizado individuales y observemos que una penalización del grado de suavizado global para el modelo viene dada por: 
 $$
 \sum_j \lambda_j \beta^T S_j \beta
 $$
@@ -733,9 +725,12 @@ l_p(\beta) = l(\beta) - \frac{1}{2\phi} \sum_j \lambda_j \beta^T S_j \beta
 Aquí, como en \ref{param-suav}, los parámetros de suavizado controlan la compensación entre la calidad de ajuste del modelo y su grado de suavizado.
 \end{observación}
 
-Ahora, en @Wood se hace notar que esta función objetivo coincide con la de un Modelo Linear Generalizado Mixto (MLGM)[^1] y se propone estimarlo por la siguiente variación del \ref{IRLS}.
+Ahora, en @Wood se hace notar que esta función objetivo coincide con la de un Modelo Linear Generalizado Mixto (MLGM)[^3] y se propone estimarlo por la siguiente variación del \ref{IRLS}.
 
-\begin{definición}[Algoritmo de mínimos cuadrados penalizados reponderados iterativamente]
+[^3]: No nos adentramos en los MLGM por falta de tiempo pero tampoco hace falta su desarrollo para la comprensión del algoritmo.
+
+\begin{definición}[Algoritmo de mínimos cuadrados penalizados reponderados iterativamente] 
+
   1. Inicialización: tomar $\hat{\mu_i} = y_i + \delta_i$ y $\hat{\eta_i} = g(\hat{\mu_i})$, donde $\delta_i$ suele ser 0 ó una constante que asegure que  $\hat{\eta_i}$ sea finito. \newline
   2. Calcular: $z_i = g'(\mu_i) \frac{y_i-\hat{\mu_i}}{\alpha(\mu_i)} + \hat{\eta_i}$ y $\omega_i = \frac {\alpha(\hat{\mu}_i)}{g'(\hat{\mu}_i)^2V(\hat{\mu}_i)}$ \newline
   3. Encontrar $\hat{\beta}$ el parámetro que minimiza la función objetivo de mínimos cuadrados ponderados penalizados $\ref{obj-pen}$: 
@@ -748,7 +743,6 @@ $$
 \end{definición}
 
 Donde $||a||^2_W = a^TWa$, $V(\mu)$ es la función de varianza asociada a la distribución de la familia exponencial y $\alpha(\mu_i) = [1+(y_i-\mu_i)(\frac{V'(\mu_i)}{V(\mu_i)} + \frac{g''(\mu_i)}{g'(\mu_i)})]$.
-
 
 
 
