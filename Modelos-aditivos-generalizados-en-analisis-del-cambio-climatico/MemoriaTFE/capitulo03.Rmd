@@ -78,7 +78,7 @@ Como bien podemos intuir por su nombre, los modelos aditivos generalizados no so
 
 Luego, como ya hemos mencionado, y como se plantea en @Hastie, el MAG reune estas dos propuestas de modo que generaliza el modelo aditivo de la misma forma que el MLG generalizaba el modelo lineal. Sin embargo, la flexibilidad que proporciona este modelo da lugar a dos nuevos problemas teóricos: cómo estimar las funciones de suavizado y cómo de "suaves" deben ser. 
 
-En este capítulo nos adentramos en los modelos no paramétricos, es decir, en aquellos que en vez de expresar la relación del valor esperado de la variable de respuesta con las variables predictoras mediante un predictor lineal, lo hacen mediante funciones $f$, como se vió en $\ref{eq:modelo general}$, pero ahora sin hacer ninguna suposición sobre ella. Esto conllevará en muchas ocasiones un mejor ajuste del modelo y traerá a la mesa una nueva cuestión conocida como sobreajuste que, aunque ya aparecía para los modelos paramétricos, ahora jugará un papel fundamental a la hora de querer predecir datos fuera de los observados. Este concepto refleja el hecho de que el modelo ajusta tan bien los datos proporcionados para la estimación de sus parámetros que es incapaz de mostrar la verdadera relación entre las variables que se estudian y, por tanto, da lugar a predicciones de nuevos datos que no serán las idóneas.
+En este capítulo nos adentramos en los modelos no paramétricos, es decir, en aquellos que en vez de expresar la relación del valor esperado de la variable de respuesta con las variables predictoras mediante un predictor lineal, lo hacen mediante funciones $f$, como se vió en $\ref{eq:modelo general}$, pero ahora sin hacer ninguna suposición sobre ella. Esto conllevará en muchas ocasiones un mejor ajuste del modelo y pondrá sobre la mesa una nueva cuestión conocida como sobreajuste que, aunque ya aparecía para los modelos paramétricos, ahora jugará un papel fundamental a la hora de querer predecir datos fuera de los observados. Este concepto refleja el hecho de que el modelo ajusta tan bien los datos proporcionados para la estimación de sus parámetros que es incapaz de mostrar la verdadera relación entre las variables que se estudian y, por tanto, da lugar a predicciones de nuevos datos que no serán las idóneas.
 
 Tal y como se hace en @Wood, comenzaremos viendo cómo construir los modelos aditivos generalizados, es decir, qué bases de funciones podemos elegir para obtener las funciones de suavizado y qué parámetro de suavizado se debe seleccionar o cómo se puede estimar. Luego se introduce el modelo aditivo, en el que se utilizarán los resultados vistos a lo largo del capítulo. Tras todo ello se propone la forma final del modelo aditivo generalizado.
 
@@ -97,7 +97,7 @@ Donde:
 \begin{itemize}
   \item $Y_i$ es la variable de respuesta y sigue una distribución de la familia exponencial de media $\mu_i$ y parámetro de escalado $\phi$. A partir de ahora esto lo denotaremos por: $Y_i \backsim EF(\mu_i,\phi)$.
   \item $A_i$ es la fila i-ésima de la matriz del modelo para aquellas componentes del modelo que son estrictamente paramétricas.
-  \item $\theta$ es el correspondiente vector de parámetro, que antes denotábamos por $\beta$, para las variables predictoras mencionadas en el anterior punto.
+  \item $\theta$ es el correspondiente vector de parámetros, que antes denotábamos por $\beta$, para las variables predictoras mencionadas en el anterior punto.
   \item Las $f_i$ son las funciones de suavizado para las covariables $x_k$. Suelen ser desconocidas y el principal objetivo es el de estimarlas, pero también pueden darse casos, la mayoría de modelos biológicos, en los que son conocidas y nos interesa estimar otros parámetros del modelo.
 \end{itemize}
 \end{definición}
@@ -110,12 +110,12 @@ Dicho esto, partiremos considerando modelos que, aunque no sean adecuados para u
 y_i = f(x_i) + \epsilon_i
 \label{eq: basic MAG}
 \end{equation}
-Donde $y_i$ es la variable de respuesta y los $\epsilon_i$ son variables aleatorias independientes e identicamente distribuidas como $N(0,\sigma^2)$ que representan el error.
+Donde $y_i$ será la variable de respuesta y los $\epsilon_i$ son variables aleatorias independientes e identicamente distribuidas como $N(0,\sigma^2)$ que representan el error.
 
 
 ### Bases de funciones
 
-Nos proponemos en esta sección obtener una estimación de la función de suavizado a partir de una base de un espacio de funciones, en el que también se encontrará $f$ (o una aproximación suya). Elegir una base equivale a tomar un conjunto de funciones $\{b_j(x)\}_{j=1}^k$ y, por tanto, podemos representar la función de suavizado como:
+Nos proponemos en esta sección obtener una estimación de la función de suavizado a partir de una base de un espacio de funciones, en el que también se encontrará $f$ (o una aproximación suya). Elegir una base equivale a tomar un conjunto de funciones $\{b_j(x)\}_{j=1}^k$ y, por tanto, podremos representar la función de suavizado como:
 \begin{equation}
 f(x) = \sum_{j=1}^k b_j(x)\beta_j
 \label{eq:base funcion suavizado}
@@ -135,11 +135,11 @@ $$
 \begin{observación}[Problema de la base polinómica]
 Notemos que por el teorema de Taylor, la base polinomial nos será útil cuando nuestro interés sea el de estudiar las propiedades de la función de suavizado en el entorno de un punto concreto, pero nos encontramos con problemas cuando queremos hacerlo en todo el dominio de $f$.
 
-El principal problema se debe a que la interpolación de los datos puede resultar en una función muy oscilante o que no ajuste bien la información, dependiendo del valor de k, y que al modificar un coeficiente del modelo, el cambio impacta a los valores ajustados en todo el rango de la variable explicativa. Esto se puede solucionar de cierta manera con el siguiente tipo de base de funciones.
+El principal inconveniente se debe a que la interpolación de los datos puede resultar en una función muy oscilante o que no ajuste bien la información, dependiendo del valor de k (la dimensión de la base), y que al modificar un coeficiente del modelo, el cambio impacta a los valores ajustados en todo el rango de la variable explicativa. Esto se puede solucionar de cierta manera con el siguiente tipo de base de funciones.
 \end{observación}
 
 **Base lineal por partes** \newline
-Consideremos ahora una partición de nodos $\{x^*_j : j = 1,\dots,k \}$ del rango de la variable predictora $x$ tal que $x^*_j > x^*_{j+1}$ y la base de funciones $\mathcal{B} = \{b_j(x)\}_{j=1}^k$ donde:
+Consideremos ahora una partición de nodos $\{x^*_j : j = 1,\dots,k \}$ del rango de la variable predictora $x$ tal que $x^*_j < x^*_{j+1}$ y la base de funciones $\mathcal{B} = \{b_j(x)\}_{j=1}^k$ donde:
 
 
 $$
@@ -225,7 +225,7 @@ $$
 
 Es fácil observar que cuando $f$ es una línea recta la penalización es 0 y cuando presenta muchas fluctuaciones en su curvatura este término es mayor.
 
-[^2]: Se supone que se los nodos están espaciados de manera uniforme, pues en el caso de no que lo estuvieran habría que añadir pesos a la suma.
+[^2]: Se supone que los nodos están espaciados de manera uniforme, pues en el caso de no que lo estuvieran habría que añadir pesos a la suma.
 
 Luego, en vez de ajustar el modelo por mínimos cuadrados, ahora se hará añadiendo la anterior penalización, es decir, minimizando: 
 \begin{equation}
@@ -240,7 +240,7 @@ Mientras mayor sea $\lambda$ más importancia le estaremos dando a que la funci�
 
 ### Elección del parámetro de suavizado
 
-Cómo hemos visto en la observación anterior: si el parámetro de suavizado es muy grande, el modelo será demasiado simple como para ajustarse bien a los datos y si es muy pequeño, la función de suavizado tendrá una curvatura muy alta. En cualquiera de los casos se tendrá que la estimación de $f$ no se parecerá a la función real que ajusta los datos. Por ello, debemos dar un criterio para la elección de $\lambda$.
+Como hemos visto en la observación anterior: si el parámetro de suavizado es muy grande, el modelo será demasiado simple como para ajustarse bien a los datos y si es muy pequeño, la función de suavizado tendrá una curvatura muy alta. En cualquiera de los casos se tendrá que la estimación de $f$ no se parecerá a la función real que ajusta los datos. Por ello, debemos dar un criterio para la elección de $\lambda$.
 
 Un primer criterio planteado en @Wood es el de elegir $\lambda$ de forma que minimice la siguiente expresión para $x_1,\dots,x_n$ unas observaciones dadas.
 $$
@@ -251,7 +251,7 @@ Donde $\hat{f_i} = \hat{f}(x_i)$ es la evaluación de los puntos dados en la est
 Sin embargo, como la función $f$ es desconocida, no es posible utilizar este criterio directamente. Daremos entonces una primera versión **método de validación cruzada**.
 
 \begin{definición}[Validación cruzada ordinaria]
-Sea $\hat{f_i}^{[-i]}$ la estimación de la función de suavizado que ajustada por todos los datos $\{(x_j,y_j)\}_{j=1}^n$ menos el i-ésimo, se define la validación cruzada ordinaria como:
+Sea $\hat{f_i}^{[-i]}$ la estimación de la función de suavizado ajustada por todos los datos $\{(x_j,y_j)\}_{j=1}^n$ menos el i-ésimo, se define la validación cruzada ordinaria como:
 \begin{equation}
 \nu_0 = \frac{1}{n} \sum_{i=1}^n(\hat{f_i}^{[-i]}-y_i)^2
 \label{cross-val-ord}
@@ -322,7 +322,7 @@ Sin embargo, si suponemos resueltos estos problemas, el modelo aditivo puede ser
 
 En lo que sigue, consideraremos la base del espacio de funciones lineales por partes vista en la sección anterior, es decir, expresamos las funciones $f_1$ y $f_2$ como:
 $$
-f_1(x) = \sum_{j=1}^{k_1} b_j(x)\delta_j \\
+f_1(x) = \sum_{j=1}^{k_1} b_j(x)\delta_j \hspace{0.8cm} 
 f_2(v) = \sum_{j=1}^{k_2} \beta_j(v)\gamma_j
 $$
 Donde $\delta_j$ y $\gamma_j$ son parámetros conocidos y las $b_j$ y $\beta_j$ son las funciones básicas de tipo carpa para los nodos $x^*_j$ y $v^*_j$ respectivamente, los cuales están espaciados uniformemente en el rango de $x$ y $v$. 
@@ -417,7 +417,8 @@ $$
 \delta^T S_1 \delta
 $$
 
-**Ajuste del modelo aditivo por mínimos cuadrados penalizados**
+**Ajuste del modelo aditivo por mínimos cuadrados penalizados**   
+
 Gracias a la expresión de la penalización que acabamos de obtener para el modelo aditivo $\ref{modelo aditivo}$ se tiene que la estimación de los coeficientes $\hat{\beta}$ del modelo se obtienen minimizando la función objetivo de mínimos cuadrados penalizados:
 \begin{equation}
 ||y- X\beta||^2 + \lambda_1 \beta^T S_1 \beta + \lambda_2 \beta^T S_2 \beta
@@ -518,7 +519,7 @@ Debido a estos resultados, los splines cúbicos parecen los suavizadores ideales
 \begin{observación}[Splines de regresión penalizada]
 Una buena forma de balancear las propiedades que ofrecen los splines con la eficiencia computacional será el utilizar mínimos cuadrados penalizados $\ref{min-cuad-pen}$. En su forma más simple, esto conlleva formar una base de splines junto con sus respectivas penalizaciones para un conjunto de datos de cardinal menor al conjunto original y luego utilizarlos para modelar el conjunto completo.
 
-Con este método nos surge la duda de cuántos elementos debe tener la base de splines. Generalmente esto no es posible saberlo sin conocer la función real que queremos estimar, pero es posible observar cómo debe escalar la dimensión de la base cuando se aumenta el número de datos. Se ve de manera detallada en @Wood (Capítulo 5.2, p.199).
+Con este método nos surge la duda de cuántos elementos debe tener la base de splines. Generalmente esto no es posible saberlo sin conocer la función real que queremos estimar, pero es posible observar cómo debe escalar la dimensión de la base cuando se aumenta el número de datos. Se ve de manera detallada en Wood (Capítulo 5.2, p.199).
 \end{observación}
 
 
@@ -727,10 +728,10 @@ Aquí, como en \ref{param-suav}, los parámetros de suavizado controlan la compe
 
 Ahora, en @Wood se hace notar que esta función objetivo coincide con la de un Modelo Linear Generalizado Mixto (MLGM)[^3] y se propone estimarlo por la siguiente variación del \ref{IRLS}.
 
-[^3]: No nos adentramos en los MLGM por falta de tiempo pero tampoco hace falta su desarrollo para la comprensión del algoritmo.
+[^3]: No nos adentramos en los MLG ya que hace falta su desarrollo para la comprensión del algoritmo.
 
 \begin{definición}[Algoritmo de mínimos cuadrados penalizados reponderados iterativamente] 
-
+\textcolor{white}{.............................................................................................................................................}
   1. Inicialización: tomar $\hat{\mu_i} = y_i + \delta_i$ y $\hat{\eta_i} = g(\hat{\mu_i})$, donde $\delta_i$ suele ser 0 ó una constante que asegure que  $\hat{\eta_i}$ sea finito. \newline
   2. Calcular: $z_i = g'(\mu_i) \frac{y_i-\hat{\mu_i}}{\alpha(\mu_i)} + \hat{\eta_i}$ y $\omega_i = \frac {\alpha(\hat{\mu}_i)}{g'(\hat{\mu}_i)^2V(\hat{\mu}_i)}$ \newline
   3. Encontrar $\hat{\beta}$ el parámetro que minimiza la función objetivo de mínimos cuadrados ponderados penalizados $\ref{obj-pen}$: 

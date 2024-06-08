@@ -163,3 +163,26 @@ Por otro lado, presentamos el siguiente gráfico realizado por la Oficina Españ
 ```{r, echo = FALSE,out.width='80%',fig.cap = "\\label{figura05}Emisiones globales de GEI por sectores 2019",fig.align='center'}
 knitr::include_graphics("figurasR/figura05.png")
 ```
+
+## Acciones de adaptación y mitigación
+
+El Panel Intergubernamental sobre Cambio Climático (@AdaptIPCC) propone varias soluciones de adaptación y mitigación para abordar el cambio climático, las cuales se pueden dividir en medidas para reducir las emisiones de gases de efecto invernadero y estrategias para adaptarse a los cambios ya inevitables. Se pueden ver recogidas en el artículo @Adapt-Mit.
+
+**Soluciones de Mitigación**
+
+\begin{itemize}
+  \item Transición energética: abandonar los combustibles fósiles y aumentar la inversión en energías renovables como solar y eólica.
+  \item Eficiencia energética: mejorar la eficiencia energética en todos los sectores, incluyendo edificios, transporte e industria.
+  \item Reducción de emisiones en la Agricultura: implementar prácticas agrícolas sostenibles como la agroforestería y la agricultura de conservación para reducir las emisiones.
+  \item Conservación y restauración de ecosistemas: proteger y restaurar bosques, humedales y otros ecosistemas que secuestran carbono.
+  \item Reducción de residuos y economía circular: minimizar los residuos y fomentar el reciclaje y la reutilización de materiales para reducir las emisiones de GEI relacionadas con la producción y el consumo.
+\end{itemize}
+
+**Soluciones de Adaptación**
+
+\begin{itemize}
+  \item Infraestructuras resilientes: construir y renovar infraestructuras para que sean más resistentes a eventos climáticos extremos, como inundaciones y tormentas.
+  \item Gestión del agua: implementar sistemas de gestión del agua que aseguren el suministro durante periodos de sequía y gestionen el exceso durante inundaciones.
+  \item Adaptación de la agricultura: cultivos resistentes al clima y prácticas agrícolas adaptativas que pueden soportar condiciones cambiantes.
+  \item Seguros y mecanismos financieros: desarrollar mecanismos financieros como seguros contra desastres naturales y fondos de contingencia en caso de eventos climáticos extremos.
+\end{itemize}

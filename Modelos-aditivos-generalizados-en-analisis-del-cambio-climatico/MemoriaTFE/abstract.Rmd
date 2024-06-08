@@ -2,4 +2,6 @@
 output: pdf_document
 ---
 
-Abstract...
+Climate change is one of the greatest challenges we face today as a society. We have already begun to experience its consequences, and therefore, the development of strategies which mitigate its effects and enable us to adapt to them is crucial. In order to tackle and understand better these issues, data analysis is frequently used, as it is a highly effective tool for such studies.
+
+In this project, we aim to study one of the most common methods employed in these analyses, generalized additive models. These models allow us to flexibly model complex relationships between variables. In particular, they are useful for capturing non-linear relationships and interaction effects between variables, which is essential for a comprehensive analysis of climate change.

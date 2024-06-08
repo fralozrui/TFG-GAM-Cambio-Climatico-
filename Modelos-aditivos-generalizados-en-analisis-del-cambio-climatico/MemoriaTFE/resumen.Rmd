@@ -2,4 +2,7 @@
 output: pdf_document
 ---
 
-Resumen...
+El cambio climático es uno de los mayores desafíos a los que nos enfrentamos en la actualidad como sociedad. Ya hemos comenzado a sufrir sus consecuencias y, por tanto, el desarrollo de estrategias que frenen sus efectos y nos permitan adaptarnos a ellos es crucial. Para abordar y entender mejor estos problemas en la mayoría de ocasiones entra en juego el análisis de datos, ya que se trata de una herramienta muy eficaz para este tipo de estudios. 
+
+En este trabajo nos proponemos como objetivo el estudiar uno de los métodos comúnmente empleados en estos análisis, los modelos aditivos generalizados. Estos nos permitirán modelar relaciones complejas entre variables de manera flexible, en particular son útiles para capturar relaciones no lineales y efectos de interacción entre variables, algo que es crucial para el análisis exhaustivo del cambio climático. 
+

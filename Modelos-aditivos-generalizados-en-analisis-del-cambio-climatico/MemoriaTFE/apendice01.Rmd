@@ -70,7 +70,7 @@ knitr::opts_chunk$set(fig.path = 'figurasR/',
 \renewcommand{\headrulewidth}{0.4pt}
 \renewcommand{\footrulewidth}{0.4pt}
 
-# Apéndice: Carga y limpieza de datos {#Apendice1}
+# Apéndice: Carga y depuración de datos {#Apendice1}
 
 **Clima arepuerto SVQ** 
 
@@ -83,7 +83,8 @@ Clima <- aemet_monthly_period(station = "5783", start = 1960, end = 2023)
 Clima <- Clima %>% separate(fecha, into = c("Año", "Mes"), sep = "-")
 Clima$Año <- as.numeric(Clima$Año)
 Clima$Mes <- factor(Clima$Mes, levels = as.character(1:12))
-Clima <- Clima[,c(1,2,6,11,27,29,32)] # Seleccionamos las variables que nos interesan
+Clima <- Clima[,c(1,2,6,11,27,29,32)] # Seleccionamos las variables que
+# nos interesan
 colnames(Clima) <- c('Año','Mes','HR','PresM','Prec','WMed','TMedM')
 Clima <- Clima %>% arrange(Año, Mes) # Ordenamos por año y mes
 Clima <- Clima[complete.cases(Clima$Mes),] # Retiramos las medias anuales
@@ -145,15 +146,16 @@ SeaL <- read_excel('SeaLevelv2.xlsx')
 # Retiramos datos con otro formato y nos quedamos con las variables 
 # necesarias.
 SeaL <- SeaL[-(1:240),c(8,9,11)] 
-# La variable Año es numérica para la representación como ya se ha indicado
+# La variable Año es numérica para la representación como ya se
+# ha indicado
 # otras veces
 # y la mensual es categórica
 SeaL$Year <- as.numeric(SeaL$Year)
 SeaL$Month <- factor(SeaL$Month,levels = 1:12)
 colnames(SeaL) <- c('Año','Mes','GMSL')
 
-# Como en algunos casos se tienen varias mediciones por mes lo que hacemos
-# es tomar como la GMSL mensual la media de todas ellas.
+# Como en algunos casos se tienen varias mediciones por mes lo 
+# que hacemos es tomar como la GMSL mensual la media de todas ellas.
 SeaL <- SeaL %>%
   group_by(Año, Mes) %>%
   summarise(GMSL = mean(GMSL, na.rm = TRUE))
@@ -176,16 +178,19 @@ data_vector <- as.vector(raw_data[[1]])
 processed_data <- strsplit(data_vector, split = ",")
 
 # Convertimos la lista resultante en un data frame
-data_frame <- do.call(rbind, lapply(processed_data, function(x) as.numeric(x)))
+data_frame <- do.call(rbind, lapply(processed_data, 
+                                    function(x) as.numeric(x)))
 
-colnames(data_frame) <- c("Año", paste0("Temp", 1:(ncol(data_frame) - 1)))
+colnames(data_frame) <- c("Año", 
+                          paste0("Temp", 1:(ncol(data_frame) - 1)))
 
 # Convertimos a tibble para facilitar la manipulación
 data_tibble <- as_tibble(data_frame)
 
 # Transponemos data_tibble a formato vertical
 data_long <- data_tibble %>%
-  pivot_longer(cols = starts_with("Temp"), names_to = "Mes", values_to = "Temp") %>%
+  pivot_longer(cols = starts_with("Temp"), names_to = "Mes",
+               values_to = "Temp") %>%
   mutate(Mes = as.numeric(gsub("Temp", "", Mes))) %>%
   arrange(Año, Mes)
 

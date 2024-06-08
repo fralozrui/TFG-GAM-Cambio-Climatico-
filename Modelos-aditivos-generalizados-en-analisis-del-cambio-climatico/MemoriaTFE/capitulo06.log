@@ -1,9 +1,9 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2024.3.11)  3 JUN 2024 18:50
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2024.3.11)  2 JUN 2024 19:20
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**capitulo03.tex
-(./capitulo03.tex
+**capitulo06.tex
+(./capitulo06.tex
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-02-20>
 (c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/book.cls
@@ -966,11 +966,11 @@ Package: makecell 2009/08/03 V0.1e Managing of Tab Column Heads and Cells
 \rotheadsize=\dimen321
 \c@nlinenum=\count373
 \TeXr@lab=\toks61
-) (./capitulo03.aux
-LaTeX Info: Redefining \. on input line 9.
-LaTeX Info: Redefining \% on input line 9.
+) (./capitulo06.aux
+LaTeX Info: Redefining \. on input line 18.
+LaTeX Info: Redefining \% on input line 18.
 )
-\openout1 = `capitulo03.aux'.
+\openout1 = `capitulo06.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 496.
 LaTeX Font Info:    ... okay on input line 496.
@@ -1025,9 +1025,9 @@ LaTeX Font Info:    ... okay on input line 496.
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
 Package hyperref Info: Link coloring OFF on input line 496.
-(./capitulo03.out) (./capitulo03.out)
+(./capitulo06.out) (./capitulo06.out)
 \@outlinefile=\write4
-\openout4 = `capitulo03.out'.
+\openout4 = `capitulo06.out'.
 
 (c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
@@ -1045,46 +1045,25 @@ Package: ltcaption 2021/01/08 v1.4c longtable captions (AR)
 )
 Package caption Info: rotating package is loaded.
 Package caption Info: End \AtBeginDocument code.
-(./capitulo03.toc
+(./capitulo06.toc
 LaTeX Info: Redefining \. on input line 1.
 LaTeX Info: Redefining \% on input line 1.
-LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 3.
-(c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/ot1lmr.fd
-File: ot1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-LaTeX Font Info:    Trying to load font information for OML+lmm on input line 3.
-(c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/omllmm.fd
-File: omllmm.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
-)
-LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 3.
-(c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/omslmsy.fd
-File: omslmsy.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
-)
-LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 3.
-(c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/omxlmex.fd
-File: omxlmex.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
-)
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <12> on input line 3.
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <8> on input line 3.
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <6> on input line 3.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 3.
-(c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/umsa.fd
-File: umsa.fd 2013/01/14 v3.01 AMS symbols A
-)
-LaTeX Font Info:    Trying to load font information for U+msb on input line 3.
-(c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/umsb.fd
-File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-))
 \tf@toc=\write5
-\openout5 = `capitulo03.toc'.
+\openout5 = `capitulo06.toc'.
 
-\c@observaciÃ³n=\count374
-\c@definiciÃ³n=\count375
-\c@proposiciÃ³n=\count376
-\c@ejemplo=\count377
+
+Package natbib Warning: Citation `Luque2019' undefined on input line 509.
+
+
+Package natbib Warning: Citation `RStudio' undefined on input line 509.
+
+
+Package natbib Warning: Citation `R-base' undefined on input line 509.
+
+
+Package natbib Warning: Citation `Techopedia' undefined on input line 509.
+
 [1
 
 
@@ -1093,182 +1072,76 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 
 ]
 Cap\'{\i }tulo 1.
+(./capitulo06.bbl [3] [4
 
-LaTeX Warning: Reference `eq:modelo general' on page 3 undefined on input line 567.
-
-[3{c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}]
-LaTeX Info: Redefining \. on input line 635.
-LaTeX Info: Redefining \% on input line 635.
-LaTeX Info: Redefining \. on input line 635.
-LaTeX Info: Redefining \% on input line 635.
-[4{c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc}{c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}]
-<figurasR/unnamed-chunk-2-1.pdf, id=117, 469.755pt x 325.215pt>
-File: figurasR/unnamed-chunk-2-1.pdf Graphic file (type pdf)
-<use figurasR/unnamed-chunk-2-1.pdf>
-Package pdftex.def Info: figurasR/unnamed-chunk-2-1.pdf  used on input line 684.
-(pdftex.def)             Requested size: 430.31812pt x 297.91121pt.
-LaTeX Info: Redefining \. on input line 684.
-LaTeX Info: Redefining \% on input line 684.
-LaTeX Info: Redefining \. on input line 684.
-LaTeX Info: Redefining \% on input line 684.
-[5]
+]
+LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 11.
+(c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/ot1lmr.fd
+File: ot1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
+)
+LaTeX Font Info:    Trying to load font information for OML+lmm on input line 11.
+(c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/omllmm.fd
+File: omllmm.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
+)
+LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 11.
+(c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/omslmsy.fd
+File: omslmsy.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
+)
+LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 11.
+(c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/omxlmex.fd
+File: omxlmex.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
+)
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 708.
+(Font)              <12> on input line 11.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 708.
+(Font)              <8> on input line 11.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 708.
-LaTeX Info: Redefining \. on input line 721.
-LaTeX Info: Redefining \% on input line 721.
-LaTeX Info: Redefining \. on input line 721.
-LaTeX Info: Redefining \% on input line 721.
-[6 <./figurasR/unnamed-chunk-2-1.pdf>]
-LaTeX Info: Redefining \. on input line 783.
-LaTeX Info: Redefining \% on input line 783.
-LaTeX Info: Redefining \. on input line 783.
-LaTeX Info: Redefining \% on input line 783.
-[7]
-Underfull \hbox (badness 3179) in paragraph at lines 790--791
-[][]\T1/lmr/bx/n/12 Definición 1.2.2 \T1/lmr/m/n/12 (Va-li-da-ción cru-za-da ge-ne-ra-li-za-da)\T1/lmr/bx/n/12 . []\T1/lmr/m/n/12 Da-das unas ob-ser-va-cio-nes
+(Font)              <6> on input line 11.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 11.
+(c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/umsa.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Trying to load font information for U+msb on input line 11.
+(c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/umsb.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+)
+Underfull \hbox (badness 1803) in paragraph at lines 15--18
+[]\T1/lmr/m/n/12 Oficina Es-pa-ño-la Cam-bio Cli-má-ti-co.  In-for-mes de eva-lua-ción del ipcc.  URL
  []
 
 
-LaTeX Warning: Reference `eq:modelo general' on page 8 undefined on input line 838.
-
-LaTeX Info: Redefining \. on input line 842.
-LaTeX Info: Redefining \% on input line 842.
-LaTeX Info: Redefining \. on input line 842.
-LaTeX Info: Redefining \% on input line 842.
-[8]
-LaTeX Info: Redefining \. on input line 921.
-LaTeX Info: Redefining \% on input line 921.
-LaTeX Info: Redefining \. on input line 921.
-LaTeX Info: Redefining \% on input line 921.
-[9]
-LaTeX Info: Redefining \. on input line 986.
-LaTeX Info: Redefining \% on input line 986.
-LaTeX Info: Redefining \. on input line 986.
-LaTeX Info: Redefining \% on input line 986.
-[10]
-Overfull \hbox (3.67665pt too wide) detected at line 1007
-\OML/lmm/m/it/12 s[]\OT1/lmr/m/n/12 (\OML/lmm/m/it/12 x[]\OT1/lmr/m/n/12 ) = \OML/lmm/m/it/12 s[]\OT1/lmr/m/n/12 (\OML/lmm/m/it/12 x[]\OT1/lmr/m/n/12 )\OML/lmm/m/it/12 ;  s[]\OT1/lmr/m/n/12 (\OML/lmm/m/it/12 x[]\OT1/lmr/m/n/12 ) = \OML/lmm/m/it/12 s[]\OT1/lmr/m/n/12 (\OML/lmm/m/it/12 x[]\OT1/lmr/m/n/12 )\OML/lmm/m/it/12 ;  s[]\OT1/lmr/m/n/12 (\OML/lmm/m/it/12 x[]\OT1/lmr/m/n/12 ) = \OML/lmm/m/it/12 s[]\OT1/lmr/m/n/12 (\OML/lmm/m/it/12 x[]\OT1/lmr/m/n/12 ) \OMS/lmsy/m/n/12 8\OML/lmm/m/it/12 j \OT1/lmr/m/n/12 = 1\OML/lmm/m/it/12 ; [] ; n
+Underfull \hbox (badness 10000) in paragraph at lines 15--18
+[]$\T1/lmr/m/n/12 https : / / www . miteco . gob . es / es / ceneam / recursos / mini-[]portales-[]tematicos / cclimatico /
  []
 
+)
 
-Underfull \hbox (badness 10000) in paragraph at lines 1014--1015
+Package natbib Warning: There were undefined citations.
 
- []
-
-
-Overfull \hbox (46.07927pt too wide) detected at line 1036
-\OML/lmm/m/it/12 J\OT1/lmr/m/n/12 (\OML/lmm/m/it/12 f\OT1/lmr/m/n/12 ) = [][] \OML/lmm/m/it/12 f[]\OT1/lmr/m/n/12 (\OML/lmm/m/it/12 x\OT1/lmr/m/n/12 )[]\OML/lmm/m/it/12 dx \OT1/lmr/m/n/12 = [][](\OML/lmm/m/it/12 s[]\OT1/lmr/m/n/12 (\OML/lmm/m/it/12 x\OT1/lmr/m/n/12 ) + \OML/lmm/m/it/12 h[]\OT1/lmr/m/n/12 (\OML/lmm/m/it/12 x\OT1/lmr/m/n/12 ))[]\OML/lmm/m/it/12 dx \OT1/lmr/m/n/12 = [][] \OML/lmm/m/it/12 s[]\OT1/lmr/m/n/12 (\OML/lmm/m/it/12 x\OT1/lmr/m/n/12 )[]\OML/lmm/m/it/12 dx \OT1/lmr/m/n/12 + 2 [][] \OML/lmm/m/it/12 s[]\OT1/lmr/m/n/12 (\OML/lmm/m/it/12 x\OT1/lmr/m/n/12 )\OML/lmm/m/it/12 h[]\OT1/lmr/m/n/12 (\OML/lmm/m/it/12 x\OT1/lmr/m/n/12 )\OML/lmm/m/it/12 dx \OT1/lmr/m/n/12 + [][] \OML/lmm/m/it/12 h[]\OT1/lmr/m/n/12 (\OML/lmm/m/it/12 x\OT1/lmr/m/n/12 )[]\OML/lmm/m/it/12 dx
- []
-
-LaTeX Info: Redefining \. on input line 1044.
-LaTeX Info: Redefining \% on input line 1044.
-LaTeX Info: Redefining \. on input line 1044.
-LaTeX Info: Redefining \% on input line 1044.
-[11]
-Underfull \hbox (badness 10000) in paragraph at lines 1064--1065
-
- []
-
-LaTeX Info: Redefining \. on input line 1096.
-LaTeX Info: Redefining \% on input line 1096.
-LaTeX Info: Redefining \. on input line 1096.
-LaTeX Info: Redefining \% on input line 1096.
-[12]
-Underfull \hbox (badness 10000) in paragraph at lines 1111--1112
-
- []
-
-LaTeX Info: Redefining \. on input line 1161.
-LaTeX Info: Redefining \% on input line 1161.
-LaTeX Info: Redefining \. on input line 1161.
-LaTeX Info: Redefining \% on input line 1161.
-[13]
-<figurasR/figura01.png, id=224, 509.40312pt x 179.16937pt>
-File: figurasR/figura01.png Graphic file (type png)
-<use figurasR/figura01.png>
-Package pdftex.def Info: figurasR/figura01.png  used on input line 1183.
-(pdftex.def)             Requested size: 362.37569pt x 127.46266pt.
-
-Underfull \hbox (badness 10000) in paragraph at lines 1199--1200
-
- []
-
-LaTeX Info: Redefining \. on input line 1207.
-LaTeX Info: Redefining \% on input line 1207.
-LaTeX Info: Redefining \. on input line 1207.
-LaTeX Info: Redefining \% on input line 1207.
-[14 <./figurasR/figura01.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 1237--1238
-
- []
-
-LaTeX Info: Redefining \. on input line 1264.
-LaTeX Info: Redefining \% on input line 1264.
-LaTeX Info: Redefining \. on input line 1264.
-LaTeX Info: Redefining \% on input line 1264.
-[15]
-Underfull \hbox (badness 2582) in paragraph at lines 1293--1303
-[]\T1/lmr/m/n/12 Si $\OML/lmm/m/it/12 p > \OT1/lmr/m/n/12 0$\T1/lmr/m/n/12 , en-ton-ces con-si-de-re-mos $\OML/lmm/m/it/12 P; H \OMS/lmsy/m/n/12 2 M[]$ \T1/lmr/m/n/12 con ele-men-tos:
- []
-
-
-LaTeX Warning: Reference `Dist-exponencial' on page 16 undefined on input line 1315.
-
-LaTeX Info: Redefining \. on input line 1330.
-LaTeX Info: Redefining \% on input line 1330.
-LaTeX Info: Redefining \. on input line 1330.
-LaTeX Info: Redefining \% on input line 1330.
-[16]
-
-LaTeX Warning: Reference `IRLS' on page 17 undefined on input line 1389.
-
-LaTeX Info: Redefining \. on input line 1390.
-LaTeX Info: Redefining \% on input line 1390.
-LaTeX Info: Redefining \. on input line 1390.
-LaTeX Info: Redefining \% on input line 1390.
-[17]
-Overfull \hbox (50.58125pt too wide) in paragraph at lines 1392--1396
-\T1/lmr/m/n/12 men-te)\T1/lmr/bx/n/12 . [][]\T1/lmr/m/n/12 .............................................................................................................................................[]
- []
-
-(./capitulo03.bbl
-LaTeX Info: Redefining \. on input line 1.
-LaTeX Info: Redefining \% on input line 1.
-LaTeX Info: Redefining \. on input line 1.
-LaTeX Info: Redefining \% on input line 1.
-[18]) [19
-
-] (./capitulo03.aux
-LaTeX Info: Redefining \. on input line 9.
-LaTeX Info: Redefining \% on input line 9.
+[5] (./capitulo06.aux
+LaTeX Info: Redefining \. on input line 18.
+LaTeX Info: Redefining \% on input line 18.
 )
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-02-20>
  ***********
-
-LaTeX Warning: There were undefined references.
-
-Package rerunfilecheck Info: File `capitulo03.out' has not changed.
-(rerunfilecheck)             Checksum: 94D98EC968735FE961DB104170CABAB9;2106.
+Package rerunfilecheck Info: File `capitulo06.out' has not changed.
+(rerunfilecheck)             Checksum: B1A753FB4C006C67365BC8C79D533241;203.
  ) 
 Here is how much of TeX's memory you used:
- 30760 strings out of 476058
- 586928 string characters out of 5790415
- 1952190 words of memory out of 5000000
- 52184 multiletter control sequences out of 15000+600000
- 632023 words of font info for 85 fonts, out of 8000000 for 9000
+ 30511 strings out of 476058
+ 582327 string characters out of 5790415
+ 1933190 words of memory out of 5000000
+ 52030 multiletter control sequences out of 15000+600000
+ 587005 words of font info for 59 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 84i,16n,93p,580b,662s stack positions out of 10000i,1000n,20000p,200000b,200000s
-<c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmex10.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi12.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi6.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi8.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr6.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr8.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri12.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmro8.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy6.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy8.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on capitulo03.pdf (19 pages, 383555 bytes).
+ 84i,5n,93p,547b,466s stack positions out of 10000i,1000n,20000p,200000b,200000s
+<c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri12.pfb>
+Output written on capitulo06.pdf (5 pages, 85402 bytes).
 PDF statistics:
- 395 PDF objects out of 1000 (max. 8388607)
- 330 compressed objects within 4 object streams
- 90 named destinations out of 1000 (max. 500000)
- 127 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 79 PDF objects out of 1000 (max. 8388607)
+ 65 compressed objects within 1 object stream
+ 16 named destinations out of 1000 (max. 500000)
+ 29 words of extra memory for PDF output out of 10000 (max. 10000000)
 

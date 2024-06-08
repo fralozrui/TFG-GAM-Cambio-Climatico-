@@ -97,14 +97,14 @@ Donde $f$ es una función desconocida cuyo propósito es el de representar de la
 
 [^1]: El cómo de bueno es un modelo es un concepto que se puede definir de tantas formas como maneras hay de evaluarlos. Veremos varias de ellas a lo largo del trabajo.
 
-Este trabajo tiene como finalidad el definir un conjunto de estrategias y técnicas que proporcionan un ajuste óptimo de la función $f$, es decir, que asemeje lo mejor posible la relación de las variables al fenómeno que se esté estudiando. Además, se incluye una posterior aplicación práctica de dichos resultados en el ámbito del cambio climático.
+Este trabajo tiene como finalidad el definir un conjunto de estrategias y técnicas que proporcionan un ajuste óptimo de la función $f$, es decir, que asemeje lo mejor posible la relación de las variables al fenómeno que se esté estudiando.
 
 En lo que a este capítulo respecta, partiremos definiendo los modelos lineales de una forma breve y más general, ya que se ve de manera más extensa en varias asignaturas durante el grado. Tras ello, daremos varios resultados básicos para el entendimiento y desarrollo de los Modelos Lineales Generalizados.
 
 \newpage
 ## Modelos lineales
 
-El modelo lineal ocupa un lugar clave en el manual de herramientas de todo estadístico aplicado. Esto se debe a su simple estructura, a la fácil interpretación de sus resultados y al sencillo desarrolo de la teoría de mínimos cuadrados. Sin embargo, a la hora de dar su definición se deben tener en cuenta ciertas restricciones que deben cumplir las variables y los errores del modelo. Estas condiciones hacen que el modelo no sea capaz de adaptarse bien a todos los fenómenos que uno propone describir con él pero, a cambio, otorga esa sencillez de visualización antes mencionada. Daremos a continuación una serie de definiciones y resultados basados en @Wood. 
+El modelo lineal ocupa un lugar clave en el manual de herramientas de todo estadístico aplicado. Esto se debe a su simple estructura, a la fácil interpretación de sus resultados y al sencillo desarrollo de la teoría de mínimos cuadrados. Sin embargo, a la hora de dar su definición se deben tener en cuenta ciertas restricciones que deben cumplir las variables y los errores del modelo. Estas condiciones hacen que el modelo no sea capaz de adaptarse bien a todos los fenómenos que uno propone describir con él pero, a cambio, otorga esa sencillez de visualización antes mencionada. Daremos a continuación una serie de definiciones y resultados basados en @Wood. 
 
 
 \begin{definición}[Modelo Lineal]
@@ -136,7 +136,7 @@ Donde:
   \item $\beta$ es un vector de parámetros $\beta_i$ a determinar que reflejan la magnitud del efecto lineal (constante) de los incrementos unitarios en las variables explicativas $X_{i}$ sobre la variable explicada $Y$.
   \item $\epsilon$ es un vector aleatorio tal que los $\epsilon_{i}$ son variables aleatorias independientes e identicamente distribuidas por una distribución normal de esperanza nula y varianza $\sigma^2$ ($\epsilon_{i} \backsim N(0,\sigma^2)$). Representa el término de error del modelo y corresponde con $\epsilon = Y-E[Y]$.
 \end{itemize}
-\begin{observación} Gracias a lo notado en el párrafo anterior podemos ver que: \newline $Y \backsim N(\mu,\sigma^2I_{n})$ ya que:
+\begin{observación} Gracias a la definición anterior podemos ver que: \newline $Y \backsim N(\mu,\sigma^2I_{n})$ ya que:
 $$
 E[Y] = E[X \beta + \epsilon] = X\beta + E[\epsilon] = X\beta = \mu
 $$
@@ -248,12 +248,12 @@ $$
 \end{definición}
 
 \begin{observación}
-No daremos la obtención de este estimador pero sí indicaremos que su distribución se obtiene directamente de que como S es la suma de normales $N(0,\sigma^2)$ y $\frac{\epsilon_i}{\sigma} \backsim N(0,1)$, entonces: $\frac{1}{\sigma^2}S \backsim \chi^2_{n-p}$. Finalmente, multiplicando y dividiento esta expresión por (n-p) y sustituyendo la definición del estimador $\hat{\sigma}^2$ obtenemos el resultado.
+No daremos la obtención de este estimador pero sí indicaremos que su distribución se obtiene directamente de que como S es la suma de normales $N(0,\sigma^2)$ y $\frac{\epsilon_i}{\sigma} \backsim N(0,1)$, entonces: $\frac{1}{\sigma^2}S \backsim \chi^2_{n-p}$. Finalmente, multiplicando y dividiento esta expresión por $(n-p)$ y sustituyendo la definición del estimador $\hat{\sigma}^2$ obtenemos el resultado.
 \end{observación}
 
 ## Modelos lineales generalizados
 
-Nos adentramos ya con esta sección en la primera extensión de los modelos lineales de las que se tratan durante el trabajo. Los Modelos Lineales Generalizados (MLG) fueron originalmente formulados por John Nelder y Robert Wedderburn (1972), quienes tenían como propósito unificar varios modelos estadísticos como la regresión lineal, la logística y la de Poisson en un mismo modelo. Este tipo de modelo relaja algunas de las hipótesis que asumían los modelos lineales, como que los errores ya no deben seguir ninguna distribución específica, y además añade nuevos elementos como la función de enlace, la cual interviene en la relación entre los valores esperados y la forma lineal del modelo. También se deberá tener en cuenta una nueva hipótesis distribucional, las variables de respuestas seguirán distribuciones de tipo exponencial. Más tarde introduciremos cada uno de estos aspectos, de momento demos la estructura básica de un MLG como en @Wood.
+Nos adentramos con esta sección en la primera extensión de los modelos lineales de las que se tratan durante el trabajo. Los Modelos Lineales Generalizados (MLG) fueron originalmente formulados por John Nelder y Robert Wedderburn (1972), quienes tenían como propósito unificar varios modelos estadísticos como la regresión lineal, la logística y la de Poisson en un mismo modelo. Este tipo de modelo relaja algunas de las hipótesis que asumían los modelos lineales, como que los errores ya no deben seguir ninguna distribución específica, y además añade nuevos elementos como la función de enlace, la cual interviene en la relación entre los valores esperados y la forma lineal del modelo. También se deberá tener en cuenta una nueva hipótesis distribucional, las variables de respuestas seguirán distribuciones de tipo exponencial. Más tarde introduciremos cada uno de estos aspectos, de momento demos la estructura básica de un MLG como en @Wood.
 
 \begin{definición}[Estructura básica de un MLG]
 
@@ -310,7 +310,7 @@ Y por tanto toma los siguientes parámetros de la familia exponencial:
   \item $\theta = \mu$
   \item $b(\theta) = \frac{\theta^2}{2} = \frac{\mu^2}{2}$
   \item $a(\phi) = \phi = \sigma^2$
-  \item $c(\phi,y) = \frac{-y^2}{2\phi}-log(\sqrt{\phi 2 \pi}) = \frac{-y^2}{2\sigma} - log(\sigma \sqrt{2\pi})$
+  \item $c(y,\phi) = \frac{-y^2}{2\phi}-log(\sqrt{\phi 2 \pi}) = \frac{-y^2}{2\sigma} - log(\sigma \sqrt{2\pi})$
 \end{itemize}
 \end{ejemplo}
 
@@ -333,7 +333,7 @@ Y su derivada respecto de theta:
 $$
 \frac{\partial l}{\partial \theta}(\theta) =\frac{y-b'(\theta)}{a(\phi)} 
 $$
-Ahora bien, si cambiamos la observación y por la variable Y, podemos evaluar la esperanza de esta derivada, la cual será 0 por propiedades de la función de verosimilitud logáritmica.
+Ahora bien, si cambiamos la observación $y$ por la variable Y, podemos evaluar la esperanza de esta derivada, la cual será 0 por propiedades de la función de verosimilitud logáritmica.
 $$
 E[\frac{\partial l}{\partial \theta}(\theta)] = \frac{E[Y]-b'(\theta)}{a(\phi)} = 0
 $$
@@ -342,7 +342,7 @@ Seguimos derivando para obtener que:
 $$
 \frac{\partial^2 l}{\partial \theta^2}(\theta) =-\frac{b''(\theta)}{a(\phi)} 
 $$
-Y utilizando que: $E[\frac{\partial^2 l}{\partial \theta^2}] = -E[(\frac{\partial l}{\partial \theta})^2]$, nos queda que: 
+Y utilizando que: $E[\frac{\partial^2 l}{\partial \theta^2}] = -E[(\frac{\partial l}{\partial \theta})^2]$, nos queda: 
 $$
 \frac{b''(\theta)}{a(\phi)} = \frac{E[(Y-b'(\theta))^2]}{a(\phi)^2} = \frac{E[(Y-E[Y])^2]}{a(\phi)^2} = \frac{Var(Y)}{a(\phi)^2}
 $$
@@ -368,7 +368,7 @@ Podemos recoger las carácterísticas de las principales distribuciones de tipo 
 
 ### Ajuste de los modelos lineales generalizados
 
-La estimación de parámetros e inferencia con modelos aditivos generalizados se basa en la estimación de máxima verosimilitud, ya que, gracias a la hipótesis de que las $Y_i$ pertenecezcan a la familia de distribuciones exponenciales, siempre se dispondrá de funciones de densidad. Partiremos considerando un MLG como el de la definición $\ref{Estructura básica de un MLG}$ y nuestro principal objetivo en esta sección será dar el estimador de máxima verosimilitud del vector de parámetros $\beta$ como se hace en @Wood. Veremos que será necesario recurrir a un algoritmo basado en mínimos cuadrados para hallar tal máximo, el método de mínimos cuadrados reponderados iterativamente.
+La estimación de parámetros e inferencia con modelos lineales generalizados se basa en la estimación de máxima verosimilitud, ya que, gracias a la hipótesis de que las $Y_i$ pertenecezcan a la familia de distribuciones exponenciales, siempre se dispondrá de funciones de densidad. Partiremos considerando un MLG como el de la definición $\ref{Estructura básica de un MLG}$ y nuestro principal objetivo en esta sección será dar el estimador de máxima verosimilitud del vector de parámetros $\beta$ como se hace en @Wood. Veremos que será necesario recurrir a un algoritmo basado en mínimos cuadrados para hallar tal máximo, tal algoritmo se denomina: método de mínimos cuadrados reponderados iterativamente.
 
 Empezamos considerando $y$ una observación de $Y$ y notando que, como los $Y_i$ son independientes entre sí, en tal caso la función de verosimilitud para $\beta$ viene dada por: 
 $$
@@ -392,7 +392,7 @@ Donde $\frac{\partial\theta_i}{\partial \beta_j}$ por la regla de la cadena es:
 $$
 \frac{\partial\theta_i}{\partial \beta_j} = \frac{d\theta_i}{d \mu_i} \frac{\partial\mu_i}{\partial \beta_j} = \frac{d\theta_i}{d \mu_i} \frac{\partial\eta_i}{\partial \beta_j} \frac{\partial\mu_i}{\partial \eta_i} = \frac{X_{ij}}{g'(\mu_i) b''(\theta_i)}
 $$
-Hemos utilizado que $\frac{\partial\mu_i}{\partial \eta_i} = g'(\mu_i)$, que $\frac{\partial\eta_i}{\partial \beta_j} = X_{ij}$ y que derivando el resultado $\ref{Esperanza exponencial}$ se tiene: $\frac{d\theta_i}{d \mu_i} = \frac{1}{b''(\theta)}$. Sustituyendo también el resultado de $\ref{V}$: 
+Hemos utilizado que $\frac{\partial\mu_i}{\partial \eta_i} = \frac{1}{g'(\mu_i)}$, que $\frac{\partial\eta_i}{\partial \beta_j} = X_{ij}$ y que derivando el resultado $\ref{Esperanza exponencial}$ se tiene: $\frac{d\theta_i}{d \mu_i} = \frac{1}{b''(\theta)}$. Sustituyendo también el resultado de $\ref{V}$: 
 \begin{equation}
 \frac{\partial l}{\partial \beta_j} = \frac{1}{\phi} \sum_{i=1}^n \frac{y_i - b'_i(\theta_i)}{g'(\mu_i)b''_i(\theta_i)/\omega_i} = 
 \frac{1}{\phi} \sum_{i=1}^n \frac{y_i - \mu_i}{g'(\mu_i)V(\mu_i)}X_{ij}
@@ -400,7 +400,7 @@ Hemos utilizado que $\frac{\partial\mu_i}{\partial \eta_i} = g'(\mu_i)$, que $\f
 \end{equation}
 
 \begin{observación}
-Ahora bien, el razonamiento general que seguiríamos sería el igualar estas derivadas a 0 y resolver el sistema resultante, sin embargo, se trata de un sistema con ecuaciones no lineales, por lo que para resolverlo utilizaremos métodos numéricos, en concreto utilizaremos el método de Newton que precisa del gradiente y del Hessiano de $l$. Por lo que debemos volver a derivar $l$.
+Ahora bien, el razonamiento general que seguiríamos sería el de igualar estas derivadas a 0 y resolver el sistema resultante, sin embargo, se trata de un sistema con ecuaciones no lineales, por lo que para resolverlo utilizaremos métodos numéricos, en concreto utilizaremos el método de Newton que precisa del gradiente y del Hessiano de $l$. Por lo que debemos volver a derivar $l$.
 \end{observación}
 $$
 \frac{\partial^2 l}{\partial \beta_j \beta_k} =  
@@ -448,21 +448,21 @@ Se dice que una función de enlace $g_c$ es canónica para una distribución de 
   \item Su uso en el modelo $\ref{Estructura básica de un MLG}$ resulta en: $\theta_i = X_i\beta$
   \item Hacen que $\alpha(\mu_i)=1$.
   \item El Hessiano de la función de verosimilitud logarítmica coincida con su valor esperado.
-  \item El sistema a resolver para obtener los estimadores de máxima verosimilitud de $\beta$, es decir, el formado por las derivadas parciales $\frac{\partial l}{\partial \beta_j}$ igualadas a 0 se reduce a: $X^ty - X^T\hat{\mu} = 0 \Rightarrow X^ty = X^T\hat{\mu}$ pues $\frac{\partial \theta_i}{\partial \beta_j} = X_{ij}$
+  \item El sistema a resolver para obtener los estimadores de máxima verosimilitud de $\beta$, es decir, el formado por las derivadas parciales $\frac{\partial l}{\partial \beta_j}$ igualadas a 0 se reduce a: $X^Ty - X^T\hat{\mu} = 0 \Rightarrow X^Ty = X^T\hat{\mu}$ pues $\frac{\partial \theta_i}{\partial \beta_j} = X_{ij}$
 \end{itemize}
 
 \end{proposición}
 
 ### Residuos
 
-Al igual que para los modelos lineales, el estudio de los residuos $\epsilon_i$ de los MLG es un buen método para el control de los modelos, pero en este caso la estandarización de los residuos es necesaria y más complicada. Esto se debe a que si las suposiciones hechas sobre el modelo son correctas, entonces los residuos estandarizados deben tener aproximadamente la misma varizana y se deben comportar, tanto como sea posible, como los residuos de los modelos lineales. Para ello veremos dos tipos de estandarizaciones distintas.
+Al igual que para los modelos lineales, el estudio de los residuos $\epsilon_i$ de los MLG es un buen método para el control de los modelos, pero en este caso la estandarización de los residuos es necesaria y más complicada. Esto se debe a que si las suposiciones hechas sobre el modelo son correctas, entonces los residuos estandarizados deben tener aproximadamente la misma varianza y se deben comportar, tanto como sea posible, como los residuos de los modelos lineales. Para ello veremos dos tipos de estandarizaciones distintas.
 
 \begin{definición} [Residuos de Pearson]
 Se dividen los residuos entre una cantidad proporcional a la desviación estándar dada por el modelo ajustado: 
 $$
 \hat{\epsilon}^p_i = \frac{y_i - \hat{\mu_i}}{\sqrt{V(\hat{\mu_i})}}
 $$
-Deben tener media nula y varianza $\phi$ si el modelos es correcto.
+Deben tener media nula y varianza $\phi$ si el modelo es correcto.
 \end{definición}
 
 \begin{observación}

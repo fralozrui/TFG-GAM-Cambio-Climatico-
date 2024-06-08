@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2024.3.11)  11 MAR 2024 10:59
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2024.3.11)  2 JUN 2024 19:23
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -966,8 +966,10 @@ Package: makecell 2009/08/03 V0.1e Managing of Tab Column Heads and Cells
 \rotheadsize=\dimen321
 \c@nlinenum=\count373
 \TeXr@lab=\toks61
+) (./capitulo01.aux
+LaTeX Info: Redefining \. on input line 9.
+LaTeX Info: Redefining \% on input line 9.
 )
-No file capitulo01.aux.
 \openout1 = `capitulo01.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 496.
@@ -1023,6 +1025,7 @@ LaTeX Font Info:    ... okay on input line 496.
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
 Package hyperref Info: Link coloring OFF on input line 496.
+(./capitulo01.out) (./capitulo01.out)
 \@outlinefile=\write4
 \openout4 = `capitulo01.out'.
 
@@ -1042,7 +1045,10 @@ Package: ltcaption 2021/01/08 v1.4c longtable captions (AR)
 )
 Package caption Info: rotating package is loaded.
 Package caption Info: End \AtBeginDocument code.
-No file capitulo01.toc.
+(./capitulo01.toc
+LaTeX Info: Redefining \. on input line 1.
+LaTeX Info: Redefining \% on input line 1.
+)
 \tf@toc=\write5
 \openout5 = `capitulo01.toc'.
 
@@ -1054,16 +1060,10 @@ No file capitulo01.toc.
 
 ]
 Cap\'{\i }tulo 1.
-
-Package natbib Warning: Citation `Luque2017' on page 3 undefined on input line 535.
-
 [3]
 No file capitulo01.bbl.
-
-Package natbib Warning: There were undefined citations.
-
-LaTeX Info: Redefining \. on input line 586.
-LaTeX Info: Redefining \% on input line 586.
+LaTeX Info: Redefining \. on input line 588.
+LaTeX Info: Redefining \% on input line 588.
 [4] (./capitulo01.aux
 LaTeX Info: Redefining \. on input line 9.
 LaTeX Info: Redefining \% on input line 9.
@@ -1072,31 +1072,22 @@ LaTeX Info: Redefining \% on input line 9.
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-02-20>
  ***********
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
-
-Package rerunfilecheck Warning: File `capitulo01.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `capitulo01.out':
-(rerunfilecheck)             Before: <no file>
-(rerunfilecheck)             After:  64F457815571E6AE7F51112AF8C3FF5E;212.
+Package rerunfilecheck Info: File `capitulo01.out' has not changed.
+(rerunfilecheck)             Checksum: 64F457815571E6AE7F51112AF8C3FF5E;212.
  ) 
 Here is how much of TeX's memory you used:
- 30360 strings out of 476058
- 579042 string characters out of 5790415
+ 30373 strings out of 476058
+ 579256 string characters out of 5790415
  1935190 words of memory out of 5000000
- 51927 multiletter control sequences out of 15000+600000
+ 51932 multiletter control sequences out of 15000+600000
  583756 words of font info for 46 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  84i,12n,93p,547b,462s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri12.pfb><c:/Users/34633/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmro8.pfb>
-Output written on capitulo01.pdf (4 pages, 118524 bytes).
+Output written on capitulo01.pdf (4 pages, 114537 bytes).
 PDF statistics:
- 59 PDF objects out of 1000 (max. 8388607)
- 42 compressed objects within 1 object stream
+ 68 PDF objects out of 1000 (max. 8388607)
+ 51 compressed objects within 1 object stream
  8 named destinations out of 1000 (max. 500000)
- 13 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 29 words of extra memory for PDF output out of 10000 (max. 10000000)
 

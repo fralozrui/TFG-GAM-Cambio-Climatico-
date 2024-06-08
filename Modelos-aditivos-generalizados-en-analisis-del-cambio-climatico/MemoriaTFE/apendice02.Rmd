@@ -117,7 +117,8 @@ lmCO2 <- gam(Tmes ~ Año, )
 ggplot(CO2, aes(x = Año, y = Tmes)) +
   geom_point(size = 2) + 
   geom_line(aes(y = predsc), color = "darkgreen", linewidth = 1.2) + 
-  labs(x = "Años",y = "ppm", title = "Concentración mensual media de dióxido de carbono (ppm)") +
+  labs(x = "Años",y = "ppm",
+       title = "Concentración mensual media de dióxido de carbono (ppm)") +
   theme_minimal()
 
 ```
@@ -145,10 +146,14 @@ df <- rbind(pasado,futuro)
 
 ggplot(df, aes(x = Año, y = Tmes)) +
   geom_line(aes(color = col, group = 1), linewidth = 1) +
-  geom_vline(aes(xintercept = 2024), color = 'black',, linetype = "dashed" , linewidth = 0.5)+
-  labs(x = "Años",y = "ppm", title = "Concentración mensual media de dióxido de carbono",
+  geom_vline(aes(xintercept = 2024), color = 'black',
+             linetype = "dashed" , linewidth = 0.5)+
+  labs(x = "Años",y = "ppm", 
+       title = "Concentración mensual media de dióxido de carbono",
        legend = c('Datos','Predicciones')) +
-  scale_color_manual(values = c('Datos' = 'darkgreen', 'Predicciones' = 'darkred'), name = "Leyenda")+
+  scale_color_manual(values = c('Datos' = 'darkgreen',
+                                'Predicciones' = 'darkred'),
+                     name = "Leyenda")+
   theme(axis.title = element_text(face = "bold"),
         legend.text = element_text(size = 10,color = 'black'),
         legend.position = 'right')
@@ -156,9 +161,11 @@ ggplot(df, aes(x = Año, y = Tmes)) +
 
 
 ```{r, echo=TRUE,eval=FALSE}
-magCH4 <- gam(Trend ~ s(Año) + as.numeric(Mes), data = CH4, family = Gamma(link = "log"))
+magCH4 <- gam(Trend ~ s(Año) + as.numeric(Mes), 
+              data = CH4, family = Gamma(link = "log"))
 
-magN2O <- gam(Trend ~ s(Año) + Mes, data = N2O, family = Gamma(link = "log"))
+magN2O <- gam(Trend ~ s(Año) + Mes, 
+              data = N2O, family = Gamma(link = "log"))
 
 
 predsCH4 <- exp(predict(magCH4,CH4))
@@ -169,13 +176,15 @@ par(mfrow = c(1,2))
 ggplot(CH4, aes(x = Año, y = Trend)) +
   geom_point(size = 2) + 
   geom_line(aes(y = predsCH4), color = "darkorange2", linewidth = 1.2) + 
-  labs(x = "Años",y = "ppb", title = "Concentración mensual media de metano") +
+  labs(x = "Años",y = "ppb", title = "Concentración mensual media
+       de metano") +
   theme_minimal()
 
 ggplot(N2O, aes(x = Año, y = Trend)) +
   geom_point(size = 2) + 
   geom_line(aes(y = predsN2O), color = "deepskyblue2", linewidth = 1.2) + 
-  labs(x = "Años",y = "ppb", title = "Concentración mensual media de óxido nitroso") +
+  labs(x = "Años",y = "ppb", title = "Concentración mensual media
+       de óxido nitroso") +
   theme_minimal()
 
 par(mfrow = c(1,1))
@@ -201,11 +210,15 @@ Julio$preds3 <- predict(magSL3, newdata = Julio)
 
 ggplot(data = Julio, aes(x = Año, y = GMSL)) +
   geom_point() +
-  geom_line(aes(x = Año, y = preds, color = 'Mod. sin int.'), linewidth = 1) +
-  geom_line(aes(x = Año, y = preds3, color = 'Mod. con int.'),  linewidth = 1) +
+  geom_line(aes(x = Año, y = preds, color = 'Mod. sin int.'),
+            linewidth = 1) +
+  geom_line(aes(x = Año, y = preds3, color = 'Mod. con int.'),
+            linewidth = 1) +
   labs(x = "Años", y = "mm", 
        title = "Comparación de modelos para GMSL") +
-  scale_color_manual(values = c('Mod. sin int.'= "darkblue", 'Mod. con int.' = "lightblue"), name = 'Leyenda') +
+  scale_color_manual(values = c('Mod. sin int.'= "darkblue",
+                                'Mod. con int.' = "lightblue"),
+                    name = 'Leyenda') +
   theme_minimal()
 
 ```
@@ -231,12 +244,20 @@ SeaP$Mes <- append(Sea$Mes,Seapreds$Mes)
 SeaP$GMSL <- append(SeaL$GMSL[(1959 <= SeaL$Año)],rep(NA, 16))
 
 ggplot(data = SeaP, aes(x = Año, y = GMSL)) +
-  geom_line(aes(x = Año, y = GMSL , color = 'Datos'), linewidth = 1) + 
-  geom_line(aes(x = Año, y = preds, color = 'Mod. sin int.'), linewidth = 1) +
-  geom_line(aes(x = Año, y = preds3, color = 'Mod. con int.'),  linewidth = 1) +
-  labs(x = "Años", y = "mm", title = "Predicciones de la media global del nivel del mar") +
-  geom_vline(aes(xintercept = 2015), color = 'black',, linetype = "dashed" , linewidth = 0.5)+
-  scale_color_manual(values = c('Datos' = 'lightgreen', 'Mod. sin int.' = 'darkblue','Mod. con int.' = 'lightblue'), name = "Leyenda")+
+  geom_line(aes(x = Año, y = GMSL , color = 'Datos'),
+            linewidth = 1) + 
+  geom_line(aes(x = Año, y = preds, color = 'Mod. sin int.'),
+            linewidth = 1) +
+  geom_line(aes(x = Año, y = preds3, color = 'Mod. con int.'), 
+            linewidth = 1) +
+  labs(x = "Años", y = "mm",
+       title = "Predicciones de la media global del nivel del mar") +
+  geom_vline(aes(xintercept = 2015), color = 'black',
+             linetype = "dashed" , linewidth = 0.5)+
+  scale_color_manual(values = c('Datos' = 'lightgreen', 
+                                'Mod. sin int.' = 'darkblue',
+                                'Mod. con int.' = 'lightblue'), 
+                     name = "Leyenda")+
   theme(axis.title = element_text(face = "bold"),
         legend.text = element_text(size = 10,color = 'black'),
         legend.position = 'right')

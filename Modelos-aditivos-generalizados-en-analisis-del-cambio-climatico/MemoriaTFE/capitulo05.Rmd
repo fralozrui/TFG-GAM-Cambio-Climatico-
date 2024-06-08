@@ -225,7 +225,7 @@ ggplot(Julio,aes(x=Año))+
         legend.position = 'right')
 ```
 
-Con esta gráfica podemos apreciar claramente como la temperatura media en el mes de Julio ha ido aumentado con el paso de los años en la estación meteorológica del aeropuerto de San Pablo. Hemos introducido la recta proporcionada por el modelo lineal para los datos de los meses de Julio para tener una mejor apreciación de tal incremento.
+Con esta gráfica es posible apreciar claramente como la tendencia de la temperatura media en el mes de Julio presenta un aumento constante desde la década de los 60s en la estación meteorológica del aeropuerto de San Pablo. Hemos introducido la recta proporcionada por el modelo lineal para los datos de los meses de Julio para tener una mejor apreciación de tal incremento.
 
 ## Modelización de gases de efecto invernadero 
 

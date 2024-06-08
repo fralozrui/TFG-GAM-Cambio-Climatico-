@@ -3,7 +3,6 @@
 \contentsline {section}{Resumen}{\es@scroman {v}}{section*.3}%
 \contentsline {section}{Abstract}{\es@scroman {vi}}{section*.4}%
 \contentsline {section}{Índice de Figuras}{\es@scroman {vii}}{chapter*.5}%
-\contentsline {section}{Índice de Tablas}{\es@scroman {ix}}{chapter*.6}%
 \contentsline {chapter}{\numberline {1}Introducción}{1}{chapter.1}%
 \contentsline {chapter}{\numberline {2}Modelos lineales generalizados}{3}{chapter.2}%
 \contentsline {section}{\numberline {2.1}Introducción}{3}{section.2.1}%
@@ -29,19 +28,21 @@
 \contentsline {section}{\numberline {4.1}Consenso científico}{29}{section.4.1}%
 \contentsline {section}{\numberline {4.2}Controversia}{31}{section.4.2}%
 \contentsline {section}{\numberline {4.3}Resumen del cambio climático en la actualidad}{32}{section.4.3}%
-\contentsline {chapter}{\numberline {5}Aplicación de los MAG al análisis del cambio climático}{35}{chapter.5}%
-\contentsline {section}{\numberline {5.1}Modelización de la temperatura media mensual}{35}{section.5.1}%
-\contentsline {subsection}{\numberline {5.1.1}Descripción de los datos}{35}{subsection.5.1.1}%
-\contentsline {subsection}{\numberline {5.1.2}Descripción del modelo}{37}{subsection.5.1.2}%
-\contentsline {subsection}{\numberline {5.1.3}Visualización de resultados}{42}{subsection.5.1.3}%
-\contentsline {section}{\numberline {5.2}Modelización de gases de efecto invernadero}{43}{section.5.2}%
-\contentsline {subsection}{\numberline {5.2.1}Descripción de los datos}{43}{subsection.5.2.1}%
-\contentsline {subsection}{\numberline {5.2.2}Descripción de los modelos}{46}{subsection.5.2.2}%
-\contentsline {subsection}{\numberline {5.2.3}Visualización de resultados}{51}{subsection.5.2.3}%
-\contentsline {section}{\numberline {5.3}Modelización del aumento del nivel del mar}{54}{section.5.3}%
-\contentsline {subsection}{\numberline {5.3.1}Descripción de los datos}{54}{subsection.5.3.1}%
-\contentsline {subsection}{\numberline {5.3.2}Descripción del modelo}{56}{subsection.5.3.2}%
-\contentsline {subsection}{\numberline {5.3.3}Visualización de resultados}{60}{subsection.5.3.3}%
-\contentsline {chapter}{\numberline {A}Apéndice: Carga y limpieza de datos}{63}{appendix.Alph1}%
-\contentsline {chapter}{\numberline {B}Apéndice: Representaciones gráficas}{67}{appendix.Alph2}%
-\contentsline {chapter}{Bibliografía}{72}{appendix*.12}%
+\contentsline {section}{\numberline {4.4}Acciones de adaptación y mitigación}{34}{section.4.4}%
+\contentsline {chapter}{\numberline {5}Aplicación de los MAG al análisis del cambio climático}{37}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Modelización de la temperatura media mensual}{37}{section.5.1}%
+\contentsline {subsection}{\numberline {5.1.1}Descripción de los datos}{37}{subsection.5.1.1}%
+\contentsline {subsection}{\numberline {5.1.2}Descripción del modelo}{39}{subsection.5.1.2}%
+\contentsline {subsection}{\numberline {5.1.3}Visualización de resultados}{44}{subsection.5.1.3}%
+\contentsline {section}{\numberline {5.2}Modelización de gases de efecto invernadero}{45}{section.5.2}%
+\contentsline {subsection}{\numberline {5.2.1}Descripción de los datos}{45}{subsection.5.2.1}%
+\contentsline {subsection}{\numberline {5.2.2}Descripción de los modelos}{48}{subsection.5.2.2}%
+\contentsline {subsection}{\numberline {5.2.3}Visualización de resultados}{53}{subsection.5.2.3}%
+\contentsline {section}{\numberline {5.3}Modelización del aumento del nivel del mar}{56}{section.5.3}%
+\contentsline {subsection}{\numberline {5.3.1}Descripción de los datos}{56}{subsection.5.3.1}%
+\contentsline {subsection}{\numberline {5.3.2}Descripción del modelo}{58}{subsection.5.3.2}%
+\contentsline {subsection}{\numberline {5.3.3}Visualización de resultados}{62}{subsection.5.3.3}%
+\contentsline {chapter}{\numberline {6}Conclusión}{65}{chapter.6}%
+\contentsline {chapter}{\numberline {A}Apéndice: Carga y depuración de datos}{67}{appendix.Alph1}%
+\contentsline {chapter}{\numberline {B}Apéndice: Representaciones gráficas}{71}{appendix.Alph2}%
+\contentsline {chapter}{Bibliografía}{76}{appendix*.11}%
